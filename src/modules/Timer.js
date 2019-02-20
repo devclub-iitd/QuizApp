@@ -41,7 +41,13 @@ class Timer extends React.Component{
       timerClass = "timer-off";
     }
     return(
-      <div className={timerClass}>{this.state.displayTime / 1000 | 0} and {this.props.isOn.toString()}</div>
+      <div className={timerClass}>  {(this.state.displayTime/1000|0)}
+      <div className="progress">
+        <div className="progress-bar" role="progressbar" style={{width: + ((this.state.displayTime/1000|0) / this.props.totalTime)*100+"%"}} >
+       
+        </div>
+      </div>
+      </div>
     )
   }
 }

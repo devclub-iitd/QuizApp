@@ -35,7 +35,7 @@ class Game extends React.Component {
       response: -1,
       timerIsOn: true,
       timerEndTime: new Date(),
-      timerTotalTime: 10000,
+      timerTotalTime: 10,
     };
     this.state.timerEndTime.setTime(this.state.timerEndTime.getTime()+10000)
   }
