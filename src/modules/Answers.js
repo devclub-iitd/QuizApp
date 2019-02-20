@@ -21,7 +21,7 @@ class Answers extends React.Component {
   render() {
     return (
       <div className="answers">
-        <div className="row">
+        <div className="row option-row">
           {this.renderOption(0)}
           {this.renderOption(1)}
         </div>

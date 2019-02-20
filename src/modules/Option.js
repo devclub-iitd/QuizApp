@@ -7,7 +7,7 @@ function Option(props) {
       onClick: Onclick function (No args) 
   */
   return (
-    <button className="option btn" onClick={props.onClick}>
+    <button className="option col-12" onClick={props.onClick}>
       {props.value}
     </button>
   );

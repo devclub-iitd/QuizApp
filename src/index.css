@@ -3,12 +3,16 @@ html{
   /* margin: 20px; */
   /* margin: 0; */
     height: 100%;
-  background-color: red; /* For browsers that do not support gradients */
-  background-image: linear-gradient(to bottom right, red, yellow); 
+  background-color: #500050; /* For browsers that do not support gradients */
+  background-image: linear-gradient(to bottom right, #500050, #102040); 
+  box-sizing: border-box;
 }
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
+  font: 20px Comfortaa, cursive;
   margin: 20px;
+  background-color: transparent;
+  color: white;
+
   /* background-color: red; For browsers that do not support gradients */
   /* background-image: linear-gradient(to bottom right, red, yellow); Standard syntax (must be last) */
 }
@@ -58,11 +62,36 @@ ol, ul {
 .game-info {
   margin-left: 20px;
 } */
-
+#root{
+}
 .option{
+  background-color: transparent;
+  padding: 15px;
+  border: solid white 2px;
+  color: white;
+  border-radius: 4px;
+  margin :2px;
+}
+.option:hover{
+  background-color: #100090;
+}
+.answers{
+}
+.question{
+  border: solid white 2px;
+  border-radius: 4px;
+  padding:10px;
+  margin : 5px;
+}
+.game{
+  border: solid white 2px;
+  border-radius: 4px;
+  padding:10px;
+}
+.response{
+}
+
+.option-row{
+  background-color: transparent;
 
 }
-.answers{}
-.question{}
-.game{}
-.response{}

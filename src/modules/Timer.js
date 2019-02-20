@@ -8,7 +8,7 @@ class Timer extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      displayTime: props.endTime.getTime() - new Date().getTime(),
+      displayTime: props.endTime.getTime() - Date.now(),
       toDisplay: props.isOn,
     };
     if(this.state.displayTime<=0){
@@ -21,9 +21,9 @@ class Timer extends React.Component{
   }
 
   tick(){
-    if(this.state.toDisplay){
+    if(this.state.toDisplay && this.props.isOn){
       this.setState({
-        displayTime: this.props.endTime.getTime() - new Date().getTime()
+        displayTime: this.props.endTime.getTime() - Date.now(),
       });
     }
     if((this.state.displayTime/1000|0) <= 0){
@@ -34,14 +34,14 @@ class Timer extends React.Component{
   }
   render(){
     let timerClass;
-    if(this.state.toDisplay){
+    if(this.state.toDisplay && this.props.isOn){
       timerClass = "timer-on";
     } 
     else{
       timerClass = "timer-off";
     }
     return(
-      <div className={timerClass}>{this.state.displayTime / 1000 | 0}</div>
+      <div className={timerClass}>{this.state.displayTime / 1000 | 0} and {this.props.isOn.toString()}</div>
     )
   }
 }

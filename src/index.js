@@ -40,13 +40,16 @@ class Game extends React.Component {
     this.state.timerEndTime.setTime(this.state.timerEndTime.getTime()+10000)
   }
   handleClick(i) {
-    this.setState({
-      status:1,
-      response: i,
-    });
-    socket.emit('answer',{
-      answer:i,
-    })
+    if(this.state.timerIsOn && (this.state.timerEndTime.getTime() >= Date.now())){
+      this.setState({
+        status:1,
+        response: i,
+        timerIsOn: false,
+      });
+      socket.emit('answer',{
+        answer:i,
+      });
+    }
   } 
   render() {
     return (
