@@ -3,6 +3,22 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  state = {
+    data: null
+  };
+  componentDidMount() {
+    this.call()
+    .then(body => this.setState({ data: body.data }))
+    .catch(err => console.log(err));
+  }
+
+  call = async () => {
+    const response = await fetch('/abc', {
+	accept: 'application/json', mode: 'cors',
+  });
+    return response.json();
+  }
+
   render() {
     return (
       <div className="App">
@@ -17,8 +33,8 @@ class App extends Component {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Learn React
-          </a>
+	{this.state.data}
+	</a>
         </header>
       </div>
     );
