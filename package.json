@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/express": "^4.16.1",
+    "@types/socket.io": "^2.1.2",
     "express": "^4.16.4",
     "http": "0.0.0",
     "pg": "^7.8.0",
@@ -10,13 +12,17 @@
     "react-dom": "^16.8.2",
     "react-scripts": "2.1.5",
     "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0"
+    "socket.io-client": "^2.2.0",
+    "typescript": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "npm run tsc && node server/server.js",
+    "tsc": "tsc",
+    "dev": "concurrently \"npm run start\" \"npm run server\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -26,5 +32,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.10"
+  }
 }
