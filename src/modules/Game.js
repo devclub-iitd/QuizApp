@@ -7,6 +7,7 @@ class Game extends React.Component {
   /* 
   props:
   socket: socket object
+  cb: what to do at the end of the game
   */
   constructor(props) {
     super(props);

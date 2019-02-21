@@ -10,12 +10,23 @@ const SERVER_URL = 'http://10.184.17.101:3001';
 const socket = openSocket(SERVER_URL);
   
 class QuizApp extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      status: "AtLobby",
+    }
+  }
   renderGame(){
     return(
       <Game 
         socket={socket}
       />
     );
+  }
+  setStatus(s){
+    this.setState({
+      status: s,
+    });
   }
   renderLogin(){
   }
@@ -28,7 +39,15 @@ class QuizApp extends React.Component{
   }
 
   render(){
-    return this.renderLobby();
+    if(this.state.status==="LoggingIn"){
+      return this.renderLogin();
+    }
+    else if(this.state.status==="AtLobby"){
+      return this.renderLobby();
+    }
+    else if(this.state.status==="Playing"){
+      return this.renderGame();
+    }
   }
 }
 
