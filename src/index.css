@@ -73,13 +73,13 @@ ol, ul {
   margin :2px;
 }
 
-.option.grey{
+.option.option-grey, .option.option-grey:hover{
   background-color: #222222;
+  background-image: none;
 }
 .option:hover{
   background-color: #500050;
   background-image: linear-gradient(to bottom right, #990066, #603090); 
-
 }
 .answers{
 }

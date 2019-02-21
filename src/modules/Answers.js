@@ -6,6 +6,7 @@ class Answers extends React.Component {
     props:
     options: array of options (String Array)
     onClick: onclick function for options (Takes integer index)
+    isOn: whether timer is on (Boolean)
   */
   renderOption(i) {
     return (
@@ -13,6 +14,7 @@ class Answers extends React.Component {
       <Option
         value={this.props.options[i]}
         onClick={() => this.props.onClick(i)}
+        isOn={this.props.isOn}
       />
       </div>
     );
