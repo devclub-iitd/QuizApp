@@ -1,6 +1,10 @@
 import React from "react";
 import UserInLobby from "./UserInLobby"
 class Lobby extends React.Component{
+  /* 
+  props:
+  cb: called when game starts
+   */
   constructor(props){
     super(props);
     this.state = {
@@ -9,7 +13,7 @@ class Lobby extends React.Component{
       startTime: new Date(),
       timeLeft: 100,
     };
-    this.state.startTime.setTime(this.state.startTime.getTime()+1000000); //temp
+    this.state.startTime.setTime(this.state.startTime.getTime()+10000); //temp
     this.timerID=setInterval(()=>this.tick(),1000);
   }
   componentWillUnmount(){
@@ -20,6 +24,9 @@ class Lobby extends React.Component{
       this.setState({
         timeLeft:(this.state.startTime.getTime()-Date.now())/1000|0,
       });
+    }
+    if(((this.state.startTime.getTime()-Date.now())/1000|0) <= 0){ //Maybe 1?
+      this.props.cb();
     }
   }
   render(){
@@ -42,10 +49,11 @@ class Lobby extends React.Component{
         <div className="countdown"></div>
       )
     }
+    //Should add unique key to each list element
     return(
       <div className="lobby">
         <div className="user-list-in-lobby">
-          {userDisplayList}
+          {userDisplayList} 
           </div>
         {countdown}
       </div>

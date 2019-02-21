@@ -13,7 +13,7 @@ class QuizApp extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      status: "AtLobby",
+      status: "Playing",
     }
   }
   renderGame(){
@@ -34,6 +34,7 @@ class QuizApp extends React.Component{
     return (
       <Lobby 
         socket={socket}
+        cb={()=>this.setStatus("Playing")}
       />
     );
   }

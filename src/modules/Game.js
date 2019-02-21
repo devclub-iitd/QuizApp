@@ -3,11 +3,11 @@ import Timer from "./Timer";
 import Question from "./Question";
 import Answers from "./Answers";
 
+// TODO: Handle state where we are too early for questions to start 
 class Game extends React.Component {
   /* 
   props:
   socket: socket object
-  cb: what to do at the end of the game
   */
   constructor(props) {
     super(props);

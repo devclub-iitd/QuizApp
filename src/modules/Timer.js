@@ -14,7 +14,7 @@ class Timer extends React.Component{
     if(this.state.displayTime<=0){
       this.props.onTimeout();
     }
-    this.timerID=setInterval(()=>this.tick(),1000);
+    this.timerID=setInterval(()=>this.tick(),100);
   }
   componentWillUnmount(){
     clearInterval(this.timerID);
@@ -26,7 +26,7 @@ class Timer extends React.Component{
         displayTime: this.props.endTime.getTime() - Date.now(),
       });
     }
-    if((this.state.displayTime/1000|0) <= 0){
+    if((this.state.displayTime) <= 0){
       this.props.onTimeout();
     }
   }
@@ -38,10 +38,18 @@ class Timer extends React.Component{
     else{
       timerClass = "timer-off";
     }
+    let displayValue;
+    let displayWidthPercent=(((this.state.displayTime) / (10*this.props.totalTime))-4);
+    if(this.state.displayTime>=0){
+      displayValue=(((this.state.displayTime) /1000|0) + 1);
+    }
+    else{
+      displayValue=0;
+    }
     return(
-      <div className={timerClass}>  {(this.state.displayTime/1000|0)}
+      <div className={timerClass}>  {displayValue} {/* and {displayWidthPercent} and {this.state.displayTime} */}
       <div className="progress">
-        <div className="progress-bar" role="progressbar" style={{width: + ((this.state.displayTime/1000|0) / this.props.totalTime)*100+"%"}} >
+        <div className="progress-bar" role="progressbar" style={{width: + displayWidthPercent+"%"}} >
        
         </div>
       </div>
