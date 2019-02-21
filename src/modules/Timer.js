@@ -4,7 +4,8 @@ class Timer extends React.Component{
   /* props:
     isOn: Whether to countdown or be greyed out (Boolean)
     endTime: Time at which to stop count (Date Object)
-    totalTime: Size of timer in seconds (Integer)*/
+    totalTime: Size of timer in seconds (Integer)
+    onTimeout: Function to call when timer runs out*/
   constructor(props){
     super(props);
     this.state={
@@ -30,6 +31,7 @@ class Timer extends React.Component{
       this.setState({
         toDisplay:false,
       });
+      this.props.onTimeout();
     }
   }
   render(){

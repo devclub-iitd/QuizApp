@@ -25,6 +25,12 @@ const socket = openSocket(SERVER_URL);
 //     )
 //   }
 // }
+
+// class QuizApp extends React.Component{
+//   constructor(props){
+
+//   }
+// }
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -39,8 +45,13 @@ class Game extends React.Component {
     };
     this.state.timerEndTime.setTime(this.state.timerEndTime.getTime()+10000)
   }
+  handleTimeout(){
+    this.setState({
+      timerIsOn: false,
+    });
+  }
   handleClick(i) {
-    if(this.state.timerIsOn && (this.state.timerEndTime.getTime() >= Date.now())){
+    if(this.state.timerIsOn){
       this.setState({
         status:1,
         response: i,
@@ -65,6 +76,7 @@ class Game extends React.Component {
           endTime={this.state.timerEndTime}
           isOn={this.state.timerIsOn}
           totalTime={this.state.timerTotalTime}
+          onTimeout={()=>this.handleTimeout()}
         />
       </div>
     );
