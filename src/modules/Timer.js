@@ -10,10 +10,9 @@ class Timer extends React.Component{
     super(props);
     this.state={
       displayTime: props.endTime.getTime() - Date.now(),
-      toDisplay: props.isOn,
     };
     if(this.state.displayTime<=0){
-      this.state.toDisplay=false;
+      this.props.onTimeout();
     }
     this.timerID=setInterval(()=>this.tick(),1000);
   }
@@ -22,21 +21,18 @@ class Timer extends React.Component{
   }
 
   tick(){
-    if(this.state.toDisplay && this.props.isOn){
+    if(this.props.isOn){
       this.setState({
         displayTime: this.props.endTime.getTime() - Date.now(),
       });
     }
     if((this.state.displayTime/1000|0) <= 0){
-      this.setState({
-        toDisplay:false,
-      });
       this.props.onTimeout();
     }
   }
   render(){
     let timerClass;
-    if(this.state.toDisplay && this.props.isOn){
+    if(this.props.isOn){
       timerClass = "timer-on";
     } 
     else{
