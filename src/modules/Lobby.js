@@ -9,7 +9,7 @@ class Lobby extends React.Component{
     super(props);
     this.state = {
       userList: ["user1","user2","user3","user4"],
-      status: "Starting Soon", /* "Waiting For QM", "Started" */
+      status: "Waiting for QM", /* "Waiting For QM", "Started", "Starting Soon" */
       startTime: new Date(),
       timeLeft: 100,
     };
@@ -25,7 +25,7 @@ class Lobby extends React.Component{
         timeLeft:(this.state.startTime.getTime()-Date.now())/1000|0,
       });
     }
-    if(((this.state.startTime.getTime()-Date.now())/1000|0) <= 0){ //Maybe 1?
+    if(((this.state.startTime.getTime()-Date.now())/1000|0) <= 0 && this.state.status==="Starting Soon"){ //Maybe 1?
       this.props.cb();
     }
   }
@@ -51,11 +51,13 @@ class Lobby extends React.Component{
     }
     //Should add unique key to each list element
     return(
-      <div className="lobby game-box">
-        <div className="user-list-in-lobby">
-          {userDisplayList} 
-          </div>
-        {countdown}
+      <div className="row">
+        <div className="lobby game-box col-sm-8 offset-sm-2">
+          <div className="user-list-in-lobby">
+            {userDisplayList} 
+            </div>
+          {countdown}
+        </div>
       </div>
     );
   }

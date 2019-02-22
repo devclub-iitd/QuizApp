@@ -13,7 +13,7 @@ class Game extends React.Component {
     super(props);
     this.state = {
       status: 0,
-      options: ["Yes, it is", "Really, it is ~ RamaswamyNaickerV@E@makemyday.commaswamynaicker", "This isn't funny you know", "Please stop"],
+      options: ["Yes, it is", "Really, it is", "This isn't funny you know", "Please stop"],
       questionText: "This is a sample question, or is it?",
       response: -1,
       timerIsOn: true,
@@ -42,24 +42,22 @@ class Game extends React.Component {
   render() {
     return (
       <div className="row">
-      <div className="col-sm-2"></div>
-      <div className="game-box col-sm-8">
-        <div className="response">{this.state.response}</div>
-        <Question questionText={this.state.questionText} />
-        <Answers
-          options={this.state.options}
-          onClick={i => this.handleClick(i)}
-          isOn={this.state.timerIsOn}
-        />
-        {/* <TestButton /> */}
-        <Timer 
-          endTime={this.state.timerEndTime}
-          isOn={this.state.timerIsOn}
-          totalTime={this.state.timerTotalTime}
-          onTimeout={()=>this.handleTimeout()}
-        />
-      </div>
-      <div className="col-sm-2"></div>
+        <div className="game-box col-sm-8 offset-sm-2">
+          <div className="response">{this.state.response}</div>
+          <Question questionText={this.state.questionText} />
+          <Answers
+            options={this.state.options}
+            onClick={i => this.handleClick(i)}
+            isOn={this.state.timerIsOn}
+          />
+          {/* <TestButton /> */}
+          <Timer 
+            endTime={this.state.timerEndTime}
+            isOn={this.state.timerIsOn}
+            totalTime={this.state.timerTotalTime}
+            onTimeout={()=>this.handleTimeout()}
+          />
+        </div>
       </div>
     );
   }

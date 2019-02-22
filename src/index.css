@@ -93,13 +93,17 @@ ol, ul {
   background-image: none;
   border: solid #999999 0.0625em;
   color: #999999;
-}
-.option.option-grey:hover{
-  margin: 0;
+  box-shadow: none;
 }
 .option:hover{
-  border: solid #444444 0.125em;
-  margin: -0.0625em;
+  /* border: solid #000000 0.125em; */
+  /* margin: -0.0625em; */
+  border: solid #000000 0.0625em;
+  color: black;
+  box-shadow:0.0125em 0.0125em 0.0625em #200020;
+}
+.option:active{
+  background-color:  #F6D8CA;
 }
 .answers{
   /* padding: 0.0625em; */
