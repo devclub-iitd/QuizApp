@@ -2,6 +2,7 @@ import Sequelize = require('sequelize');
 import { SequelizeAttributes } from '../types/attributes';
 import { UserAttributes, UserInstance, UserModel } from '../types/user';
 import { RoomModel } from '../types/room';
+import { Socket } from 'dgram';
 
 export function initUser(sequelize: Sequelize.Sequelize, Room: RoomModel): UserModel {
     const attributes: SequelizeAttributes<UserAttributes> = {
@@ -20,13 +21,17 @@ export function initUser(sequelize: Sequelize.Sequelize, Room: RoomModel): UserM
             type: Sequelize.STRING,
             allowNull: false
         },
-        roomID: {
+        room: {
             type: Sequelize.STRING,
             references: {
                 model: Room,
                 key: 'roomID',
             }
-        }
+        },
+        socket: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
     };
 
     const User = sequelize.define<UserInstance, UserAttributes>('Users', attributes);

@@ -21,7 +21,11 @@ export function initQM(sequelize: Sequelize.Sequelize):  QMModel {
         password: {
             type: Sequelize.STRING,
             allowNull: false,
-        }
+        },
+        socket: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
     };
 
     const Question = sequelize.define<QMInstance, QMAttributes>('QM', attributes);

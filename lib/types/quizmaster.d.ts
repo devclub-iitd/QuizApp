@@ -5,6 +5,7 @@ export interface QMAttributes {
     email: string;
     phone: string;
     password: string;
+    socket: string;
 }
 
 export type QMInstance = Sequelize.Instance<QMAttributes> & QMAttributes;
