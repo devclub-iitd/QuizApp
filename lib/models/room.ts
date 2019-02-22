@@ -1,9 +1,9 @@
 import Sequelize = require('sequelize');
 import { SequelizeAttributes } from '../types/attributes';
 import { RoomAttributes, RoomInstance, RoomModel } from '../types/room';
+import { QMModel } from '../types/quizmaster';
 
-
-export function initUser(sequelize: Sequelize.Sequelize):  RoomModel {
+export function initRoom(sequelize: Sequelize.Sequelize, QM: QMModel):  RoomModel {
     const attributes: SequelizeAttributes<RoomAttributes> = {
         roomID: {
             type: Sequelize.STRING,
@@ -12,6 +12,14 @@ export function initUser(sequelize: Sequelize.Sequelize):  RoomModel {
         state: {
             type: Sequelize.ENUM,
             values: ['inactive', 'waiting', 'collecting'],
+        },
+        qm: {
+            type: Sequelize.STRING,
+            references: {
+                model: QM,
+                key: 'email',
+            },
+            allowNull: false,
         },
     };
 

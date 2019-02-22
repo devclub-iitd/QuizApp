@@ -4,8 +4,7 @@ export interface UserAttributes {
     username: string;
     email: string;
     phone: string;
-    qm: boolean;
-    room?: string;
+    roomID: string;
 }
 
 export type UserInstance = Sequelize.Instance<UserAttributes> & UserAttributes;

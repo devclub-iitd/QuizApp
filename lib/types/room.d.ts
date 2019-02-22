@@ -3,6 +3,7 @@ import Sequelize = require('sequelize');
 export interface RoomAttributes {
     roomID: string;
     state?: Enumerator;
+    qm: string;
 }
 
 export type RoomInstance = Sequelize.Instance<RoomAttributes> & RoomAttributes;

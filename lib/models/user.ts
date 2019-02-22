@@ -1,8 +1,9 @@
 import Sequelize = require('sequelize');
 import { SequelizeAttributes } from '../types/attributes';
 import { UserAttributes, UserInstance, UserModel } from '../types/user';
+import { RoomModel } from '../types/room';
 
-export function initUser(sequelize: Sequelize.Sequelize): UserModel {
+export function initUser(sequelize: Sequelize.Sequelize, Room: RoomModel): UserModel {
     const attributes: SequelizeAttributes<UserAttributes> = {
         username: {
             type: Sequelize.STRING,
@@ -10,15 +11,22 @@ export function initUser(sequelize: Sequelize.Sequelize): UserModel {
         },
         email: {
             type: Sequelize.STRING,
+            validate: {
+                isEmail: true,
+            },
             primaryKey: true
         },
         phone: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        qm: {
-            type: Sequelize.BOOLEAN
-        },
+        roomID: {
+            type: Sequelize.STRING,
+            references: {
+                model: Room,
+                key: 'roomID',
+            }
+        }
     };
 
     const User = sequelize.define<UserInstance, UserAttributes>('Users', attributes);
