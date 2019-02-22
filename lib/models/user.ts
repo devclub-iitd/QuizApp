@@ -1,6 +1,5 @@
-import Sequelize from 'sequelize';
-import db from '../config/db';
-import { SequelizeAttributes } from '.././types/index';
+import Sequelize = require('sequelize');
+import { SequelizeAttributes } from '../types/attributes';
 import { UserAttributes, UserInstance, UserModel } from '../types/user';
 
 export function initUser(sequelize: Sequelize.Sequelize): UserModel {

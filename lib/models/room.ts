@@ -1,5 +1,4 @@
-import Sequelize from 'sequelize';
-import db from '../config/db';
+import Sequelize = require('sequelize');
 import { SequelizeAttributes } from '../types/attributes';
 import { RoomAttributes, RoomInstance, RoomModel } from '../types/room';
 
@@ -11,8 +10,9 @@ export function initUser(sequelize: Sequelize.Sequelize):  RoomModel {
             primaryKey: true,
         },
         state: {
-            type: Sequelize.ENUM('inactive', 'waiting', 'collecting')
-        }, 
+            type: Sequelize.ENUM,
+            values: ['inactive', 'waiting', 'collecting'],
+        },
     };
 
     const Room = sequelize.define<RoomInstance, RoomAttributes>('Rooms', attributes);

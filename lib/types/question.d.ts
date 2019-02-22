@@ -1,4 +1,4 @@
-import Sequelize from 'sequelize';
+import Sequelize = require('sequelize');
 
 export interface QuestionAttributes {
     QuestionID: string;

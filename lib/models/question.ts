@@ -1,5 +1,4 @@
-import Sequelize from 'sequelize';
-import db from '../config/db';
+import Sequelize = require('sequelize');
 import { SequelizeAttributes } from '../types/attributes';
 import { QuestionAttributes, QuestionInstance, QuestionModel } from '../types/question';
 import { RoomModel } from '../types/room';
