@@ -6,6 +6,8 @@
     "outDir": "./server/",
     "strict": true
   },
-  "include": ["./server.ts"],
+  "include": [
+    "./lib/*/*.ts",
+    ".lib/server.ts"],
   "exclude": ["node_modules", "**/__tests__/*","src/"]
 }
