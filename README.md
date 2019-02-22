@@ -79,4 +79,10 @@ Quizmasters ccan create rooms and add questions, while players can join rooms an
   * Options (4)
   * Answer
 
-## 
+## Viewing the UI
+
+* Clone the repo
+* Run `npm install`
+* Run `npm start`
+* View at `localhost:3000`
+* It may be necessary to delete `tsconfig.json`

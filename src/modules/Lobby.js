@@ -10,7 +10,7 @@ class Lobby extends React.Component{
     super(props);
     this.state = {
       userList: ["user1","user2","user3","user4"],
-      status: "Waiting for QM", /* "Waiting For QM", "Started", "Starting Soon" */
+      status: "Starting Soon", /* "Waiting For QM", "Started", "Starting Soon" */
       startTime: new Date(),
       timeLeft: 100,
     };
