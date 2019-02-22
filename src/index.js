@@ -6,15 +6,19 @@ import openSocket from 'socket.io-client';
 import Game from "./modules/Game";
 import Lobby from "./modules/Lobby";
 import Login from "./modules/Login";
+import RoomSelect from "./modules/RoomSelect";
 
 const SERVER_URL = 'http://10.184.17.101:3001';
 const socket = openSocket(SERVER_URL);
   
 class QuizApp extends React.Component{
+
+  // Split into QM path and User path separately?
+
   constructor(props){
     super(props);
     this.state={
-      status: "LoggingIn",
+      status: "LoggingIn" /* "LoggingIn","InLobby","Playing","SelectingRoom" */,
       username: "hey",
       isQM: false,
     }
@@ -31,27 +35,35 @@ class QuizApp extends React.Component{
       status: s,
     });
   }
-  setLoginStatus(stateUpdate){
-    this.setStatus("InLobby");
+  setStateAndStatus(stateUpdate,status){
+    this.setStatus(status);
     this.setState(stateUpdate);
   }
   renderLogin(){
     return(
       <Login 
-        cb={(stateUpdate)=>this.setLoginStatus(stateUpdate)}
+        cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate, "SelectingRoom")}
       />
     )
   }
   renderLobby(){
     return (
-      <div>
-        <div className="game-box">{this.state.username}</div>
+      // <div>
+        // <div className="game-box">{this.state.username}</div>
         <Lobby 
+          roomcode={this.state.roomcode}
           socket={socket}
           cb={()=>this.setStatus("Playing")}
         />
-      </div>
+      // </div>
     );
+  }
+  renderRoomSelect(){
+    return(
+      <RoomSelect 
+        cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate, "InLobby")}
+      />
+    )
   }
 
   render(){
@@ -63,6 +75,9 @@ class QuizApp extends React.Component{
     }
     else if(this.state.status==="Playing"){
       return this.renderGame();
+    }
+    else if(this.state.status==="SelectingRoom"){
+      return this.renderRoomSelect();
     }
   }
 }

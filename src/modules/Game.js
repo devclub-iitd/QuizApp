@@ -41,23 +41,21 @@ class Game extends React.Component {
   } 
   render() {
     return (
-      <div className="row">
-        <div className="game-box col-sm-8 offset-sm-2">
-          <div className="response">{this.state.response}</div>
-          <Question questionText={this.state.questionText} />
-          <Answers
-            options={this.state.options}
-            onClick={i => this.handleClick(i)}
-            isOn={this.state.timerIsOn}
-          />
-          {/* <TestButton /> */}
-          <Timer 
-            endTime={this.state.timerEndTime}
-            isOn={this.state.timerIsOn}
-            totalTime={this.state.timerTotalTime}
-            onTimeout={()=>this.handleTimeout()}
-          />
-        </div>
+      <div className="game-box col-sm-8 offset-sm-2">
+        <div className="response">{this.state.response}</div>
+        <Question questionText={this.state.questionText} />
+        <Answers
+          options={this.state.options}
+          onClick={i => this.handleClick(i)}
+          isOn={this.state.timerIsOn}
+        />
+        {/* <TestButton /> */}
+        <Timer 
+          endTime={this.state.timerEndTime}
+          isOn={this.state.timerIsOn}
+          totalTime={this.state.timerTotalTime}
+          onTimeout={()=>this.handleTimeout()}
+        />
       </div>
     );
   }

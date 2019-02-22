@@ -3,6 +3,7 @@ import UserInLobby from "./UserInLobby"
 class Lobby extends React.Component{
   /* 
   props:
+  roomcode: recieved roomcode string
   cb: called when game starts
    */
   constructor(props){
@@ -51,13 +52,12 @@ class Lobby extends React.Component{
     }
     //Should add unique key to each list element
     return(
-      <div className="row">
-        <div className="lobby game-box col-sm-8 offset-sm-2">
-          <div className="user-list-in-lobby">
-            {userDisplayList} 
-            </div>
-          {countdown}
-        </div>
+      <div className="lobby game-box col-sm-8 offset-sm-2">
+        {this.props.roomcode}
+        <div className="user-list-in-lobby">
+          {userDisplayList} 
+          </div>
+        {countdown}
       </div>
     );
   }
