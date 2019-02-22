@@ -3,15 +3,19 @@ html{
   /* margin: 20px; */
   /* margin: 0; */
     height: 100%;
-  background-color: #800080; /* For browsers that do not support gradients */
-  background-image: url(http://www.transparenttextures.com/patterns/old-map.png);
+  background-color: #300030; /* For browsers that do not support gradients */
+  /* background-image: url(http://www.transparenttextures.com/patterns/old-map.png); */
+  /* background-image: linear-gradient(to bottom right, #42275a, #734b6d);  */
+  background-image:linear-gradient(to bottom right, #2C3E50, #FD746C);
+  text-overflow: ellipsis;
+  overflow: hidden;
   box-sizing: border-box;
 }
 body {
   font: 20px Comfortaa, cursive;
   margin: 20px;
   background-color: transparent;
-  color: white;
+  color: #444444;
 
   /* background-color: red; For browsers that do not support gradients */
   /* background-image: linear-gradient(to bottom right, red, yellow); Standard syntax (must be last) */
@@ -64,45 +68,62 @@ ol, ul {
 } */
 #root{
 }
-.option{
-  padding: 15px;
-  border: solid white 1px;
-  color: white;
-  border-radius: 4px;
-  margin :2px;
-  background-color: #990066;
-  background-image: linear-gradient(to bottom right, #990066, #603090); 
+.option-container{
+  padding: 0.125em;
+}
+.option{                                    /* TODO: make relative */
+  padding: 20px;
+  border: solid #444444 1px;
+  /* color: white; */
+  border-radius: 40px;
+  /* margin :0.125em; */
+  background-color: transparent;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  /* background-color: #990066; */
+  /* background-image: linear-gradient(to bottom right, #990066, #603090);  */
+  /* background-image:linear-gradient(to bottom right, #2C3E50, #FD746C); */
+
 }
 
 .option.option-grey, .option.option-grey:hover{
   background-color: transparent;
   background-image: none;
-  border: solid white 1px;
-  margin: 2px;
+  border: solid #999999 0.0625em;
+  color: #999999;
+}
+.option.option-grey:hover{
+  margin: 0;
 }
 .option:hover{
-  border: solid white 2px;
-  margin: 1px;
+  border: solid #444444 0.125em;
+  margin: -0.0625em;
 }
 .answers{
+  /* padding: 0.0625em; */
 }
 .question{
-  border: solid white 2px;
-  border-radius: 4px;
-  padding:10px;
-  margin : 5px;
+  /* border: solid white 2px; */
+  /* border-radius: 4px; */
+  padding:0.625em;
+  margin : 0.125em;
 }
-.game{
-  border: solid white 2px;
-  border-radius: 4px;
-  padding:10px;
-  background-color:  #500080;
-  background-image:linear-gradient(to bottom right, #511054, #500055);
+.game-box{
+  /* border: solid white 2px; */
+  border-radius: 0.25em;
+  padding:0.625em;
+  background-color:  #FFFDE7;
+  /* background-image: linear-gradient(to bottom right, #f12711, #f5af19);  */
+  /* background-image:linear-gradient(to bottom right, #2C3E50, #FD746C); */
+  box-shadow:0.125em 0.125em 0.625em #200020;
 }
 .response{
 }
 
 .option-row{
   background-color: transparent;
-
+  /* width: 100%; */
+  margin: auto;
 }

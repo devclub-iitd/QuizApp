@@ -51,7 +51,7 @@ class Lobby extends React.Component{
     }
     //Should add unique key to each list element
     return(
-      <div className="lobby">
+      <div className="lobby game-box">
         <div className="user-list-in-lobby">
           {userDisplayList} 
           </div>

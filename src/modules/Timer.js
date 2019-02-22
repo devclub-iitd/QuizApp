@@ -39,7 +39,13 @@ class Timer extends React.Component{
       timerClass = "timer-off";
     }
     let displayValue;
-    let displayWidthPercent=(((this.state.displayTime) / (10*this.props.totalTime))-4);
+    let displayWidthPercent;
+    if(this.props.isOn){
+      displayWidthPercent =(((this.state.displayTime-300) / (10*this.props.totalTime)));
+    }
+    else{
+      displayWidthPercent = 0;
+    }
     if(this.state.displayTime>=0){
       displayValue=(((this.state.displayTime) /1000|0) + 1);
     }

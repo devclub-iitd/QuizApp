@@ -10,7 +10,7 @@ class Answers extends React.Component {
   */
   renderOption(i) {
     return (
-      <div className="col-md-6">
+      <div className="col-md-6 option-container">
       <Option
         value={this.props.options[i]}
         onClick={() => this.props.onClick(i)}
@@ -27,7 +27,7 @@ class Answers extends React.Component {
           {this.renderOption(0)}
           {this.renderOption(1)}
         </div>
-        <div className="row">
+        <div className="row option-row">
           {this.renderOption(2)}
           {this.renderOption(3)}
         </div>

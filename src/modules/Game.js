@@ -13,7 +13,7 @@ class Game extends React.Component {
     super(props);
     this.state = {
       status: 0,
-      options: ["A","B","C","D"],
+      options: ["Yes, it is", "Really, it is ~ RamaswamyNaickerV@E@makemyday.commaswamynaicker", "This isn't funny you know", "Please stop"],
       questionText: "This is a sample question, or is it?",
       response: -1,
       timerIsOn: true,
@@ -41,7 +41,9 @@ class Game extends React.Component {
   } 
   render() {
     return (
-      <div className="game">
+      <div className="row">
+      <div className="col-sm-2"></div>
+      <div className="game-box col-sm-8">
         <div className="response">{this.state.response}</div>
         <Question questionText={this.state.questionText} />
         <Answers
@@ -56,6 +58,8 @@ class Game extends React.Component {
           totalTime={this.state.timerTotalTime}
           onTimeout={()=>this.handleTimeout()}
         />
+      </div>
+      <div className="col-sm-2"></div>
       </div>
     );
   }

@@ -43,7 +43,7 @@ class QuizApp extends React.Component{
     if(this.state.status==="LoggingIn"){
       return this.renderLogin();
     }
-    else if(this.state.status==="AtLobby"){
+    else if(this.state.status==="InLobby"){
       return this.renderLobby();
     }
     else if(this.state.status==="Playing"){

@@ -9,10 +9,10 @@ function Option(props) {
   */
   let buttonClass;
   if(props.isOn){
-    buttonClass="option col-12";
+    buttonClass="option";
   }
   else{
-    buttonClass="option option-grey col-12";
+    buttonClass="option option-grey";
   }
   return (
     <button className={buttonClass} onClick={props.onClick}>
