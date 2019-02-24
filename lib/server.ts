@@ -15,40 +15,35 @@ server.listen(env.PORT);
 
 io.on('connection', (socket: SocketIO.Socket) => {
     socket.on('login', (payload) => {
-        let message: string = '';
         if(payload.isQM) {
             qmController.createQM(payload.username, payload.email, payload.phone, payload.password, socket.id)
-            .then((qm) => message = 'Success')
-            .catch((err) => message = 'Failed');
+            .then((qm) => socket.emit('login', { message: 'Success' }))
+            .catch((err) => socket.emit('login', { message: 'Failed' }));
         } else {
-            userController.createUser(payload.user, payload.email, payload.phone, socket.id)
-            .then((user) => message = 'Success')
-            .catch((err) => message = 'Failed');
+            userController.createUser(payload.username, payload.email, payload.phone, socket.id)
+            .then((user) => socket.emit('login', { message: 'Success' }))
+            .catch((err) => socket.emit('login', { message: 'Failed' }));
         };
-        socket.emit('login', { message: message });
     });
 
     socket.on('createroom', (payload) => {
         let message = '';
         roomController.createRoom(payload.roomid, payload.qm)
-        .then((room) => message = 'Success')
-        .catch((err) => message = 'Failed');
-        socket.emit('createroom', { message: message });
+        .then((room) => socket.emit('createroom', { message: 'Success' }))
+        .catch((err) => socket.emit('createroom', { message: 'Failed' }));
     });
 
     socket.on('createquestion', (payload) => {
         let message = '';
         quesController.createQuestion(payload.question, payload.roomid, payload.serial)
-        .then((ques) => message = 'Success')
-        .catch((err) => message = 'Failed');
-        socket.emit('createquestion', { message: message });
+        .then((ques) => socket.emit('createquestion', { message: 'Success' }))
+        .catch((err) => socket.emit('createquestion', { message: 'Failed' }));
     });
 
     socket.on('joinroom', (payload) => {
         let message = '';
         userController.addToRoom(payload.email, payload.roomid)
-        .then((user) => message = 'Success')
-        .catch((err) => message = 'Failed');
-        socket.emit('joinroom', { message: message });
+        .then((user) => socket.emit('joinroom', { message: 'Success' }))
+        .catch((err) => socket.emit('joinroom', { message: 'Failed' }));
     });
 });
