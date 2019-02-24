@@ -27,23 +27,39 @@ io.on('connection', (socket: SocketIO.Socket) => {
     });
 
     socket.on('createroom', (payload) => {
-        let message = '';
         roomController.createRoom(payload.roomid, payload.qm)
         .then((room) => socket.emit('createroom', { message: 'Success' }))
         .catch((err) => socket.emit('createroom', { message: 'Failed' }));
     });
 
     socket.on('createquestion', (payload) => {
-        let message = '';
         quesController.createQuestion(payload.question, payload.roomid, payload.serial)
         .then((ques) => socket.emit('createquestion', { message: 'Success' }))
         .catch((err) => socket.emit('createquestion', { message: 'Failed' }));
     });
 
     socket.on('joinroom', (payload) => {
-        let message = '';
         userController.addToRoom(payload.email, payload.roomid)
         .then((user) => socket.emit('joinroom', { message: 'Success' }))
         .catch((err) => socket.emit('joinroom', { message: 'Failed' }));
+    });
+
+    socket.on('start', (payload) => {
+        userController.findByRoom(payload.roomid)
+        .then((users) => {
+            const startTime: number = new Date().setTime(Date.now() + 10000);
+            for(const x of users) {
+                socket.broadcast.to(x.socket).emit('start', { time: startTime });                
+            };
+            return Promise.all([users, quesController.findNext(payload.roomid, 1)]);
+        })
+        .then(([users, question]) => {
+            setTimeout(function() {
+                for(const x of users) {
+                    socket.broadcast.to(x.socket).emit('question', { question: question });
+                }
+                socket.emit('question', { question: question })
+            }, 10000);
+        });
     });
 });
