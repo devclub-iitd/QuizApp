@@ -7,7 +7,7 @@ import Answers from "./Answers";
 class Game extends React.Component {
   /* 
   props:
-  socket: socket object
+  socket: socket object (Object)
   */
   constructor(props) {
     super(props);

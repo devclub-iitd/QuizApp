@@ -1,14 +1,19 @@
 import React from "react";
+import Loading from "./Loading";
 
 class RoomSelect extends React.Component{
   /* 
   props:
-  cb: What to do when room is selected 
+  cb: What to do when room is selected (Takes state object for index)
+  username: username (String)
+  socket: socket object (Object)
   */
   constructor(props){
     super(props);
     this.state={
       roomcode: "",
+      isWaiting: false,
+      message: "",
     }
   }
 
@@ -18,17 +23,49 @@ class RoomSelect extends React.Component{
     stateUpdate[stateField]=event.target.value;
     this.setState(stateUpdate);
   }
-  handleSubmit(event){
-    event.preventDefault();
-    this.props.cb({
-      roomcode: this.state.roomcode,
-    });
-  }
   //
 
+  handleSubmit(event){
+    event.preventDefault();
+    this.props.socket.emit('joinroom',{
+      roomid: this.state.roomcode,
+      username: this.state.username,
+    });
+    this.setState({
+      isWaiting: true,
+    });
+  }
+
+  handleRoomResponse(payload){
+    if(payload.message==="Success"){
+      this.props.cb({
+        roomcode: this.state.roomcode,
+        // userlist: payload.userlist,
+      });
+    }
+    else{
+      this.setState({
+        isWaiting: false,
+        message: payload.message,
+      })
+    }
+  }
   render(){
+    if(this.state.isWaiting){
+      return(
+        <Loading 
+          text={"Looking for room..."}
+          socket={this.props.socket}
+          time={5000}
+          listenFor={'joinroom'}
+          onSuccess={(payload)=>this.handleRoomResponse(payload)}
+          onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
+        />
+      );
+    }
     return(
       <div className="game-box col-sm-8 offset-sm-2">
+        {this.state.message}
         <form onSubmit={(event)=>this.handleSubmit(event)}>
           <label>
             RoomCode: 

@@ -18,7 +18,7 @@ class QuizApp extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      status: "LoggingIn" /* "LoggingIn","InLobby","Playing","SelectingRoom" */,
+      status: "SelectingRoom" /* "LoggingIn","InLobby","Playing","SelectingRoom" */,
       username: "hey",
       isQM: false,
     }
@@ -63,6 +63,7 @@ class QuizApp extends React.Component{
     return(
       <RoomSelect 
         cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate, "InLobby")}
+        socket={socket}
       />
     )
   }

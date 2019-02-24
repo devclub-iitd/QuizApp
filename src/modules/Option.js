@@ -2,10 +2,10 @@ import React from "react"
 
 function Option(props) {
   /*
-    props:
-      value: Value to display (Any Type)
-      onClick: Onclick function (No args) 
-      isOn: Whether timer is on (Boolean)
+  props:
+  value: Value to display (Any Type)
+  onClick: Onclick function (No args) 
+  isOn: Whether timer is on (Boolean)
   */
   let buttonClass;
   if(props.isOn){

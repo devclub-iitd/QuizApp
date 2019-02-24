@@ -3,12 +3,12 @@ import React from "react";
 class Loading extends React.Component{
   /* 
   props:
-  text:
-  socket:
-  time:
-  listenFor:
-  onSuccess:
-  onFailure: 
+  text: Text to display while loading (String)
+  socket: Socket object (Object)
+  time: Time to wait in ms (Integer)
+  listenFor: Event to listen for in socket (String)
+  onSuccess: What to do when payload recieved (Takes Payload)
+  onFailure: What to do on failure (No args)
   */
   constructor(props){
     super(props);

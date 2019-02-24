@@ -3,7 +3,7 @@ import React from "react";
 function Question(props){
   /* 
   props:
-    questionText: Test to display 
+  questionText: Text to display (String) 
   */
   return(
     <div className="question">{props.questionText}</div>

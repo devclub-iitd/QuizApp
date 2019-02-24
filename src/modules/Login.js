@@ -3,8 +3,8 @@ import Loading from "./Loading.js"
 class Login extends React.Component{
   /* 
   props:
-  socket: socket object
-  cb: What to do when logged in 
+  socket: socket object (Object)
+  cb: What to do when logged in (Takes state object for index)
   */
   constructor(props){
     super(props);

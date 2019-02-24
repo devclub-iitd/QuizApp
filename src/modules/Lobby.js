@@ -3,8 +3,8 @@ import UserInLobby from "./UserInLobby"
 class Lobby extends React.Component{
   /* 
   props:
-  roomcode: recieved roomcode string
-  cb: called when game starts
+  roomcode: recieved roomcode (String)
+  cb: called when game starts (No args)
    */
   constructor(props){
     super(props);

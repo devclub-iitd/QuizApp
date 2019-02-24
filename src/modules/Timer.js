@@ -1,11 +1,13 @@
 import React from "react";
 
 class Timer extends React.Component{
-  /* props:
-    isOn: Whether to countdown or be greyed out (Boolean)
-    endTime: Time at which to stop count (Date Object)
-    totalTime: Size of timer in seconds (Integer)
-    onTimeout: Function to call when timer runs out*/
+  /*
+  props:
+  isOn: Whether to countdown or be greyed out (Boolean)
+  endTime: Time at which to stop count (Date Object)
+  totalTime: Size of timer in seconds (Integer)
+  onTimeout: Function to call when timer runs out (No args)
+    */
   constructor(props){
     super(props);
     this.state={
