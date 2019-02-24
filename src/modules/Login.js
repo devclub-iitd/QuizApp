@@ -3,6 +3,7 @@ import React from "react"
 class Login extends React.Component{
   /* 
   props:
+  socket: socket object
   cb: What to do when logged in 
   */
   constructor(props){
@@ -24,6 +25,12 @@ class Login extends React.Component{
     // this.setState({
     //   username: "Submit Function Called",
     // });
+    this.props.socket.emit('login',{
+      username: this.state.username,
+      isQM: this.state.isQM,
+      emailid: this.state.email,
+      phone: '42',
+    });
     this.props.cb({
       isQM: this.state.isQM,
       username: this.state.username,
