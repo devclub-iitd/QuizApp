@@ -1,5 +1,5 @@
 import React from "react"
-
+import Loading from "./Loading.js"
 class Login extends React.Component{
   /* 
   props:
@@ -10,9 +10,12 @@ class Login extends React.Component{
     super(props);
     this.state={
       isQM: false,
+      isWaiting: false,
       username: "",
       email: "",
       password: "",
+      phone: "",
+      message: "",
     }
   }
   takeTextInput(event, stateField){
@@ -28,45 +31,71 @@ class Login extends React.Component{
     this.props.socket.emit('login',{
       username: this.state.username,
       isQM: this.state.isQM,
-      emailid: this.state.email,
-      phone: '42',
+      email: this.state.email,
+      phone: this.state.phone,
+      password: this.state.password,
     });
-    this.props.cb({
-      isQM: this.state.isQM,
-      username: this.state.username,
+    this.setState({
+      isWaiting: true,
     });
+    // this.props.cb({
+    //   isQM: this.state.isQM,
+    //   username: this.state.username,
+    // });
+  }
+  handleLoginResponse(payload){
+    if(payload.message==="Success"){
+      this.props.cb({
+        username: this.state.username,
+      });
+    }
+    else{
+      this.setState({
+        isWaiting: false,
+        message: payload.message,
+      })
+    }
   }
   render(){
+    if(this.state.isWaiting){
+      return (
+        <Loading 
+          text={"Logging in..."}
+          socket={this.props.socket}
+          time={5000}
+          listenFor={'login'}
+          onSuccess={(payload)=>this.handleLoginResponse(payload)}
+          onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
+        />
+      );
+    }
     let secInput;
     let QMButtonClass;
     let userButtonClass;
     if(this.state.isQM){
       secInput=(
         <label> Password: 
-          <input type="password" value={this.state.value} onChange={(event)=>this.takeTextInput(event,"password")} />
+          <input type="password" onChange={(event)=>this.takeTextInput(event,"password")} />
         </label>
       );
-      QMButtonClass="btn-active btn";
-      userButtonClass="btn";
+      QMButtonClass="disabled btn btn-info";
+      userButtonClass="btn btn-outline-info";
     }
     else{
-      secInput=(
-        <label> Email: 
-          <input type="text" value={this.state.value} onChange={(event)=>this.takeTextInput(event,"email")} />
-        </label>
-      );
-      userButtonClass="btn-active btn";
-      QMButtonClass="btn";
+      secInput="";
+      userButtonClass="disabled btn btn-info";
+      QMButtonClass="btn btn-outline-info";
     }
     return(
       <div className="game-box col-sm-8 offset-sm-2">
+        {this.state.message}
         <form onSubmit={(event)=>this.handleSubmit(event)}>
           <div>
             <button 
               className={userButtonClass} 
               onClick={(e)=>{ this.setState({ isQM: false }); e.preventDefault() }}
-            > 
-              User Login 
+            >
+              User Login
             </button>
             <button 
               className={QMButtonClass} 
@@ -77,11 +106,16 @@ class Login extends React.Component{
           </div> 
           <label>
             Username: 
-            <input type="text" value={this.state.value} onChange={(event)=>this.takeTextInput(event,"username")} />
+            <input type="text" onChange={(event)=>this.takeTextInput(event,"username")} />
           </label>
+          <label> Email: 
+          <input type="text" onChange={(event)=>this.takeTextInput(event,"email")} />
+        </label>
+        <label> Phone Number: 
+          <input type="number" min="1000000000" max="9999999999" onChange={(event)=>this.takeTextInput(event,"phone")} />
+        </label>
           {secInput}
           <input type="submit" value="Submit" />
-          {this.state.username}
         </form>
       </div>
     )
