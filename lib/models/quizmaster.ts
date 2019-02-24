@@ -28,6 +28,6 @@ export function initQM(sequelize: Sequelize.Sequelize):  QMModel {
         },
     };
 
-    const Question = sequelize.define<QMInstance, QMAttributes>('QM', attributes);
+    const Question = sequelize.define<QMInstance, QMAttributes>('qm', attributes, {createdAt: false, updatedAt: false});
     return Question;
 }

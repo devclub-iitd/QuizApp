@@ -8,6 +8,6 @@
   },
   "include": [
     "./lib/*/*.ts",
-    ".lib/server.ts"],
+    "./lib/server.ts"],
   "exclude": ["node_modules", "**/__tests__/*","src/"]
 }

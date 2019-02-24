@@ -24,6 +24,6 @@ export function initQuestion(sequelize: Sequelize.Sequelize, Room: RoomModel):  
         },
     };
 
-    const Question = sequelize.define<QuestionInstance, QuestionAttributes>('Questions', attributes);
+    const Question = sequelize.define<QuestionInstance, QuestionAttributes>('question', attributes, {createdAt: false, updatedAt: false});
     return Question;
 }

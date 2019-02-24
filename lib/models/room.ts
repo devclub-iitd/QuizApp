@@ -23,6 +23,6 @@ export function initRoom(sequelize: Sequelize.Sequelize, QM: QMModel):  RoomMode
         },
     };
 
-    const Room = sequelize.define<RoomInstance, RoomAttributes>('Rooms', attributes);
+    const Room = sequelize.define<RoomInstance, RoomAttributes>('room', attributes. {createdAt: false, updatedAt: false});
     return Room;
 }

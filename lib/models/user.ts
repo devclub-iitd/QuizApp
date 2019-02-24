@@ -34,6 +34,6 @@ export function initUser(sequelize: Sequelize.Sequelize, Room: RoomModel): UserM
         },
     };
 
-    const User = sequelize.define<UserInstance, UserAttributes>('Users', attributes);
+    const User = sequelize.define<UserInstance, UserAttributes>('user', attributes, {createdAt: false, updatedAt: false});
     return User;
 }
