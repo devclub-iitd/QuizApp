@@ -7,13 +7,15 @@ import { Room } from './room.controller';
 export const Question: QuestionModel = initQuestion(sequelize, Room);
 
 export function createQuestion(question: JSON, roomID: string, serial: number) {
-    Question.create({
-        question: question,
-        roomID: roomID,
-        serial: serial,
-    }).then((question) => {
-        return true;
-    }).catch((err) => {
-        return false;
+    return new Promise((resolve, reject) => {
+        Question.create({
+            question: question,
+            roomID: roomID,
+            serial: serial,
+        }).then((question) => {
+            resolve(question);
+        }).catch((err) => {
+            reject(err);
+        });
     });
 }

@@ -2,9 +2,10 @@ import http = require('http');
 import socketio = require('socket.io');
 import express = require('./config/express');
 import env = require('./config/env');
-import { createQM } from './controllers/qm.controller';
-import { createUser } from './controllers/user.controller';
-import { createRoom } from './controllers/room.controller';
+import * as qmController from './controllers/qm.controller';
+import * as userController from './controllers/user.controller';
+import * as roomController from './controllers/room.controller';
+import * as quesController from './controllers/ques.controller';
 
 const app: Express.Application = express();
 const server: http.Server = new http.Server(app);
@@ -16,11 +17,11 @@ io.on('connection', (socket: SocketIO.Socket) => {
     socket.on('login', (payload) => {
         let message: string = '';
         if(payload.isQM) {
-            createQM(payload.username, payload.email, payload.phone, payload.password, socket.id)
+            qmController.createQM(payload.username, payload.email, payload.phone, payload.password, socket.id)
             .then((qm) => message = 'Success')
             .catch((err) => message = 'Failed');
         } else {
-            createUser(payload.user, payload.email, payload.phone, socket.id)
+            userController.createUser(payload.user, payload.email, payload.phone, socket.id)
             .then((user) => message = 'Success')
             .catch((err) => message = 'Failed');
         };
@@ -29,9 +30,17 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('createroom', (payload) => {
         let message = '';
-        createRoom(payload.roomID, payload.qm)
+        roomController.createRoom(payload.roomID, payload.qm)
         .then((room) => message = 'Success')
         .catch((err) => message = 'Failed');
         socket.emit('createroom', { message: message });
+    });
+
+    socket.on('createquestion', (payload) => {
+        let message = '';
+        quesController.createQuestion(payload.question, payload.roomID, payload.serial)
+        .then((ques) => message = 'Success')
+        .catch((err) => message = 'Failed');
+        socket.emit('createquestion', { message: message });
     });
 });
