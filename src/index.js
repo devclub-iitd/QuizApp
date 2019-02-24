@@ -43,6 +43,7 @@ class QuizApp extends React.Component{
     return(
       <Login 
         cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate, "SelectingRoom")}
+        socket={socket}
       />
     )
   }
