@@ -26,4 +26,12 @@ io.on('connection', (socket: SocketIO.Socket) => {
         };
         socket.emit('login', { message: message });
     });
+
+    socket.on('createroom', (payload) => {
+        let message = '';
+        createRoom(payload.roomID, payload.qm)
+        .then((room) => message = 'Success')
+        .catch((err) => message = 'Failed');
+        socket.emit('createroom', { message: message });
+    });
 });
