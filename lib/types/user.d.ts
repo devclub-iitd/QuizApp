@@ -4,7 +4,7 @@ export interface UserAttributes {
     username: string;
     email: string;
     phone: string;
-    room?: string;
+    roomid?: string;
     socket: string;
 }
 

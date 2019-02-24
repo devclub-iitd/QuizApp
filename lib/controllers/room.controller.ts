@@ -5,10 +5,10 @@ import { QM } from './qm.controller';
 
 export const Room: RoomModel = initRoom(sequelize, QM);
 
-export function createRoom(roomID: string,  qm: string) {
+export function createRoom(roomid: string,  qm: string) {
     return new Promise((resolve, reject) => {
         Room.create({
-            roomID: roomID,
+            roomid: roomid,
             qm: qm,
         }).then((room) => {
             resolve(room);

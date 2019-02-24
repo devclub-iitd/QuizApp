@@ -6,11 +6,11 @@ import { RoomModel } from '../types/room';
 
 export function initQuestion(sequelize: Sequelize.Sequelize, Room: RoomModel):  QuestionModel {
     const attributes: SequelizeAttributes<QuestionAttributes> = {
-        roomID: {
+        roomid: {
             type: Sequelize.STRING,
             references: {
                 model: Room,
-                key: 'roomID',
+                key: 'roomid',
             },
             allowNull: false,
         },

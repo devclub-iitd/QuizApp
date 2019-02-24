@@ -5,7 +5,7 @@ import { QMModel } from '../types/quizmaster';
 
 export function initRoom(sequelize: Sequelize.Sequelize, QM: QMModel):  RoomModel {
     const attributes: SequelizeAttributes<RoomAttributes> = {
-        roomID: {
+        roomid: {
             type: Sequelize.STRING,
             primaryKey: true,
         },

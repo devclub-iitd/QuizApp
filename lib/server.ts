@@ -30,7 +30,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('createroom', (payload) => {
         let message = '';
-        roomController.createRoom(payload.roomID, payload.qm)
+        roomController.createRoom(payload.roomid, payload.qm)
         .then((room) => message = 'Success')
         .catch((err) => message = 'Failed');
         socket.emit('createroom', { message: message });
@@ -38,9 +38,17 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('createquestion', (payload) => {
         let message = '';
-        quesController.createQuestion(payload.question, payload.roomID, payload.serial)
+        quesController.createQuestion(payload.question, payload.roomid, payload.serial)
         .then((ques) => message = 'Success')
         .catch((err) => message = 'Failed');
         socket.emit('createquestion', { message: message });
+    });
+
+    socket.on('joinroom', (payload) => {
+        let message = '';
+        userController.addToRoom(payload.email, payload.roomid)
+        .then((user) => message = 'Success')
+        .catch((err) => message = 'Failed');
+        socket.emit('joinroom', { message: message });
     });
 });

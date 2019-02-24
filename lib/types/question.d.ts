@@ -1,7 +1,7 @@
 import Sequelize = require('sequelize');
 
 export interface QuestionAttributes {
-    roomID: string;
+    roomid: string;
     question: JSON;
     serial: number;
 }

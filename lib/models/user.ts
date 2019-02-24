@@ -21,11 +21,11 @@ export function initUser(sequelize: Sequelize.Sequelize, Room: RoomModel): UserM
             type: Sequelize.STRING,
             allowNull: false
         },
-        room: {
+        roomid: {
             type: Sequelize.STRING,
             references: {
                 model: Room,
-                key: 'roomID',
+                key: 'roomid',
             }
         },
         socket: {
