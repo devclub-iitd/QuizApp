@@ -6,17 +6,20 @@ export function initQM(sequelize: Sequelize.Sequelize):  QMModel {
     const attributes: SequelizeAttributes<QMAttributes> = {
         username: {
             type: Sequelize.STRING,
+            primaryKey: true,
         },
         email: {
             type: Sequelize.STRING,
             validate: {
                 isEmail: true,
             },
-            primaryKey: true,
         },
         phone: {
             type: Sequelize.JSON,
             allowNull: false,
+            validate: {
+                isNumeric: true,
+            },
         },
         password: {
             type: Sequelize.STRING,

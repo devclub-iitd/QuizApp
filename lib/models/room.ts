@@ -17,7 +17,7 @@ export function initRoom(sequelize: Sequelize.Sequelize, QM: QMModel):  RoomMode
             type: Sequelize.STRING,
             references: {
                 model: QM,
-                key: 'email',
+                key: 'username',
             },
             allowNull: false,
         },
