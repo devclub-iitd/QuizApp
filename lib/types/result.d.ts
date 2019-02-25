@@ -1,8 +1,9 @@
 import Sequelize = require('sequelize');
+import { AttemptJSON } from './attempt';
 
 export interface ResultAttributes {
     roomid: string;
-    attempts: JSON;
+    attempts?: AttemptJSON;
     username: string;
 }
 
