@@ -1,5 +1,4 @@
 import Sequelize = require('sequelize');
-import uuid = require('uuid/v4');
 import { SequelizeAttributes } from '../types/attributes';
 import { QuestionAttributes, QuestionInstance, QuestionModel } from '../types/question';
 import { RoomModel } from '../types/room';
