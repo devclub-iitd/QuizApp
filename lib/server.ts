@@ -74,7 +74,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         .then(([users, question]) => {
             socket.emit('question', { question: question });
             for(const x of users) {
-                socket.broadcast.to(x.socket).emit('question', { question: quesetion });
+                socket.broadcast.to(x.socket).emit('question', { question: question });
             }
         })
         .catch((err) => {
