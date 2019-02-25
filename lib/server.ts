@@ -55,11 +55,30 @@ io.on('connection', (socket: SocketIO.Socket) => {
         })
         .then(([users, question]) => {
             setTimeout(function() {
+                socket.emit('question', { question: question });
                 for(const x of users) {
                     socket.broadcast.to(x.socket).emit('question', { question: question });
                 }
-                socket.emit('question', { question: question })
             }, 10000);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    });
+
+    socket.on('next', (payload) => {
+        userController.findByRoom(payload.roomid)
+        .then((users) => {
+            return Promise.all([users, quesController.findNext(payload.roomid, payload.serial)]);
+        })
+        .then(([users, question]) => {
+            socket.emit('question', { question: question });
+            for(const x of users) {
+                socket.broadcast.to(x.socket).emit('question', { question: quesetion });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
         });
     });
 });
