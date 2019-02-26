@@ -25,6 +25,7 @@ export function initResult(sequelize: Sequelize.Sequelize, Room: RoomModel, User
             },
             allowNull: false,
         },
+        total: Sequelize.INTEGER,
     };
 
     const Result = sequelize.define<ResultInstance, ResultAttributes>('result', attributes, {createdAt: false, updatedAt: false});
