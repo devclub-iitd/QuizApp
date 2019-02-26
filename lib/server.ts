@@ -19,13 +19,13 @@ io.on('connection', (socket: SocketIO.Socket) => {
     socket.on('login', (payload) => {
         console.log(payload);
         if(payload.isQM) {
-            qmController.createQM(payload.username, payload.email, payload.phone, payload.password, socket.id)
+            qmController.loginQM(payload.username, payload.email, payload.phone, payload.password, socket.id)
             .then((qm) => socket.emit('login', { message: 'Success' }))
-            .catch((err) => socket.emit('login', { message: 'Failed' }));
+            .catch((err) => socket.emit('login', { message: err }));
         } else {
             userController.createUser(payload.username, payload.email, payload.phone, socket.id)
             .then((user) => socket.emit('login', { message: 'Success' }))
-            .catch((err) => {console.log(err); socket.emit('login', { message: 'Failed' , err: err });});
+            .catch((err) => {console.log(err); socket.emit('login', { message: err});});
         };
     });
 
