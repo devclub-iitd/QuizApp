@@ -21,10 +21,6 @@ export function initQuestion(sequelize: Sequelize.Sequelize, Room: RoomModel):  
             type: Sequelize.JSON,
             allowNull: false,
         },
-        serial: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-        },
         answer: {
             type: Sequelize.INTEGER,
             allowNull: false,

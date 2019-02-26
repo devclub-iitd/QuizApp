@@ -7,13 +7,12 @@ import { quesArray } from '../types/quesarray';
 
 export const Question: QuestionModel = initQuestion(sequelize, Room);
 
-export function createQuestion(question: Text, options: JSON, roomid: string, serial: number, answer: number): Promise<QuestionInstance> {
+export function createQuestion(question: Text, options: JSON, roomid: string, answer: number): Promise<QuestionInstance> {
     return new Promise((resolve, reject) => {
         Question.create({
             question: question,
             options: options,
             roomid: roomid,
-            serial: serial,
             answer: answer,
         })
         .then((question) => resolve(question))
@@ -23,33 +22,33 @@ export function createQuestion(question: Text, options: JSON, roomid: string, se
 
 export function findNext(roomid: string, serial: number): Promise<QuestionInstance | null> {
     return new Promise((resolve, reject) => {
-        Question.findOne({
+        Question.findAll({
             attributes: ['question'],
             where: {
                 roomid: roomid,
-                serial: serial,
             },
         })
-        .then((question) => resolve(question))
+        .then((questions) => {
+            resolve(questions[serial]);
+        })
         .catch((err) => reject(err));
     });
 };
 
 export function checkAnswer(roomid: string, serial: number, attempt: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
-        Question.findOne({
+        Question.findAll({
             attributes: ['answer'],
             where: {
                 roomid: roomid,
-                serial: serial,
             },
         })
-        .then((question) => {
-            if(question === null) {
+        .then((questions) => {
+            if(questions === null) {
                 throw 'No such question';
             }
             else {
-                resolve(question.answer === attempt);
+                resolve(questions[serial].answer === attempt);
             };
         })
         .catch((err) => {

@@ -45,13 +45,22 @@ io.on('connection', (socket: SocketIO.Socket) => {
     socket.on('createroom', (payload) => {
         roomController.createRoom(payload.roomid, payload.qm)
         .then((room) => socket.emit('createroom', { message: 'Success' }))
-        .catch((err) => socket.emit('createroom', { message: 'Failed' }));
+        .catch((err) => socket.emit('createroom', { message: err }));
     });
 
     socket.on('createquestion', (payload) => {
-        quesController.createQuestion(payload.question, payload.options, payload.roomid, payload.serial, payload.answer)
-        .then((ques) => socket.emit('createquestion', { message: 'Success' }))
-        .catch((err) => socket.emit('createquestion', { message: 'Failed' }));
+        console.log(payload);
+        quesController.createQuestion(payload.question, payload.options, payload.roomid, payload.answer)
+        .then((ques) => {
+            return quesController.getByRoom(payload.roomid);
+        })
+        .then((questions) => {
+            socket.emit('createquestion', {
+                message: 'Success',
+                questions: questions,
+            });
+        })
+        .catch((err) => socket.emit('createquestion', { message: err }));
     });
 
     socket.on('fetchroom', (payload) => {
