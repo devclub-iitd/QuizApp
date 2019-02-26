@@ -14,6 +14,10 @@ export function initQuestion(sequelize: Sequelize.Sequelize, Room: RoomModel):  
             allowNull: false,
         },
         question: {
+            type: Sequelize.TEXT,
+            allowNull: false,
+        },
+        options: {
             type: Sequelize.JSON,
             allowNull: false,
         },

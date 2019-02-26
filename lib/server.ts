@@ -34,7 +34,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
     });
 
     socket.on('createquestion', (payload) => {
-        quesController.createQuestion(payload.question, payload.roomid, payload.serial, payload.answer)
+        quesController.createQuestion(payload.question, payload.options, payload.roomid, payload.serial, payload.answer)
         .then((ques) => socket.emit('createquestion', { message: 'Success' }))
         .catch((err) => socket.emit('createquestion', { message: 'Failed' }));
     });

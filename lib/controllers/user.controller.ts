@@ -20,7 +20,7 @@ export function createUser(username: string, email: string, phone: string,socket
     });
 };
 
-export function addToRoom(email: string, roomid: string): Promise<UserInstance> {
+export function addToRoom(username: string, roomid: string): Promise<UserInstance> {
     return new Promise((resolve, reject) => {
         Room.findAndCountAll({
             attributes: ['roomid'],
@@ -30,7 +30,7 @@ export function addToRoom(email: string, roomid: string): Promise<UserInstance> 
         })
         .then((count) => {
             if(count.count === 1) {
-                return User.findByPk(email);
+                return User.findByPk(username);
             }
             else {
                 throw ('No room with id '+roomid);
