@@ -12,7 +12,7 @@ class Answers extends React.Component {
     return (
       <div className="col-md-6 option-container">
       <Option
-        value={this.props.options[i]}
+        value={this.props.options["option"+i]}
         onClick={() => this.props.onClick(i)}
         isOn={this.props.isOn}
       />
@@ -24,12 +24,12 @@ class Answers extends React.Component {
     return (
       <div className="answers">
         <div className="row option-row">
-          {this.renderOption(0)}
           {this.renderOption(1)}
+          {this.renderOption(2)}
         </div>
         <div className="row option-row">
-          {this.renderOption(2)}
           {this.renderOption(3)}
+          {this.renderOption(4)}
         </div>
       </div>
     );

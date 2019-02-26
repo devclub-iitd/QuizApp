@@ -3,33 +3,48 @@ import UserInLobby from "./UserInLobby"
 class Lobby extends React.Component{
   /* 
   props:
+  roomstatus: (String)
+  socket: socket object (Object)
   roomcode: recieved roomcode (String)
-  cb: called when game starts (No args)
+  cb: called when game starts (Takes parent state update)
    */
   constructor(props){
     super(props);
     this.state = {
       userList: ["user1","user2","user3","user4"],
-      status: "Starting Soon", /* "Waiting For QM", "Started", "Starting Soon" */
+      status: this.props.roomstatus, /* "inactive", "waiting", "collecting", "finish","countdown" */
       startTime: new Date(),
-      timeLeft: 100,
+      timeLeft: '',
     };
-    this.state.startTime.setTime(this.state.startTime.getTime()+10000); //temp
+    this.props.socket.on('start', (payload)=>{
+      this.setState({
+        startTime:payload.time,
+        timeLeft:(payload.time.getTime()-Date.now())/1000|0,
+      });
+    });
+    this.props.socket.on('question', (payload)=>{
+      this.props.cb({
+        question: payload.question,
+        options: payload.options,
+        timerEndTime: payload.endtime,
+        timerTotalTime: payload.totaltime,
+      })
+    });
     this.timerID=setInterval(()=>this.tick(),1000);
   }
   componentWillUnmount(){
     clearInterval(this.timerID);
+    this.props.socket.off('start');
+    this.props.socket.off('question');
   }
   tick(){
-    if(this.state.status==="Starting Soon"){
+    if(this.state.status==="countdown"){
       this.setState({
         timeLeft:(this.state.startTime.getTime()-Date.now())/1000|0,
       });
     }
-    if(((this.state.startTime.getTime()-Date.now())/1000|0) <= 0 && this.state.status==="Starting Soon"){ //Maybe 1?
-      this.props.cb();
-    }
   }
+
   render(){
     let userDisplayList=[];
     let countdown;
@@ -41,9 +56,16 @@ class Lobby extends React.Component{
       )
     });
     if(this.state.status==="Starting Soon"){
-      countdown = (
-        <div className="countdown">{this.state.timeLeft}</div> 
-      )
+      if(this.state.timeLeft>=0){
+        countdown = (
+          <div className="countdown">{this.state.timeLeft}</div> 
+        )
+      }
+      else{
+        countdown = (
+          <div className="countdown">0</div> 
+        )
+      }
     }
     else{
       countdown = (

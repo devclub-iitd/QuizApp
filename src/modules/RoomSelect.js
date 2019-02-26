@@ -29,8 +29,12 @@ class RoomSelect extends React.Component{
     event.preventDefault();
     this.props.socket.emit('joinroom',{
       roomid: this.state.roomcode,
-      username: this.state.username,
+      username: this.props.username,
     });
+    // console.log({
+    //   roomid: this.state.roomcode,
+    //   username: this.state.username,
+    // })
     this.setState({
       isWaiting: true,
     });
@@ -38,10 +42,17 @@ class RoomSelect extends React.Component{
 
   handleRoomResponse(payload){
     if(payload.message==="Success"){
-      this.props.cb({
+      let stateUpdate={
         roomcode: this.state.roomcode,
+        roomstatus: payload.status,
         // userlist: payload.userlist,
-      });
+      }
+      if(payload.state==="countdown" || payload.state==="waiting" || payload.state==="collecting"){
+        this.props.cb(stateUpdate,"Playing");
+      }
+      else{
+        this.props.cb(stateUpdate,"InLobby");
+      }
     }
     else{
       this.setState({

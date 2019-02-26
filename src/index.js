@@ -18,17 +18,15 @@ class QuizApp extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      status: "SelectingRoom" /* "LoggingIn","InLobby","Playing","SelectingRoom" */,
-      username: "hey",
+      status: "Playing" /* "LoggingIn","InLobby","Playing","SelectingRoom" */,
+      username: "",
       isQM: false,
+      roomstatus:"",
+      question:"",
+      options:"",
+      timerEndTime: new Date(),
+      timerTotalTime: 30,
     }
-  }
-  renderGame(){
-    return(
-      <Game 
-        socket={socket}
-      />
-    );
   }
   setStatus(s){
     this.setState({
@@ -47,14 +45,27 @@ class QuizApp extends React.Component{
       />
     )
   }
+  renderGame(){
+    return(
+      <Game 
+        socket={socket}
+        options={this.state.options}
+        question={this.state.question}
+        timerEndTime={this.state.timerEndTime}
+        timerTotalTime={this.state.timerTotalTime}
+      />
+    );
+  }
   renderLobby(){
     return (
       // <div>
         // <div className="game-box">{this.state.username}</div>
         <Lobby 
+          roomstatus={this.state.roomstatus}
           roomcode={this.state.roomcode}
           socket={socket}
-          cb={()=>this.setStatus("Playing")}
+          cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate,"Playing")}
+          status={this.state.roomstatus}
         />
       // </div>
     );
@@ -62,8 +73,9 @@ class QuizApp extends React.Component{
   renderRoomSelect(){
     return(
       <RoomSelect 
-        cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate, "InLobby")}
+        cb={(stateUpdate, nextParentState)=>this.setStateAndStatus(stateUpdate, nextParentState)}
         socket={socket}
+        username={this.state.username}
       />
     )
   }
@@ -75,7 +87,8 @@ class QuizApp extends React.Component{
     else if(this.state.status==="InLobby"){
       return this.renderLobby();
     }
-    else if(this.state.status==="Playing"){
+    else if(
+      this.state.status==="Playing"){
       return this.renderGame();
     }
     else if(this.state.status==="SelectingRoom"){

@@ -8,19 +8,32 @@ class Game extends React.Component {
   /* 
   props:
   socket: socket object (Object)
+  options: options JSON
+  question: HTML
+  timerEndTime: ending time (Date)
+  timerTotalTime: max time for a question in seconds (Integer)
   */
   constructor(props) {
     super(props);
     this.state = {
       status: 0,
-      options: ["Yes, it is", "Really, it is", "This isn't funny you know", "Please stop"],
-      questionText: "This is a sample question, or is it?",
-      response: -1,
+      options: this.props.options,
+      questionText: this.props.question,
+      response: -1, //temp
       timerIsOn: true,
-      timerEndTime: new Date(),
-      timerTotalTime: 10,
+      timerEndTime: this.props.timerEndTime,
+      timerTotalTime: this.props.timerTotalTime,
     };
-    this.state.timerEndTime.setTime(this.state.timerEndTime.getTime()+10000) //temp
+    this.props.socket.on('question',(payload)=>{
+      this.setState({
+        question: payload.question,
+        options: payload.options,
+        timerEndTime: payload.endtime,
+        timerTotalTime: payload.totaltime,
+        timerIsOn: true,
+      })
+    });
+    
   }
   handleTimeout(){
     this.setState({
@@ -40,24 +53,33 @@ class Game extends React.Component {
     }
   } 
   render() {
-    return (
-      <div className="game-box col-sm-8 offset-sm-2">
-        <div className="response">{this.state.response}</div>
-        <Question questionText={this.state.questionText} />
-        <Answers
-          options={this.state.options}
-          onClick={i => this.handleClick(i)}
-          isOn={this.state.timerIsOn}
-        />
-        {/* <TestButton /> */}
-        <Timer 
-          endTime={this.state.timerEndTime}
-          isOn={this.state.timerIsOn}
-          totalTime={this.state.timerTotalTime}
-          onTimeout={()=>this.handleTimeout()}
-        />
-      </div>
-    );
+    if(this.state.questionText){
+      return (
+        <div className="game-box col-sm-8 offset-sm-2">
+          <div className="response">{this.state.response}</div>
+          <Question questionText={this.state.questionText} />
+          <Answers
+            options={this.state.options}
+            onClick={i => this.handleClick(i)}
+            isOn={this.state.timerIsOn}
+          />
+          {/* <TestButton /> */}
+          <Timer 
+            endTime={this.state.timerEndTime}
+            isOn={this.state.timerIsOn}
+            totalTime={this.state.timerTotalTime}
+            onTimeout={()=>this.handleTimeout()}
+          />
+        </div>
+      );
+    }
+    else{
+      return(
+        <div className="game-box col-sm-8 offset-sm-2">
+        Please Wait For The Next Question
+        </div>
+      );
+    }
   }
 }
 
