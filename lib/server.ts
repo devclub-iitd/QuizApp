@@ -88,4 +88,14 @@ io.on('connection', (socket: SocketIO.Socket) => {
         .then((result) => {})
         .catch((err) => console.log(err));
     });
+
+    socket.on('leaderboard', (payload) => {
+        resultController.getLeaderboard(payload.roomid)
+        .then((leaderboard) => {
+            socket.emit('leaderboard', {
+                leaderboard: leaderboard,
+            });
+        })
+        .catch((err) => console.log(err));
+    });
 });
