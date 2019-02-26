@@ -40,31 +40,40 @@ export function createUser(username: string, email: string, phone: string,socket
     });
 };
 
-export function addToRoom(username: string, roomid: string): Promise<UserInstance> {
+export function addToRoom(username: string, roomid: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
-        Room.findAndCountAll({
-            attributes: ['roomid'],
-            where: {
-                roomid: roomid,
-            },
-        })
-        .then((count) => {
-            if(count.count === 1) {
-                return User.findByPk(username);
+        Room.findByPk(roomid)
+        .then((room) => {
+            if(room === null) {
+                throw 'No room with id '+roomid;
+            }
+            else if(room.state === 'inactive') {
+                throw 'This quiz has ended.';
             }
             else {
-                throw ('No room with id '+roomid);
+                return Promise.all([User.findByPk(username)]);
             }
         })
-        .then((user) => {
+        .then(([room, user]) => {
             if(user !== null) {
-                return user.update({ roomid: roomid });
+                return Promise.all([room, user.update({ roomid: roomid })]);
             } else {
-                throw 'user not found';
+                throw 'User not found.';
             }
         })
-        .then((user) => resolve(user))
-        .catch((err) => reject(err))
+        .then(([room, user]) => {
+            return findByRoom(roomid);
+        })
+        .then((users) => {
+            let userArray: string[] = [];
+
+            users.map((user, index) => {
+                userArray[index] = users[index].username;
+            });
+
+            resolve(userArray);
+        })
+        .catch((err) => reject(err));
     });
 }
 

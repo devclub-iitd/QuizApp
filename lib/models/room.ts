@@ -10,8 +10,8 @@ export function initRoom(sequelize: Sequelize.Sequelize, QM: QMModel):  RoomMode
             primaryKey: true,
         },
         state: {
-            type: Sequelize.ENUM,
-            values: ['inactive','countdown', 'waiting', 'collecting', 'finish'],
+            type: Sequelize.STRING,
+            defaultValue: 'inactive',
         },
         qm: {
             type: Sequelize.STRING,

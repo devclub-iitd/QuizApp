@@ -41,8 +41,8 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('joinroom', (payload) => {
         userController.addToRoom(payload.email, payload.roomid)
-        .then((user) => socket.emit('joinroom', { message: 'Success' }))
-        .catch((err) => socket.emit('joinroom', { message: 'Failed' }));
+        .then((users) => socket.emit('joinroom', { message: 'Success', users: users }))
+        .catch((err) => socket.emit('joinroom', { message: 'Failed', err: err }));
     });
 
     socket.on('start', (payload) => {

@@ -2,7 +2,7 @@ import Sequelize = require('sequelize');
 
 export interface RoomAttributes {
     roomid: string;
-    state?: Enumerator;
+    state?: string;
     qm: string;
 }
 
