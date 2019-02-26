@@ -56,7 +56,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         })
         .then(([users, question]) => {
             setTimeout(function() {
-                socket.emit('question', { question: question });
+                socket.emit('question', { question: question[0].question });
                 for(const x of users) {
                     socket.broadcast.to(x.socket).emit('question', { question: question });
                 }
@@ -73,7 +73,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             return Promise.all([users, quesController.findNext(payload.roomid, payload.serial)]);
         })
         .then(([users, question]) => {
-            socket.emit('question', { question: question });
+            socket.emit('question', { question: question[0].question });
             for(const x of users) {
                 socket.broadcast.to(x.socket).emit('question', { question: question });
             }

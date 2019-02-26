@@ -31,4 +31,27 @@ export function findNext(roomid: string, serial: number): Promise<QuestionInstan
         .then((question) => resolve(question))
         .catch((err) => reject(err));
     });
+};
+
+export function checkAnswer(roomid: string, serial: number, attempt: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+        Question.findOne({
+            attributes: ['answer'],
+            where: {
+                roomid: roomid,
+                serial: serial,
+            },
+        })
+        .then((question) => {
+            if(question === null) {
+                throw 'No such question';
+            }
+            else {
+                resolve(question.answer === attempt);
+            };
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
 }
