@@ -63,28 +63,32 @@ class Game extends React.Component {
   render() {
     if(this.state.questionText){
       return (
-        <div className="game-box col-sm-8 offset-sm-2">
-          <div className="response">{this.state.response}</div>
-          <Question questionText={this.state.questionText} />
-          <Answers
-            options={this.state.options}
-            onClick={i => this.handleClick(i)}
-            isOn={this.state.timerIsOn}
-          />
-          {/* <TestButton /> */}
-          <Timer 
-            endTime={this.state.timerEndTime}
-            isOn={this.state.timerIsOn}
-            totalTime={this.state.timerTotalTime}
-            onTimeout={()=>this.handleTimeout()}
-          />
+        <div className="row h-100">
+          <div className="game-box my-auto col-sm-8 offset-sm-2">
+            <div className="response">{this.state.response}</div>
+            <Question questionText={this.state.questionText} />
+            <Answers
+              options={this.state.options}
+              onClick={i => this.handleClick(i)}
+              isOn={this.state.timerIsOn}
+            />
+            {/* <TestButton /> */}
+            <Timer 
+              endTime={this.state.timerEndTime}
+              isOn={this.state.timerIsOn}
+              totalTime={this.state.timerTotalTime}
+              onTimeout={()=>this.handleTimeout()}
+            />
+          </div>
         </div>
       );
     }
     else{
       return(
-        <div className="game-box col-sm-8 offset-sm-2">
-        Please Wait For The Next Question
+        <div className="row h-100">
+          <div className="game-box my-auto col-sm-8 offset-sm-2">
+            Please Wait For The Next Question
+          </div>
         </div>
       );
     }

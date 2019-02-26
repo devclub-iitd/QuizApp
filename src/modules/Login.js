@@ -45,9 +45,17 @@ class Login extends React.Component{
   }
   handleLoginResponse(payload){
     if(payload.message==="Success"){
-      this.props.cb({
+      let stateUpdate = {
         username: this.state.username,
-      });
+        isQM: this.state.isQM,
+      }
+      let nextState="SelectingRoom";
+      if(this.state.isQM){
+        stateUpdate["roomCodeList"]=payload.rooms;
+        nextState="RoomListScreen";
+        console.log(stateUpdate)
+      }
+      this.props.cb(stateUpdate,nextState);
     }
     else{
       this.setState({

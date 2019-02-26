@@ -18,7 +18,7 @@ class Loading extends React.Component{
   }
   tick(){
     this.props.socket.off(this.props.listenFor);
-    // this.props.onFailure();
+    this.props.onFailure();
   }
   componentWillUnmount(){
     clearInterval(this.timerID);
@@ -26,10 +26,12 @@ class Loading extends React.Component{
   
   render(){
     return (
-      <div className="game-box col-sm-8 offset-sm-2">
-        <div className="spinner-border"></div>
-        {this.props.text}
-        <BackButton cb={()=>this.props.onCancel()}/>
+      <div className="row h-100">
+        <div className="game-box my-auto col-sm-8 offset-sm-2">
+          <div className="spinner-border"></div>
+          {this.props.text}
+          <BackButton cb={()=>this.props.onCancel()}/>
+        </div>
       </div>
     )
   }

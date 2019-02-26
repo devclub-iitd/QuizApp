@@ -89,14 +89,16 @@ class Lobby extends React.Component{
     }
     //Should add unique key to each list element
     return(
-      <div className="lobby game-box col-sm-8 offset-sm-2">
-        {this.props.roomcode}
-        <div className="user-list-in-lobby">
-          {userDisplayList} 
+      <div className="row h-100">
+        <div className="game-box my-auto col-sm-8 offset-sm-2 lobby">
+          {this.props.roomcode}
+          <div className="user-list-in-lobby">
+            {userDisplayList} 
           </div>
-        {countdown}
+          {countdown}
         {/* {this.state.status}
         {this.props.status} */}
+        </div>
       </div>
     );
   }

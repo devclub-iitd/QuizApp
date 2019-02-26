@@ -7,6 +7,8 @@ import Game from "./modules/Game";
 import Lobby from "./modules/Lobby";
 import Login from "./modules/Login";
 import RoomSelect from "./modules/RoomSelect";
+import RoomListScreen from './RoomListScreen';
+import RoomMenu from './modules/RoomMenu';
 
 const SERVER_URL = 'http://10.184.17.101:3001';
 const socket = openSocket(SERVER_URL);
@@ -18,7 +20,7 @@ class QuizApp extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      status: "LoggingIn" /* "LoggingIn","InLobby","Playing","SelectingRoom" */,
+      status: "LoggingIn" /* "LoggingIn","InLobby","Playing","SelectingRoom","RoomListScreen","ViewingRoom" */,
       username: "",
       isQM: false,
       roomstatus:"",
@@ -27,6 +29,8 @@ class QuizApp extends React.Component{
       timerEndTime: new Date(),
       timerTotalTime: 30,
       userlist:["iw"],
+      roomCodeList: ["aw"],
+      questionList:[""],
     }
   }
   setStatus(s){
@@ -41,7 +45,7 @@ class QuizApp extends React.Component{
   renderLogin(){
     return(
       <Login 
-        cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate, "SelectingRoom")}
+        cb={(stateUpdate,nextStatus)=>this.setStateAndStatus(stateUpdate, nextStatus)}
         socket={socket}
       />
     )
@@ -81,7 +85,22 @@ class QuizApp extends React.Component{
       />
     )
   }
-
+  renderRoomScreen(){
+    return(
+      <RoomListScreen
+        socket={socket}
+        roomCodeList={this.state.roomCodeList}
+        cb={(stateUpdate,nextStatus)=>this.setStateAndStatus(stateUpdate,nextStatus)}
+      />
+    )
+  }
+  renderRoomMenu(){
+    return(
+      <RoomMenu
+        questionList={this.state.questionList}
+      />
+    );
+  }
   render(){
     // console.log(this.state.userlist)
     // console.log("hi")
@@ -97,6 +116,12 @@ class QuizApp extends React.Component{
     }
     else if(this.state.status==="SelectingRoom"){
       return this.renderRoomSelect();
+    }
+    else if(this.state.status==="RoomListScreen"){
+      return this.renderRoomScreen();
+    }
+    else if(this.state.status==="ViewingRoom"){
+      return this.renderRoomMenu();
     }
   }
 }

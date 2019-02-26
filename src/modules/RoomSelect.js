@@ -77,19 +77,19 @@ class RoomSelect extends React.Component{
       );
     }
     return(
-      <div className="game-box col-sm-8 offset-sm-2">
-        {this.state.message}
-        <form onSubmit={(event)=>this.handleSubmit(event)}>
-          <div className="form-group">
-          <label>
-            RoomCode: 
-            </label>
-
-            <input className="form-control"type="text" value={this.state.value} onChange={(event)=>this.takeTextInput(event,"roomcode")} />
+      <div className="row h-100">
+        <div className="game-box my-auto col-sm-8 offset-sm-2"> 
+          {this.state.message}
+          <form onSubmit={(event)=>this.handleSubmit(event)}>
+            <div className="form-group">
+              <label>
+                RoomCode: 
+              </label>
+              <input className="form-control"type="text" value={this.state.value} onChange={(event)=>this.takeTextInput(event,"roomcode")} />
             </div>
-          
-          <input className="form-control" type="submit" value="Submit" />
-        </form> 
+            <input className="form-control" type="submit" value="Submit" />
+          </form> 
+        </div>
       </div>
     );
   }
