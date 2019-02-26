@@ -5,8 +5,7 @@ import { Room } from './room.controller';
 import { User } from './user.controller';
 import { checkAnswer } from './ques.controller';
 import { AttemptJSON } from '../types/attempt';
-import { totalmem } from 'os';
-
+import { Leaderboard } from '../types/leaderboard';
 
 export const Result: ResultModel = initResult(sequelize, Room, User);
 
@@ -70,6 +69,44 @@ export function addAttempt(roomid: string, username: string, serial: number, att
         })
         .catch((err) => {
             reject(err)
+        });
+    });
+};
+
+export function getLeaderboard(roomid: string): Promise<Leaderboard> {
+    return new Promise((resolve, reject) => {
+        Result.findAll({
+            attributes: ['username', 'total'],
+            where: {
+                roomid: roomid,
+            },
+        })
+        .then((results) => {
+            let resultArray: Leaderboard = [];
+
+            results.map((result, index) => {
+                resultArray[index] = {
+                    username: result.username,
+                    total: result.total,
+                };
+            });
+
+            resultArray.sort((a, b) => {
+                if(a.total > b.total) {
+                    return -1;
+                }
+                else if (a.total < b.total) {
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            });
+
+            resolve(resultArray);
+        })
+        .catch((err) => {
+            reject(err);
         });
     });
 }
