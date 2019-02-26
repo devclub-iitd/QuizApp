@@ -20,12 +20,25 @@ io.on('connection', (socket: SocketIO.Socket) => {
         console.log(payload);
         if(payload.isQM) {
             qmController.loginQM(payload.username, payload.email, payload.phone, payload.password, socket.id)
-            .then((qm) => socket.emit('login', { message: 'Success' }))
-            .catch((err) => socket.emit('login', { message: err }));
+            .then((qm) => {
+                return roomController.getRooms(qm.username);
+            })
+            .then((rooms) => {
+                socket.emit('login', {
+                    message: 'Success',
+                    rooms: rooms,
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                socket.emit('login', {
+                    message: err
+                });
+            });
         } else {
             userController.createUser(payload.username, payload.email, payload.phone, socket.id)
             .then((user) => socket.emit('login', { message: 'Success' }))
-            .catch((err) => {console.log(err); socket.emit('login', { message: err});});
+            .catch((err) => {console.log(err); socket.emit('login', { message: err });});
         };
     });
 

@@ -1,11 +1,10 @@
 import sequelize = require('../config/db');
 import { initQM } from '../models/quizmaster';
-import { QMModel } from '../types/quizmaster';
+import { QMModel, QMInstance } from '../types/quizmaster';
 
 export const QM: QMModel = initQM(sequelize);
 
-export function loginQM(username: string, email:string, phone: string,
-                        password: string, socket: string) {
+export function loginQM(username: string,email:string,phone: string,password: string,socket: string): Promise<QMInstance>{
     return new Promise((resolve, reject) => {
         QM.findByPk(username)
         .then((qm) => {

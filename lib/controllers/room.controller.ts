@@ -33,4 +33,26 @@ export function getState(roomid: string): Promise<string> {
             reject(err);
         });
     });
+};
+
+export function getRooms(qm: string): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+        Room.findAll({
+            attributes: ['roomid'],
+            where: {
+                qm: qm,
+            },
+        })
+        .then((rooms) => {
+            let roomsArray: string[] = [];
+
+            rooms.map((room, index) => {
+                roomsArray[index] = room.roomid;
+            });
+            resolve(roomsArray);
+        })
+        .catch((err) => {
+            reject(err);
+        })
+    })
 }
