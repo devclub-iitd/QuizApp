@@ -7,6 +7,7 @@ import * as userController from './controllers/user.controller';
 import * as roomController from './controllers/room.controller';
 import * as quesController from './controllers/ques.controller';
 import * as resultController from './controllers/result.controller';
+import { Leaderboard } from './types/leaderboard';
 
 const app: Express.Application = express();
 const server: http.Server = new http.Server(app);
@@ -40,9 +41,47 @@ io.on('connection', (socket: SocketIO.Socket) => {
     });
 
     socket.on('joinroom', (payload) => {
-        userController.addToRoom(payload.email, payload.roomid)
-        .then((users) => socket.emit('joinroom', { message: 'Success', users: users }))
-        .catch((err) => socket.emit('joinroom', { message: 'Failed', err: err }));
+        roomController.getState(payload.roomid)
+        .then((state) => {
+            if(state === 'finish') {
+                resultController.getLeaderboard(payload.roomid)
+                .then((leaderboard) => {
+                    socket.emit('joinroom', {
+                        message: 'Success',
+                        state: state,
+                        leaderboard: leaderboard,
+                    });
+                })
+                .catch((err) => {
+                    socket.emit('joinroom', {
+                        message: 'Failed',
+                        err: err,
+                    });
+                });
+            }
+            else {
+                userController.addToRoom(payload.email, payload.roomid)
+                .then((users) => {
+                    socket.emit('joinroom', {
+                        message: 'Success',
+                        state: state,
+                        users: users,
+                    });
+                })
+                .catch((err) => {
+                    socket.emit('joinroom', {
+                        message: 'Failed',
+                        err: err,
+                    });
+                });
+            };
+        })
+        .catch((err) => {
+            socket.emit('joinroom', {
+                message: 'Failed',
+                err: err,
+            });
+        });
     });
 
     socket.on('start', (payload) => {

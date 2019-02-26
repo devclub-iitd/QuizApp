@@ -16,4 +16,21 @@ export function createRoom(roomid: string,  qm: string) {
             resolve(err);
         });
     });
+};
+
+export function getState(roomid: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        Room.findByPk(roomid)
+        .then((room) => {
+            if(room !== null) {
+                resolve(room.state);
+            }
+            else {
+                throw 'No room with id '+roomid;
+            };
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
 }

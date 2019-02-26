@@ -42,26 +42,15 @@ export function createUser(username: string, email: string, phone: string,socket
 
 export function addToRoom(username: string, roomid: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
-        Room.findByPk(roomid)
-        .then((room) => {
-            if(room === null) {
-                throw 'No room with id '+roomid;
-            }
-            else if(room.state === 'inactive') {
-                throw 'This quiz has ended.';
-            }
-            else {
-                return Promise.all([User.findByPk(username)]);
-            }
-        })
-        .then(([room, user]) => {
+        User.findByPk(username)
+        .then((user) => {
             if(user !== null) {
-                return Promise.all([room, user.update({ roomid: roomid })]);
+                return user.update({ roomid: roomid });
             } else {
                 throw 'User not found.';
             }
         })
-        .then(([room, user]) => {
+        .then((user) => {
             return findByRoom(roomid);
         })
         .then((users) => {
