@@ -6,6 +6,7 @@ import * as qmController from './controllers/qm.controller';
 import * as userController from './controllers/user.controller';
 import * as roomController from './controllers/room.controller';
 import * as quesController from './controllers/ques.controller';
+import * as resultController from './controllers/result.controller';
 
 const app: Express.Application = express();
 const server: http.Server = new http.Server(app);
@@ -80,5 +81,11 @@ io.on('connection', (socket: SocketIO.Socket) => {
         .catch((err) => {
             console.log(err);
         });
+    });
+
+    socket.on('attempt', (payload) => {
+        resultController.addAttempt(payload.roomid, payload.username, payload.serial, payload.attempt)
+        .then((result) => {})
+        .catch((err) => console.log(err));
     });
 });
