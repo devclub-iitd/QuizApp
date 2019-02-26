@@ -54,6 +54,23 @@ io.on('connection', (socket: SocketIO.Socket) => {
         .catch((err) => socket.emit('createquestion', { message: 'Failed' }));
     });
 
+    socket.on('fetchroom', (payload) => {
+        console.log(payload);
+        quesController.getByRoom(payload.roomid)
+        .then((questions) => {
+            console.log(questions);
+            socket.emit('fetchroom', {
+                message: 'Success',
+                questions: questions,
+            });
+        })
+        .catch((err) => {
+            socket.emit('fetchroom', {
+                message: err,
+            });
+        });
+    });
+
     socket.on('joinroom', (payload) => {
         console.log(payload);
         roomController.getState(payload.roomid)

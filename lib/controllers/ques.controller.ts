@@ -2,6 +2,7 @@ import sequelize = require('../config/db');
 import { initQuestion } from '../models/question';
 import { QuestionModel, QuestionInstance } from '../types/question';
 import { Room } from './room.controller';
+import { quesArray } from '../types/quesarray';
 
 
 export const Question: QuestionModel = initQuestion(sequelize, Room);
@@ -50,6 +51,31 @@ export function checkAnswer(roomid: string, serial: number, attempt: number): Pr
             else {
                 resolve(question.answer === attempt);
             };
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+};
+
+export function getByRoom(roomid: string): Promise<quesArray> {
+    return new Promise((resolve, reject) => {
+        Question.findAll({
+            attributes: ['question','options'],
+            where: {
+                roomid: roomid,
+            },
+        })
+        .then((questions) => {
+            let quesArray: quesArray = [];
+
+            questions.map((question, index) => {
+                quesArray[index] = {
+                    question: question.question,
+                    options: question.options,
+                };
+            });
+            resolve(quesArray);
         })
         .catch((err) => {
             reject(err);
