@@ -5,7 +5,7 @@ export interface ResultAttributes {
     roomid: string;
     attempts?: AttemptJSON;
     username: string;
-    total?: number;
+    total: number;
 }
 
 export type ResultInstance = Sequelize.Instance<ResultAttributes> & ResultAttributes;
