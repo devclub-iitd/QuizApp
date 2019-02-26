@@ -7,14 +7,34 @@ export const User: UserModel = initUser(sequelize, Room);
 
 export function createUser(username: string, email: string, phone: string,socket: string): Promise<UserInstance> {
     return new Promise((resolve, reject) => {
-        User.create({
-            username: username,
-            email: email,
-            phone: phone,
-            socket: socket,
-        }).then((user) => {
+        User.findByPk(username)
+        .then((user) => {
+            if(user === null) {
+                return User.create({
+                    username: username,
+                    email: email,
+                    phone: phone,
+                    socket: socket,
+                });
+            }
+            else if(user.email!==email || user.phone!==phone) {
+                throw 'Username taken. If this is a reconnect request make sure all your credentials match';
+            }
+            else {
+                return user.update({
+                    socket: socket,
+                },
+                {
+                    where: {
+                        username: username,
+                    },
+                });
+            };
+        })
+        .then((user) => {
             resolve(user);
-        }).catch((err) => {
+        })
+        .catch((err) => {
             reject(err);
         });
     });

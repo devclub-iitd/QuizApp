@@ -11,7 +11,7 @@ export function initRoom(sequelize: Sequelize.Sequelize, QM: QMModel):  RoomMode
         },
         state: {
             type: Sequelize.ENUM,
-            values: ['inactive', 'waiting', 'collecting'],
+            values: ['inactive','countdown', 'waiting', 'collecting', 'finish'],
         },
         qm: {
             type: Sequelize.STRING,

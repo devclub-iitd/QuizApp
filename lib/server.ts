@@ -23,7 +23,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         } else {
             userController.createUser(payload.username, payload.email, payload.phone, socket.id)
             .then((user) => socket.emit('login', { message: 'Success' }))
-            .catch((err) => socket.emit('login', { message: 'Failed' }));
+            .catch((err) => socket.emit('login', { message: 'Failed' , err: err }));
         };
     });
 
