@@ -1,8 +1,13 @@
 import React from "react";
 
-function BackButton(cb){
+function BackButton(props){
     return(
-        <button className="btn">&#10005;</button>
+        <button 
+            className="btn"
+            onClick={(e)=>props.cb()}
+        >
+        &#10005;
+        </button>
     );
 }
 

@@ -45,8 +45,9 @@ class RoomSelect extends React.Component{
       let stateUpdate={
         roomcode: this.state.roomcode,
         roomstatus: payload.status,
-        // userlist: payload.userlist,
+        userlist: payload.users,
       }
+      console.log(payload);
       if(payload.state==="countdown" || payload.state==="waiting" || payload.state==="collecting"){
         this.props.cb(stateUpdate,"Playing");
       }
@@ -71,6 +72,7 @@ class RoomSelect extends React.Component{
           listenFor={'joinroom'}
           onSuccess={(payload)=>this.handleRoomResponse(payload)}
           onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
+          onCancel={()=>{this.setState({isWaiting:false, message: ""})}} 
         />
       );
     }
@@ -78,11 +80,15 @@ class RoomSelect extends React.Component{
       <div className="game-box col-sm-8 offset-sm-2">
         {this.state.message}
         <form onSubmit={(event)=>this.handleSubmit(event)}>
+          <div className="form-group">
           <label>
             RoomCode: 
-            <input type="text" value={this.state.value} onChange={(event)=>this.takeTextInput(event,"roomcode")} />
-          </label>
-          <input type="submit" value="Submit" />
+            </label>
+
+            <input className="form-control"type="text" value={this.state.value} onChange={(event)=>this.takeTextInput(event,"roomcode")} />
+            </div>
+          
+          <input className="form-control" type="submit" value="Submit" />
         </form> 
       </div>
     );

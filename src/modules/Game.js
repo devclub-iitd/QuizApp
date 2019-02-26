@@ -35,6 +35,14 @@ class Game extends React.Component {
     });
     
   }
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      options: nextProps.options,
+      questionText: nextProps.question,
+      timerEndTime: nextProps.timerEndTime,
+      timerTotalTime: nextProps.timerTotalTime,
+    })
+  }
   handleTimeout(){
     this.setState({
       timerIsOn: false,

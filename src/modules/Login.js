@@ -31,8 +31,8 @@ class Login extends React.Component{
     this.props.socket.emit('login',{
       username: this.state.username,
       isQM: this.state.isQM,
-      email: this.state.email,
       phone: this.state.phone,
+      email: this.state.email,
       password: this.state.password,
     });
     this.setState({
@@ -66,17 +66,29 @@ class Login extends React.Component{
           listenFor={'login'}
           onSuccess={(payload)=>this.handleLoginResponse(payload)}
           onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
+          onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
         />
       );
     }
     let secInput;
     let QMButtonClass;
     let userButtonClass;
+    let error="";
+    if(this.state.message){
+      error=(
+        <div className="alert alert-warning alert-dismissible"> {this.state.message} 
+          <button type="button" className="close" data-dismiss="alert">&times;</button>
+        </div>
+      );
+    }
     if(this.state.isQM){
       secInput=(
+        <div className="form-group">
         <label> Password: 
-          <input type="password" onChange={(event)=>this.takeTextInput(event,"password")} />
         </label>
+          
+          <input type="password" className="form-control" onChange={(event)=>this.takeTextInput(event,"password")} />
+        </div>
       );
       QMButtonClass="disabled btn btn-info";
       userButtonClass="btn btn-outline-info";
@@ -87,36 +99,47 @@ class Login extends React.Component{
       QMButtonClass="btn btn-outline-info";
     }
     return(
-      <div className="game-box col-sm-8 offset-sm-2">
-        {this.state.message}
-        <form onSubmit={(event)=>this.handleSubmit(event)}>
-          <div>
-            <button 
-              className={userButtonClass} 
-              onClick={(e)=>{ this.setState({ isQM: false }); e.preventDefault() }}
-            >
-              User Login
-            </button>
-            <button 
-              className={QMButtonClass} 
-              onClick={(e)=>{ this.setState({ isQM: true }); e.preventDefault() }}
-            > 
-              QM Login 
-            </button>
-          </div> 
-          <label>
-            Username: 
-            <input type="text" onChange={(event)=>this.takeTextInput(event,"username")} />
-          </label>
-          <label> Email: 
-          <input type="text" onChange={(event)=>this.takeTextInput(event,"email")} />
-        </label>
-        <label> Phone Number: 
-          <input type="number" min="1000000000" max="9999999999" onChange={(event)=>this.takeTextInput(event,"phone")} />
-        </label>
-          {secInput}
-          <input type="submit" value="Submit" />
-        </form>
+      <div className="row h-100">
+        <div className="game-box my-auto col-sm-8 offset-sm-2">
+          {error}
+          <form onSubmit={(event)=>this.handleSubmit(event)}>
+            <div className="form-group">
+              <button 
+                className={userButtonClass} 
+                onClick={(e)=>{ this.setState({ isQM: false }); e.preventDefault() }}
+              >
+                User Login
+              </button>
+              <button 
+                className={QMButtonClass} 
+                onClick={(e)=>{ this.setState({ isQM: true }); e.preventDefault() }}
+              > 
+                QM Login 
+              </button>
+            </div> 
+            <div className="form-group">
+              <label>
+                Username: 
+              </label>
+
+              <input type="text" className="form-control" onChange={(event)=>this.takeTextInput(event,"username")} />
+            </div>
+            {secInput}
+            <div className="form-group">
+              <label> 
+                Email: 
+              </label>
+              <input type="text" className="form-control" onChange={(event)=>this.takeTextInput(event,"email")} />
+            </div>
+            <div className="form-group">
+              <label>
+                Phone Number: 
+              </label>
+              <input type="number" className="form-control" onChange={(event)=>this.takeTextInput(event,"phone")} />
+            </div>
+            <input type="submit" className="form-control" value="Submit" />
+          </form>
+        </div>
       </div>
     )
   }

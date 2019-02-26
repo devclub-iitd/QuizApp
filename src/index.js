@@ -18,7 +18,7 @@ class QuizApp extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      status: "Playing" /* "LoggingIn","InLobby","Playing","SelectingRoom" */,
+      status: "LoggingIn" /* "LoggingIn","InLobby","Playing","SelectingRoom" */,
       username: "",
       isQM: false,
       roomstatus:"",
@@ -26,6 +26,7 @@ class QuizApp extends React.Component{
       options:"",
       timerEndTime: new Date(),
       timerTotalTime: 30,
+      userlist:["iw"],
     }
   }
   setStatus(s){
@@ -66,6 +67,7 @@ class QuizApp extends React.Component{
           socket={socket}
           cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate,"Playing")}
           status={this.state.roomstatus}
+          userList={this.state.userlist}
         />
       // </div>
     );
@@ -81,6 +83,8 @@ class QuizApp extends React.Component{
   }
 
   render(){
+    // console.log(this.state.userlist)
+    // console.log("hi")
     if(this.state.status==="LoggingIn"){
       return this.renderLogin();
     }

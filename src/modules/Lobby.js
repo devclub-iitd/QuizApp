@@ -3,7 +3,7 @@ import UserInLobby from "./UserInLobby"
 class Lobby extends React.Component{
   /* 
   props:
-  roomstatus: (String)
+  status: (String)
   socket: socket object (Object)
   roomcode: recieved roomcode (String)
   cb: called when game starts (Takes parent state update)
@@ -11,8 +11,8 @@ class Lobby extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      userList: ["user1","user2","user3","user4"],
-      status: this.props.roomstatus, /* "inactive", "waiting", "collecting", "finish","countdown" */
+      userList: this.props.userList,
+      status: this.props.status, /* "inactive", "waiting", "collecting", "finish","countdown" */
       startTime: new Date(),
       timeLeft: '',
     };
@@ -30,7 +30,18 @@ class Lobby extends React.Component{
         timerTotalTime: payload.totaltime,
       })
     });
+    this.props.socket.on('update', (payload) => {
+      this.setState({
+        userList: payload.users,
+      })
+    })
     this.timerID=setInterval(()=>this.tick(),1000);
+  }
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      userList: nextProps.userList,
+      status: nextProps.roomstatus,
+    })
   }
   componentWillUnmount(){
     clearInterval(this.timerID);
@@ -46,6 +57,10 @@ class Lobby extends React.Component{
   }
 
   render(){
+    // console.log(this.state.userList);
+    // console.log(this.props.userList);
+    // console.log(this.props.roomstatus);
+    // console.log(this.state.roomstatus);
     let userDisplayList=[];
     let countdown;
     this.state.userList.forEach(element => {
@@ -80,6 +95,8 @@ class Lobby extends React.Component{
           {userDisplayList} 
           </div>
         {countdown}
+        {/* {this.state.status}
+        {this.props.status} */}
       </div>
     );
   }
