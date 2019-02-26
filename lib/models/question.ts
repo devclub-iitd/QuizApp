@@ -21,6 +21,10 @@ export function initQuestion(sequelize: Sequelize.Sequelize, Room: RoomModel):  
             type: Sequelize.INTEGER,
             allowNull: false,
         },
+        answer: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
     };
 
     const Question = sequelize.define<QuestionInstance, QuestionAttributes>('question', attributes, {createdAt: false, updatedAt: false});

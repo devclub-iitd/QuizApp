@@ -4,6 +4,7 @@ export interface QuestionAttributes {
     roomid: string;
     question: JSON;
     serial: number;
+    answer: number;
 }
 
 export type QuestionInstance = Sequelize.Instance<QuestionAttributes> & QuestionAttributes;
