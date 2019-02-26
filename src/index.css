@@ -7,9 +7,7 @@ html{
   /* background-image: url(http://www.transparenttextures.com/patterns/old-map.png); */
   /* background-image: linear-gradient(to bottom right, #42275a, #734b6d);  */
   background-image:linear-gradient(to bottom right, #2C3E50, #FD746C);
-  text-overflow: ellipsis;
-  overflow: hidden;
-  box-sizing: border-box;
+  
 }
 body {
   font: 20px Comfortaa, cursive;
@@ -120,6 +118,9 @@ ol, ul {
   /* border-radius: 4px; */
   padding:0.625em;
   margin : 0.125em;
+}
+.min-50{
+  min-height: 50vh;
 }
 .game-box{
   min-height: 50vh;

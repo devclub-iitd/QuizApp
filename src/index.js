@@ -9,6 +9,7 @@ import Login from "./modules/Login";
 import RoomSelect from "./modules/RoomSelect";
 import RoomListScreen from './RoomListScreen';
 import RoomMenu from './modules/RoomMenu';
+import AddQuestion from './modules/AddQuestion';
 
 const SERVER_URL = 'http://10.184.17.101:3001';
 const socket = openSocket(SERVER_URL);
@@ -20,7 +21,7 @@ class QuizApp extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      status: "LoggingIn" /* "LoggingIn","InLobby","Playing","SelectingRoom","RoomListScreen","ViewingRoom" */,
+      status: "LoggingIn" /* "LoggingIn","InLobby","Playing","SelectingRoom","RoomListScreen","ViewingRoom", "AddingQuestion" */,
       username: "",
       isQM: false,
       roomstatus:"",
@@ -31,6 +32,7 @@ class QuizApp extends React.Component{
       userlist:["iw"],
       roomCodeList: ["aw"],
       questionList:[""],
+      roomCode:"",
     }
   }
   setStatus(s){
@@ -85,7 +87,7 @@ class QuizApp extends React.Component{
       />
     )
   }
-  renderRoomScreen(){
+  renderRoomListScreen(){
     return(
       <RoomListScreen
         socket={socket}
@@ -98,8 +100,18 @@ class QuizApp extends React.Component{
     return(
       <RoomMenu
         questionList={this.state.questionList}
+        cb={()=>this.setStatus("AddingQuestion")}
       />
     );
+  }
+  renderAddQuestion(){
+    return (
+      <AddQuestion
+        roomCode={this.state.roomCode}
+        socket={socket}
+        cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate,"ViewingRoom")}
+      />
+    )
   }
   render(){
     // console.log(this.state.userlist)
@@ -118,10 +130,13 @@ class QuizApp extends React.Component{
       return this.renderRoomSelect();
     }
     else if(this.state.status==="RoomListScreen"){
-      return this.renderRoomScreen();
+      return this.renderRoomListScreen();
     }
     else if(this.state.status==="ViewingRoom"){
       return this.renderRoomMenu();
+    }
+    else if(this.state.status==="AddingQuestion"){
+      return this.renderAddQuestion();
     }
   }
 }

@@ -6,7 +6,7 @@ function Question(props){
   questionText: Text to display (String) 
   */
   return(
-    <div className="question">{props.questionText}</div>
+    <div className="question" dangerouslySetInnerHTML={{__html: props.questionText}}></div>
   );
 }
 

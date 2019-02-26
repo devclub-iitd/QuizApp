@@ -8,6 +8,7 @@ class RoomMenu extends React.Component{
   props:
   roomcode:
   questionList: 
+  cb:
   */
   
   renderQuestion(i){
@@ -28,6 +29,7 @@ class RoomMenu extends React.Component{
       return "";
     }
   }
+  
   render(){
     let questionDisplayList=[];
     for (let i = 0; i < this.props.questionList.length; i++) {
@@ -35,6 +37,7 @@ class RoomMenu extends React.Component{
     } 
     return(
       <div>
+      <button className="btn btn-primary-outline" onClick={()=>this.props.cb()}>Add Question</button>
       {questionDisplayList}
       </div>
     )
