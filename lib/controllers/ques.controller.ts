@@ -20,9 +20,9 @@ export function createQuestion(question: Text, options: JSON, roomid: string, se
     });
 };
 
-export function findNext(roomid: string, serial: number): Promise<QuestionInstance[]> {
+export function findNext(roomid: string, serial: number): Promise<QuestionInstance | null> {
     return new Promise((resolve, reject) => {
-        Question.findAll({
+        Question.findOne({
             attributes: ['question'],
             where: {
                 roomid: roomid,

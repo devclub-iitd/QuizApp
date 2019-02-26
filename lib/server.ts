@@ -17,6 +17,7 @@ server.listen(env.PORT);
 
 io.on('connection', (socket: SocketIO.Socket) => {
     socket.on('login', (payload) => {
+        console.log(payload);
         if(payload.isQM) {
             qmController.createQM(payload.username, payload.email, payload.phone, payload.password, socket.id)
             .then((qm) => socket.emit('login', { message: 'Success' }))
@@ -24,7 +25,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         } else {
             userController.createUser(payload.username, payload.email, payload.phone, socket.id)
             .then((user) => socket.emit('login', { message: 'Success' }))
-            .catch((err) => socket.emit('login', { message: 'Failed' , err: err }));
+            .catch((err) => {console.log(err); socket.emit('login', { message: 'Failed' , err: err });});
         };
     });
 
@@ -41,8 +42,10 @@ io.on('connection', (socket: SocketIO.Socket) => {
     });
 
     socket.on('joinroom', (payload) => {
+        console.log(payload);
         roomController.getState(payload.roomid)
         .then((state) => {
+            console.log(state);
             if(state === 'finish') {
                 resultController.getLeaderboard(payload.roomid)
                 .then((leaderboard) => {
@@ -53,6 +56,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
                     });
                 })
                 .catch((err) => {
+                    console.log(err);
                     socket.emit('joinroom', {
                         message: 'Failed',
                         err: err,
@@ -60,15 +64,25 @@ io.on('connection', (socket: SocketIO.Socket) => {
                 });
             }
             else {
-                userController.addToRoom(payload.email, payload.roomid)
+                userController.addToRoom(payload.username, payload.roomid)
                 .then((users) => {
                     socket.emit('joinroom', {
                         message: 'Success',
                         state: state,
                         users: users,
                     });
+                    return Promise.all([users, userController.findByRoom(payload.roomid)]);
+                })
+                .then(([users, usersinst]) => {
+
+                    for(const x of usersinst) {
+                        socket.broadcast.to(x.socket).emit('update', {
+                            users: users,
+                        }); 
+                    };
                 })
                 .catch((err) => {
+                    console.log(err);
                     socket.emit('joinroom', {
                         message: 'Failed',
                         err: err,
@@ -77,6 +91,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             };
         })
         .catch((err) => {
+            console.log(err);
             socket.emit('joinroom', {
                 message: 'Failed',
                 err: err,
@@ -94,12 +109,25 @@ io.on('connection', (socket: SocketIO.Socket) => {
             return Promise.all([users, quesController.findNext(payload.roomid, 1)]);
         })
         .then(([users, question]) => {
-            setTimeout(function() {
-                socket.emit('question', { question: question[0].question });
-                for(const x of users) {
-                    socket.broadcast.to(x.socket).emit('question', { question: question });
-                }
-            }, 10000);
+            if(question !== null) {
+                setTimeout(function() {
+                    const endTime: number = new Date().setTime(Date.now() + 30000);
+                    socket.emit('question', {
+                        question: question.question,
+                        options: question.options,
+                        endtime: endTime,
+                        totaltime: 30,
+                    });
+                    for(const x of users) {
+                        socket.broadcast.to(x.socket).emit('question', {
+                            question: question.question,
+                            options: question.options,
+                            endtime: endTime,
+                            totaltime: 30,
+                        });
+                    };
+                }, 10000);
+            };
         })
         .catch((err) => {
             console.log(err);
@@ -112,10 +140,32 @@ io.on('connection', (socket: SocketIO.Socket) => {
             return Promise.all([users, quesController.findNext(payload.roomid, payload.serial)]);
         })
         .then(([users, question]) => {
-            socket.emit('question', { question: question[0].question });
-            for(const x of users) {
-                socket.broadcast.to(x.socket).emit('question', { question: question });
+            if(question === null) {
+                resultController.getLeaderboard(payload.roomid)
+                .then((leaderboard) => {
+                    socket.emit('leaderboard', {
+                        leaderboard: leaderboard
+                    });
+                })
+                .catch((err) => console.log(err));
             }
+            else {
+                const endTime: number = new Date().setTime(Date.now() + 30000);
+                socket.emit('question', {
+                    question: question.question,
+                    options: question.options,
+                    endtime: endTime,
+                    totaltime: 30,
+                });
+                for(const x of users) {
+                    socket.broadcast.to(x.socket).emit('question', {
+                        question: question.question,
+                        options: question.options,
+                        endtime: endTime,
+                        totaltime: 30,
+                    });
+                };
+            };
         })
         .catch((err) => {
             console.log(err);

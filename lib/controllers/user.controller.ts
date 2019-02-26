@@ -57,7 +57,7 @@ export function addToRoom(username: string, roomid: string): Promise<string[]> {
             let userArray: string[] = [];
 
             users.map((user, index) => {
-                userArray[index] = users[index].username;
+                userArray[index] = user.username;
             });
 
             resolve(userArray);
@@ -69,7 +69,7 @@ export function addToRoom(username: string, roomid: string): Promise<string[]> {
 export function findByRoom(roomid: string): Promise<UserInstance[]> {
     return new Promise((resolve, reject) => {
         User.findAll({
-            attributes: ['socket'],
+            attributes: ['username','socket'],
             where: {
                 roomid: roomid,
             },
