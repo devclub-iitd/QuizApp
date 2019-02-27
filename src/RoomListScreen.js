@@ -53,7 +53,7 @@ class RoomListScreen extends React.Component{
   renderRoomButton(roomcode){
     return(
       <Option
-        value={"roomcode: "+roomcode}
+        value={"RoomCode: "+roomcode}
         onClick={()=>this.fetchRoom(roomcode)}
         isOn={true}
       />
@@ -72,6 +72,11 @@ class RoomListScreen extends React.Component{
     return(
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2">
+        <div className="alert alert-warning clearfix">
+          Rooms: 
+          <button className="float-right btn btn-warning flattop" onClick={()=>this.props.back()}>Back</button>
+          
+          </div>
           {roomDisplayList}
         </div>
       </div>

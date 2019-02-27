@@ -81,6 +81,7 @@ class QuizApp extends React.Component{
           status={this.state.roomstatus}
           userList={this.state.userlist}
           isQM={this.state.isQM}
+          back={()=>this.setStatus("SelectingRoom")}
         />
       // </div>
     );
@@ -91,6 +92,7 @@ class QuizApp extends React.Component{
         cb={(stateUpdate, nextParentState)=>this.setStateAndStatus(stateUpdate, nextParentState)}
         socket={socket}
         username={this.state.username}
+        back={()=>this.setStatus("LoggingIn")}
       />
     )
   }
@@ -99,6 +101,14 @@ class QuizApp extends React.Component{
       <Leaderboard
         result={this.state.result}
         username={this.state.username}
+        back={()=>{
+          if(this.state.isQM){
+            this.setStatus("ViewingRoom")
+          }
+          else{
+            this.setStatus("RoomListScreen")
+          }
+        }}
       />
     )
   }
@@ -108,6 +118,7 @@ class QuizApp extends React.Component{
         socket={socket}
         roomcodeList={this.state.roomcodeList}
         cb={(stateUpdate,nextStatus)=>this.setStateAndStatus(stateUpdate,nextStatus)}
+        back={()=>{this.setStatus("LoggingIn")}}
       />
     )
   }
@@ -121,6 +132,7 @@ class QuizApp extends React.Component{
         activateRoomCB={()=>this.setStatus("InLobby")}
         cb={(stateUpdate)=>this.setState(stateUpdate)}
         socket={socket}
+        back={()=>{this.setStatus("SelectingRoom")}}
       />
     );
   }
@@ -130,6 +142,7 @@ class QuizApp extends React.Component{
         roomcode={this.state.roomcode}
         socket={socket}
         cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate,"ViewingRoom")}
+        back={()=>this.setStatus("ViewingRoom")}
       />
     )
   }

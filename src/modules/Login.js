@@ -112,6 +112,7 @@ class Login extends React.Component{
           {error}
           <form onSubmit={(event)=>this.handleSubmit(event)}>
             <div className="form-group">
+              <div className="btn-group">
               <button 
                 className={userButtonClass} 
                 onClick={(e)=>{ this.setState({ isQM: false }); e.preventDefault() }}
@@ -124,6 +125,7 @@ class Login extends React.Component{
               > 
                 QM Login 
               </button>
+              </div>
             </div> 
             <div className="form-group">
               <label>
