@@ -241,8 +241,19 @@ io.on('connection', (socket: SocketIO.Socket) => {
             }
         })
         .then(() => {
+            return userController.findByRoom(payload.roomid);
+        })
+        .then((users) => {
+            let userArray: string[] = [];
+            users.map((user, index) => {
+                userArray[index] = user.username;
+            });
+            return userArray;
+        })
+        .then((users) => {
             socket.emit('activate',{
                 message: 'Success',
+                user: users,
             });
         })
         .catch((err) => {
