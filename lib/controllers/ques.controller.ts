@@ -65,7 +65,7 @@ export function checkAnswer(roomid: string, serial: number, attempt: number): Pr
 export function getByRoom(roomid: string): Promise<quesArray> {
     return new Promise((resolve, reject) => {
         Question.findAll({
-            attributes: ['question','options'],
+            attributes: ['question','options','id'],
             where: {
                 roomid: roomid,
             },
@@ -77,6 +77,43 @@ export function getByRoom(roomid: string): Promise<quesArray> {
                 quesArray[index] = {
                     question: question.question,
                     options: question.options,
+                    id: question.id,
+                };
+            });
+            resolve(quesArray);
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+};
+
+export function deleteQuestion(roomid: string, id: number):Promise<quesArray> {
+    return new Promise((resolve, reject) => {
+        Question.findAll({
+            where: {
+                roomid: roomid,
+            },
+        })
+        .then((questions) => {
+            questions.map((question, index) => {
+                if(id === question.id){
+                    questions[index].destroy();
+                };
+            });
+            return questions;
+        })
+        .then((questions) => {
+            questions = questions.filter((question) => {
+                question.id!==id;
+            });
+
+            let quesArray: quesArray = [];
+            questions.map((question, index) => {
+                quesArray[index] = {
+                    question: question.question,
+                    options: question.options,
+                    id: question.id,
                 };
             });
             resolve(quesArray);

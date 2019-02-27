@@ -65,6 +65,24 @@ io.on('connection', (socket: SocketIO.Socket) => {
         .catch((err) => socket.emit('createquestion', { message: err }));
     });
 
+    socket.on('deletequestion', (payload) => {
+        console.log(payload);
+        quesController.deleteQuestion(payload.roomid, payload.id)
+        .then((questions) => {
+            console.log(questions);
+            socket.emit('deletequestion', {
+                questions: questions,
+                message: 'Success',
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            socket.emit('deletequestion', {
+                message: 'Failed',
+            });
+        });
+    })
+
     socket.on('fetchroom', (payload) => {
         console.log(payload);
         quesController.getByRoom(payload.roomid)
@@ -268,6 +286,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         resultController.getLeaderboard(payload.roomid)
         .then((leaderboard) => {
             socket.emit('leaderboard', {
+                message: 'Success',
                 leaderboard: leaderboard,
             });
         })
