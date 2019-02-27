@@ -226,4 +226,23 @@ io.on('connection', (socket: SocketIO.Socket) => {
         })
         .catch((err) => console.log(err));
     });
+
+    socket.on('activate', (payload) => {
+        roomController.getState(payload.room)
+        .then((state):(Promise<{} | undefined> | undefined) => {
+            if(state === 'finish') {
+                return roomController.changeState(payload.roomid, 'inactive');
+            }
+        })
+        .then(() => {
+            socket.emit('activate',{
+                message: 'Success',
+            });
+        })
+        .catch((err) => {
+            socket.emit('activate', {
+                message: err,
+            });
+        });
+    });
 });
