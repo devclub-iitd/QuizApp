@@ -119,6 +119,12 @@ io.on('connection', (socket: SocketIO.Socket) => {
                             users: users,
                         }); 
                     };
+                    return Promise.all([users, roomController.getQm(payload.roomid)]);
+                })
+                .then(([users, qm]) => {
+                    socket.broadcast.to(qm.socket).emit('update', {
+                        users: users,
+                    });
                 })
                 .catch((err) => {
                     console.log(err);
@@ -228,7 +234,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
     });
 
     socket.on('activate', (payload) => {
-        roomController.getState(payload.room)
+        roomController.getState(payload.roomid)
         .then((state):(Promise<{} | undefined> | undefined) => {
             if(state === 'finish') {
                 return roomController.changeState(payload.roomid, 'inactive');
