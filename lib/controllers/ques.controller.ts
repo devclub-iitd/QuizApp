@@ -23,7 +23,7 @@ export function createQuestion(question: Text, options: JSON, roomid: string, an
 export function findNext(roomid: string, serial: number): Promise<QuestionInstance | null> {
     return new Promise((resolve, reject) => {
         Question.findAll({
-            attributes: ['question'],
+            attributes: ['question','options'],
             where: {
                 roomid: roomid,
             },

@@ -15,6 +15,8 @@ const io = socketio(server);
 
 server.listen(env.PORT);
 
+const TIMER: number = 5;
+
 io.on('connection', (socket: SocketIO.Socket) => {
     socket.on('login', (payload) => {
         console.log(payload);
@@ -148,31 +150,35 @@ io.on('connection', (socket: SocketIO.Socket) => {
         userController.findByRoom(payload.roomid)
         .then((users) => {
             const startTime: number = new Date().setTime(Date.now() + 10000);
+
+            socket.emit('start', { time: startTime });
+            roomController.changeState(payload.roomid, 'countdown');
             for(const x of users) {
-                socket.broadcast.to(x.socket).emit('start', { time: startTime });                
+                socket.broadcast.to(x.socket).emit('start', { time: startTime });
             };
             return Promise.all([users, quesController.findNext(payload.roomid, 0)]);
         })
         .then(([users, question]) => {
             if(question !== null) {
                 setTimeout(function() {
-                    const endTime: number = new Date().setTime(Date.now() + 30000);
+                    const endTime: number = new Date().setTime(Date.now() + TIMER*1000);
                     socket.emit('question', {
                         question: question.question,
                         options: question.options,
                         endtime: endTime,
-                        totaltime: 30,
+                        totaltime: TIMER,
                     });
                     for(const x of users) {
                         socket.broadcast.to(x.socket).emit('question', {
                             question: question.question,
                             options: question.options,
                             endtime: endTime,
-                            totaltime: 30,
+                            totaltime: TIMER,
                         });
                     };
                 }, 10000);
             };
+            return roomController.changeState(payload.roomid, 'collecting');
         })
         .catch((err) => {
             console.log(err);
@@ -180,6 +186,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
     });
 
     socket.on('next', (payload) => {
+        console.log(payload);
         userController.findByRoom(payload.roomid)
         .then((users) => {
             return Promise.all([users, quesController.findNext(payload.roomid, payload.serial)]);
@@ -195,19 +202,21 @@ io.on('connection', (socket: SocketIO.Socket) => {
                 .catch((err) => console.log(err));
             }
             else {
-                const endTime: number = new Date().setTime(Date.now() + 30000);
+                const endTime: number = new Date().setTime(Date.now() + TIMER*1000);
+                console.log(question);
                 socket.emit('question', {
                     question: question.question,
                     options: question.options,
                     endtime: endTime,
-                    totaltime: 30,
+                    totaltime: TIMER,
                 });
                 for(const x of users) {
+                    console.log(x.socket, question.question, question.options);
                     socket.broadcast.to(x.socket).emit('question', {
                         question: question.question,
                         options: question.options,
                         endtime: endTime,
-                        totaltime: 30,
+                        totaltime: TIMER,
                     });
                 };
             };
@@ -218,6 +227,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
     });
 
     socket.on('attempt', (payload) => {
+        console.log(payload);
         resultController.addAttempt(payload.roomid, payload.username, payload.serial, payload.attempt)
         .then((result) => {})
         .catch((err) => console.log(err));
