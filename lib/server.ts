@@ -165,17 +165,19 @@ io.on('connection', (socket: SocketIO.Socket) => {
                 setTimeout(function() {
                     const endTime: number = new Date().setTime(Date.now() + TIMER*1000);
                     socket.emit('question', {
-                        question: question.question,
-                        options: question.options,
+                        question: question[0].question,
+                        options: question[0].options,
                         endtime: endTime,
                         totaltime: TIMER,
+                        islast: question[1],
                     });
                     for(const x of users) {
                         socket.broadcast.to(x.socket).emit('question', {
-                            question: question.question,
-                            options: question.options,
+                            question: question[0].question,
+                            options: question[0].options,
                             endtime: endTime,
                             totaltime: TIMER,
+                            islast: question[1],
                         });
                     };
                     return roomController.changeState(payload.roomid, 'collecting');
@@ -199,7 +201,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             return Promise.all([users, quesController.findNext(payload.roomid, payload.serial)]);
         })
         .then(([users, question]) => {
-            if(question===null || question===undefined) {
+            if((question===null) || question[0]===undefined) {
                 resultController.getLeaderboard(payload.roomid)
                 .then((leaderboard) => {
                     socket.emit('leaderboard', {
@@ -213,18 +215,20 @@ io.on('connection', (socket: SocketIO.Socket) => {
                 const endTime: number = new Date().setTime(Date.now() + TIMER*1000);
                 console.log(question);
                 socket.emit('question', {
-                    question: question.question,
-                    options: question.options,
+                    question: question[0].question,
+                    options: question[0].options,
                     endtime: endTime,
                     totaltime: TIMER,
+                    islast: question[1],
                 });
                 for(const x of users) {
-                    console.log(x.socket, question.question, question.options);
+                    console.log(x.socket, question[0].question, question[0].options);
                     socket.broadcast.to(x.socket).emit('question', {
-                        question: question.question,
-                        options: question.options,
+                        question: question[0].question,
+                        options: question[0].options,
                         endtime: endTime,
                         totaltime: TIMER,
+                        islast: question[1],
                     });
                 };
                 return roomController.changeState(payload.roomid, 'collecting');

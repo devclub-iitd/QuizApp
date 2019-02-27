@@ -20,7 +20,7 @@ export function createQuestion(question: Text, options: JSON, roomid: string, an
     });
 };
 
-export function findNext(roomid: string, serial: number): Promise<QuestionInstance | null> {
+export function findNext(roomid: string, serial: number): Promise<[QuestionInstance,boolean] | null> {
     return new Promise((resolve, reject) => {
         Question.findAll({
             attributes: ['question','options'],
@@ -29,7 +29,12 @@ export function findNext(roomid: string, serial: number): Promise<QuestionInstan
             },
         })
         .then((questions) => {
-            resolve(questions[serial]);
+            if(serial === questions.length-1) {
+                resolve([questions[serial], true]);
+            }
+            else {
+                resolve([questions[serial], false]);
+            };
         })
         .catch((err) => reject(err));
     });

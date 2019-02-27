@@ -64,7 +64,7 @@ export function addAttempt(roomid: string, username: string, serial: number, att
             else {
                 const attempts: AttemptJSON = result.attempts;
                 const sserial: string = serial.toString();
-                attempts.sserial = attempt;
+                attempts[sserial] = attempt;
                 
                 return result.update({
                     attempts: attempts,
