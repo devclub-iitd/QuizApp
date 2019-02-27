@@ -11,7 +11,7 @@ import RoomListScreen from './RoomListScreen';
 import RoomMenu from './modules/RoomMenu';
 import AddQuestion from './modules/AddQuestion';
 
-const SERVER_URL = 'http://10.184.17.101:3001';
+const SERVER_URL = 'http://10.194.13.136:3001';
 const socket = openSocket(SERVER_URL);
   
 class QuizApp extends React.Component{
@@ -60,6 +60,9 @@ class QuizApp extends React.Component{
         question={this.state.question}
         timerEndTime={this.state.timerEndTime}
         timerTotalTime={this.state.timerTotalTime}
+        roomcode={this.state.roomCode}
+        username={this.state.username}
+        isQM={this.state.isQM}
       />
     );
   }
@@ -74,6 +77,7 @@ class QuizApp extends React.Component{
           cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate,"Playing")}
           status={this.state.roomstatus}
           userList={this.state.userlist}
+          isQM={this.state.isQM}
         />
       // </div>
     );
@@ -100,7 +104,12 @@ class QuizApp extends React.Component{
     return(
       <RoomMenu
         questionList={this.state.questionList}
-        cb={()=>this.setStatus("AddingQuestion")}
+        roomCode={this.state.roomCode}
+        addQuestionCB={()=>this.setStatus("AddingQuestion")}
+        viewLeaderBoardCB={()=>this.setStatus("AddingQuestion")}
+        activateRoomCB={()=>this.setStatus("InLobby")}
+        cb={(stateUpdate)=>this.setState(stateUpdate)}
+        socket={socket}
       />
     );
   }

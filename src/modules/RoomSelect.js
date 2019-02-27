@@ -44,10 +44,10 @@ class RoomSelect extends React.Component{
     if(payload.message==="Success"){
       let stateUpdate={
         roomcode: this.state.roomcode,
-        roomstatus: payload.status,
+        roomstatus: payload.state,
         userlist: payload.users,
       }
-      console.log(payload);
+      // console.log(payload);
       if(payload.state==="countdown" || payload.state==="waiting" || payload.state==="collecting"){
         this.props.cb(stateUpdate,"Playing");
       }

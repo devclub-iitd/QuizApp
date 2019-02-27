@@ -1,6 +1,7 @@
 import React from "react";
 import Question from "./Question";
 import Answers from "./Answers";
+import Loading from "./Loading";
 
 
 class RoomMenu extends React.Component{
@@ -8,9 +9,16 @@ class RoomMenu extends React.Component{
   props:
   roomcode:
   questionList: 
-  cb:
+  cbs: ....
+  socket
   */
-  
+  constructor(props){
+    super(props);
+    this.state={
+      isWaiting:false,
+      message:"",
+    }
+  }
   renderQuestion(i){
     if(this.props.questionList[i].options){
       return(
@@ -29,20 +37,62 @@ class RoomMenu extends React.Component{
       return "";
     }
   }
-  
+  activateRoom(){
+    this.props.socket.emit('activate',{
+      roomid: this.props.roomCode,
+    })
+    this.setState({
+      isWaiting:true,
+    });
+  }
+  handleActivateResponse(payload){
+    if(payload.message==="Success"){
+      this.props.cb({
+        roomcode: this.props.roomCode,
+        // roomstatus: payload.state,
+        userlist: payload.users,
+      })
+      // console.log(payload);
+      this.props.activateRoomCB();
+    }
+    else{
+      this.setState({
+        isWaiting:false,
+        message:payload.message,
+      })
+    }
+  }
   render(){
+    if(this.state.isWaiting){
+      return (
+        <Loading
+          text={"Activating Room..."}
+          socket={this.props.socket}
+          time={5000}
+          listenFor={'activate'}
+          onSuccess={(payload)=>this.handleActivateResponse(payload)}
+          onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
+          onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
+        />
+      );
+    }
     let questionDisplayList=[];
     for (let i = 0; i < this.props.questionList.length; i++) {
       questionDisplayList.push(this.renderQuestion(i));
     } 
     return(
-      <div>
-      <button className="btn btn-primary-outline" onClick={()=>this.props.cb()}>Add Question</button>
-      {questionDisplayList}
+      <div className="card">
+        <div className="card-body">
+          <div className="form-group">
+            <button className="form-control"  onClick={()=>this.props.addQuestionCB()}>Add Question</button>
+            <button className="form-control" onClick={()=>this.props.viewLeaderBoardCB()}>View Leaderboard (non func) </button>
+            <button className="form-control" onClick={()=>this.activateRoom()}>Activate Room</button>
+          </div>
+            {questionDisplayList}
+        </div>
       </div>
     )
-    // return(
-    //   <div>"hi"</div>
+    // 
     // )
   }
 }

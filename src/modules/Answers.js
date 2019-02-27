@@ -9,15 +9,20 @@ class Answers extends React.Component {
     isOn: whether timer is on (Boolean)
   */
   renderOption(i) {
-    return (
-      <div className="col-md-6 option-container">
-      <Option
-        value={this.props.options["option"+i]}
-        onClick={() => this.props.onClick(i)}
-        isOn={this.props.isOn}
-      />
-      </div>
-    );
+    if(this.props.options){
+      return (
+        <div className="col-md-6 option-container">
+        <Option
+          value={this.props.options["option"+i]}
+          onClick={() => this.props.onClick(i)}
+          isOn={this.props.isOn}
+        />
+        </div>
+      );
+    }
+    else{
+      return "";
+    }
   }
 
   render() {
