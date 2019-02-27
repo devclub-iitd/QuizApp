@@ -17,7 +17,7 @@ class RoomMenu extends React.Component{
     this.state={
       isWaiting:false,
       message:"",
-      loadInstr: "Activate", /* "Delete" */
+      loadInstr: "Activate", /* "Delete", "Leaderboard" */
     }
   }
   renderQuestion(i){
@@ -38,6 +38,15 @@ class RoomMenu extends React.Component{
     else{
       return "";
     }
+  }
+  fetchLeaderboard(){
+    this.props.socket.emit('leaderboard',{
+      roomid: this.props.roomcode,
+    })
+    this.setState({
+      isWaiting:true,
+      loadInstr:"Leaderboard",
+    });
   }
   activateRoom(){
     this.props.socket.emit('activate',{
@@ -75,6 +84,24 @@ class RoomMenu extends React.Component{
       })
     }
   }
+  handleLeaderboardResponse(payload){
+    if(payload.message==="Success"){
+      this.props.cb({
+        result:payload.leaderboard,
+      });
+      console.log(payload);
+      this.setState({
+        isWaiting:false,
+      })
+      this.props.viewLeaderBoardCB();
+    }
+    else{
+      this.setState({
+        isWaiting:false,
+        message:payload.message,
+      })
+    }
+  }
   handleDeleteResponse(payload){
     if(payload.message==="Success"){
       this.props.cb({
@@ -82,6 +109,9 @@ class RoomMenu extends React.Component{
         // roomcode: this.props.roomcode,
         // roomstatus: payload.state,
         // userlist: payload.users,
+      })
+      this.setState({
+        isWaiting:false,
       })
       // console.log(payload);
       // this.props.activateRoomCB();
@@ -91,6 +121,7 @@ class RoomMenu extends React.Component{
         isWaiting:false,
         message:payload.message,
       })
+      console.log(payload);
     }
   }
   render(){
@@ -105,6 +136,19 @@ class RoomMenu extends React.Component{
             onSuccess={(payload)=>this.handleActivateResponse(payload)}
             onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
             onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
+          />
+        );
+      }
+      else if(this.state.loadInstr==="Leaderboard"){
+        return (
+          <Loading
+            text={"Loading Leaderboard..."}
+            socket={this.props.socket}
+            time={5000}
+            listenFor={'leaderboard'}
+            onSuccess={(payload)=>this.handleLeaderboardResponse(payload)}
+            onFailure={()=>{this.setState({isWaiting:false, message: "Time Out (Deletion Request Still Sent)"})}} 
+            onCancel={()=>{this.setState({isWaiting:false, message: "Response Cancelled (Deletion Request Still Sent)"})}}
           />
         );
       }
@@ -131,7 +175,7 @@ class RoomMenu extends React.Component{
         <div className="card-body">
           <div className="form-group">
             <button className="form-control"  onClick={()=>this.props.addQuestionCB()}>Add Question</button>
-            <button className="form-control" onClick={()=>this.props.viewLeaderBoardCB()}>View Leaderboard (non func) </button>
+            <button className="form-control" onClick={()=>this.fetchLeaderboard()}>View Leaderboard (non func) </button>
             <button className="form-control" onClick={()=>this.activateRoom()}>Activate Room</button>
           </div>
           <div className="alert alert-warning alert-dismissible"> RoomCode: {this.props.roomcode}

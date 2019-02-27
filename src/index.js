@@ -22,7 +22,7 @@ class QuizApp extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      status: "LoggingIn" /* "LoggingIn","InLobby","Playing","SelectingRoom","RoomListScreen","ViewingRoom", "AddingQuestion" */,
+      status: "LoggingIn" /* "LoggingIn","InLobby","Playing","Leaderboard","SelectingRoom","RoomListScreen","ViewingRoom", "AddingQuestion" */,
       username: "",
       isQM: false,
       roomstatus:"",
@@ -106,7 +106,7 @@ class QuizApp extends React.Component{
             this.setStatus("ViewingRoom")
           }
           else{
-            this.setStatus("RoomListScreen")
+            this.setStatus("SelectingRoom")
           }
         }}
       />
@@ -128,11 +128,11 @@ class QuizApp extends React.Component{
         questionList={this.state.questionList}
         roomcode={this.state.roomcode}
         addQuestionCB={()=>this.setStatus("AddingQuestion")}
-        viewLeaderBoardCB={()=>this.setStatus("AddingQuestion")}
+        viewLeaderBoardCB={()=>this.setStatus("Leaderboard")}
         activateRoomCB={()=>this.setStatus("InLobby")}
         cb={(stateUpdate)=>this.setState(stateUpdate)}
         socket={socket}
-        back={()=>{this.setStatus("ViewingRoom")}}
+        back={()=>{this.setStatus("RoomListScreen")}}
       />
     );
   }
