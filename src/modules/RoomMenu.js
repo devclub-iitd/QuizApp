@@ -39,7 +39,7 @@ class RoomMenu extends React.Component{
   }
   activateRoom(){
     this.props.socket.emit('activate',{
-      roomid: this.props.roomCode,
+      roomid: this.props.roomcode,
     })
     this.setState({
       isWaiting:true,
@@ -48,7 +48,7 @@ class RoomMenu extends React.Component{
   handleActivateResponse(payload){
     if(payload.message==="Success"){
       this.props.cb({
-        roomcode: this.props.roomCode,
+        roomcode: this.props.roomcode,
         // roomstatus: payload.state,
         userlist: payload.users,
       })

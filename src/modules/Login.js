@@ -51,7 +51,7 @@ class Login extends React.Component{
       }
       let nextState="SelectingRoom";
       if(this.state.isQM){
-        stateUpdate["roomCodeList"]=payload.rooms;
+        stateUpdate["roomcodeList"]=payload.rooms;
         nextState="RoomListScreen";
         // console.log(stateUpdate)
       }

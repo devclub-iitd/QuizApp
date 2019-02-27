@@ -51,6 +51,10 @@ class RoomSelect extends React.Component{
       if(payload.state==="countdown" || payload.state==="waiting" || payload.state==="collecting"){
         this.props.cb(stateUpdate,"Playing");
       }
+      else if(payload.state==="finish"){
+        stateUpdate.result=payload.leaderboard;
+        this.props.cb(stateUpdate,"Leaderboard");
+      }
       else{
         this.props.cb(stateUpdate,"InLobby");
       }
@@ -83,7 +87,7 @@ class RoomSelect extends React.Component{
           <form onSubmit={(event)=>this.handleSubmit(event)}>
             <div className="form-group">
               <label>
-                RoomCode: 
+                roomcode: 
               </label>
               <input className="form-control"type="text" value={this.state.value} onChange={(event)=>this.takeTextInput(event,"roomcode")} />
             </div>

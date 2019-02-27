@@ -7,36 +7,36 @@ class RoomListScreen extends React.Component{
   /*
   props:
   socket:
-  roomCodeList:
+  roomcodeList:
   cb: takes state update 
   */
   constructor(props){
     super(props);
     this.state={
       isWaiting: false,
-      roomCode: "",
+      roomcode: "",
       message:"",
     }
   }
-  handleRoomResponse(payload,roomCode){
-    // console.log(roomCode)
+  handleRoomResponse(payload,roomcode){
+    // console.log(roomcode)
     this.props.cb({
       questionList: payload.questions,
-      roomCode: roomCode,
+      roomcode: roomcode,
     },"ViewingRoom");
     // console.log(payload)
   }
-  fetchRoom(roomCode){
+  fetchRoom(roomcode){
     this.setState({
       isWaiting:true,
-      roomCode: roomCode,
+      roomcode: roomcode,
     });
     this.props.socket.emit('fetchroom',{
-      roomid:roomCode,
+      roomid:roomcode,
     });
     // console.log("click");
   }
-  renderLoading(roomCode){
+  renderLoading(roomcode){
     // console.log(this.state.isWaiting);
     return(
       <Loading
@@ -44,27 +44,27 @@ class RoomListScreen extends React.Component{
         socket={this.props.socket}
         time={5000}
         listenFor={'fetchroom'}
-        onSuccess={(payload)=>this.handleRoomResponse(payload,roomCode)}
+        onSuccess={(payload)=>this.handleRoomResponse(payload,roomcode)}
         onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
         onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
       />
     );
   }
-  renderRoomButton(roomCode){
+  renderRoomButton(roomcode){
     return(
       <Option
-        value={"RoomCode: "+roomCode}
-        onClick={()=>this.fetchRoom(roomCode)}
+        value={"roomcode: "+roomcode}
+        onClick={()=>this.fetchRoom(roomcode)}
         isOn={true}
       />
     );
   }
   render(){
     if(this.state.isWaiting){
-      return this.renderLoading(this.state.roomCode);
+      return this.renderLoading(this.state.roomcode);
     }
     let roomDisplayList=[];
-    this.props.roomCodeList.forEach(element => {
+    this.props.roomcodeList.forEach(element => {
       roomDisplayList.push(
         this.renderRoomButton(element),
       )

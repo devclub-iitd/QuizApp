@@ -57,7 +57,7 @@ class Timer extends React.Component{
     return(
       <div className={timerClass}>  {displayValue} {/* and {displayWidthPercent} and {this.state.displayTime} */}
         <div className="progress">
-          <div className="progress-bar" role="progressbar" style={{width: + displayWidthPercent+"%"}} >
+          <div className="progress-bar bg-info" role="progressbar" style={{width: + displayWidthPercent+"%"}} >
           </div>
         </div>
       </div>

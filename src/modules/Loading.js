@@ -28,7 +28,7 @@ class Loading extends React.Component{
     return (
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2">
-          <div className="spinner-border"></div>
+          {/* <div className="spinner-border"></div> */}
           {this.props.text}
           <BackButton cb={()=>this.props.onCancel()}/>
         </div>

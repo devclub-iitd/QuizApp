@@ -10,8 +10,9 @@ import RoomSelect from "./modules/RoomSelect";
 import RoomListScreen from './RoomListScreen';
 import RoomMenu from './modules/RoomMenu';
 import AddQuestion from './modules/AddQuestion';
+import Leaderboard from './modules/Leaderboard';
 
-const SERVER_URL = 'http://10.194.13.136:3001';
+const SERVER_URL = 'http://10.184.17.101:3001';
 const socket = openSocket(SERVER_URL);
   
 class QuizApp extends React.Component{
@@ -30,9 +31,10 @@ class QuizApp extends React.Component{
       timerEndTime: new Date(),
       timerTotalTime: 30,
       userlist:["iw"],
-      roomCodeList: ["aw"],
+      roomcodeList: ["aw"],
       questionList:[""],
-      roomCode:"",
+      roomcode:"",
+      result:[],
     }
   }
   setStatus(s){
@@ -60,9 +62,10 @@ class QuizApp extends React.Component{
         question={this.state.question}
         timerEndTime={this.state.timerEndTime}
         timerTotalTime={this.state.timerTotalTime}
-        roomcode={this.state.roomCode}
+        roomcode={this.state.roomcode}
         username={this.state.username}
         isQM={this.state.isQM}
+        cb={(stateUpdate)=>{this.setStateAndStatus(stateUpdate,"Leaderboard")}}
       />
     );
   }
@@ -91,11 +94,19 @@ class QuizApp extends React.Component{
       />
     )
   }
+  renderLeaderBoard(){
+    return(
+      <Leaderboard
+        result={this.state.result}
+        username={this.state.username}
+      />
+    )
+  }
   renderRoomListScreen(){
     return(
       <RoomListScreen
         socket={socket}
-        roomCodeList={this.state.roomCodeList}
+        roomcodeList={this.state.roomcodeList}
         cb={(stateUpdate,nextStatus)=>this.setStateAndStatus(stateUpdate,nextStatus)}
       />
     )
@@ -104,7 +115,7 @@ class QuizApp extends React.Component{
     return(
       <RoomMenu
         questionList={this.state.questionList}
-        roomCode={this.state.roomCode}
+        roomcode={this.state.roomcode}
         addQuestionCB={()=>this.setStatus("AddingQuestion")}
         viewLeaderBoardCB={()=>this.setStatus("AddingQuestion")}
         activateRoomCB={()=>this.setStatus("InLobby")}
@@ -116,7 +127,7 @@ class QuizApp extends React.Component{
   renderAddQuestion(){
     return (
       <AddQuestion
-        roomCode={this.state.roomCode}
+        roomcode={this.state.roomcode}
         socket={socket}
         cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate,"ViewingRoom")}
       />
@@ -146,6 +157,9 @@ class QuizApp extends React.Component{
     }
     else if(this.state.status==="AddingQuestion"){
       return this.renderAddQuestion();
+    }
+    else if(this.state.status==="Leaderboard"){
+      return this.renderLeaderBoard();
     }
   }
 }

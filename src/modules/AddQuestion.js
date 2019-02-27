@@ -3,7 +3,7 @@ import Loading from "./Loading";
 
 class AddQuestion extends React.Component {
   /* props:
-  roomCode: 
+  roomcode: 
   socket
   cb */
   constructor(props){
@@ -36,7 +36,7 @@ class AddQuestion extends React.Component {
     this.props.socket.emit('createquestion',{
       question: this.state.question,
       options: this.state.options,
-      roomid: this.props.roomCode,
+      roomid: this.props.roomcode,
       answer: this.state.answer,
     });
     this.setState({

@@ -12,7 +12,6 @@ class Game extends React.Component {
   question: HTML
   timerEndTime: ending time (Date)
   timerTotalTime: max time for a question in seconds (Integer)
-
   roomcode
   username
   */
@@ -26,19 +25,9 @@ class Game extends React.Component {
       timerIsOn: true,
       timerEndTime: this.props.timerEndTime,
       timerTotalTime: this.props.timerTotalTime,
-      questionIndex:0,
+      questionIndex:1,
+      isLast:false,
     };
-    this.props.socket.on('question',(payload)=>{
-      this.setState({
-        question: payload.question,
-        options: payload.options,
-        timerEndTime: payload.endtime,
-        timerTotalTime: payload.totaltime,
-        timerIsOn: true,
-        questionIndex: this.state.questionIndex+1,
-      })
-    });
-    
   }
   componentWillReceiveProps(nextProps){
     this.setState({
@@ -46,7 +35,31 @@ class Game extends React.Component {
       questionText: nextProps.question,
       timerEndTime: nextProps.timerEndTime,
       timerTotalTime: nextProps.timerTotalTime,
+    }); 
+  }
+  componentDidMount(){
+    // console.log("mounting");
+    this.props.socket.on('leaderboard',(payload)=>{
+      this.props.cb({result:payload.leaderboard});
     })
+    this.props.socket.on('question',(payload)=>{
+      this.setState({
+        questionText: payload.question,
+        options: payload.options,
+        timerEndTime: payload.endtime,
+        timerTotalTime: payload.totaltime,
+        isLast:payload.islast,
+        timerIsOn: true,
+        questionIndex: this.state.questionIndex+1,//make it question ka index + 1 aoid double click problems
+      })
+      // console.log("Question reply:")
+      console.log(payload)
+    });
+    // console.log("mounted");
+  }
+  componentWillUnmount(){
+    this.props.socket.off('question');
+    this.props.socket.off('leaderboard');
   }
   handleTimeout(){
     this.setState({
@@ -54,10 +67,11 @@ class Game extends React.Component {
     });
   }
   broadcastNext(){
-    console.log("broadcast"+this.state.questionIndex);
-    // this.props.socket.emit('next',{
-    //   serial:this.state.questionIndex,
-    // });
+    // console.log("broadcast"+this.state.questionIndex);
+    this.props.socket.emit('next',{
+      serial:this.state.questionIndex,
+      roomid:this.props.roomcode,
+    });
   }
   handleClick(i) {
     if(!this.props.isQM){
@@ -71,22 +85,26 @@ class Game extends React.Component {
           attempt:i,
           roomid:this.props.roomcode,
           username:this.props.username,
-          serial:this.state.questionIndex,
+          serial:this.state.questionIndex-1,
         });
-        console.log(this.props.roomcode);
-        console.log(this.state);
-        console.log(this.props);
+        // console.log(this.props.roomcode);
+        // console.log(this.state);
+        // console.log(this.props);
       }
     }
   } 
   render() {
     let nextButton=""
+    let buttonText="Next Question"
+    if(this.state.isLast){
+      buttonText="View Leaderboard"
+    }
     if(this.props.isQM){
       if(this.state.timerIsOn){
-        nextButton=<button className="btn btn-primary disabled">Next Question</button>;
+        nextButton=<button className="btn btn-primary disabled">{buttonText}</button>;
       }
       else{
-        nextButton=<button className="btn btn-primary" onClick={()=>this.broadcastNext()}>Next Question</button>;
+        nextButton=<button className="btn btn-primary" onClick={()=>this.broadcastNext()}>{buttonText}</button>;
       }
     }
     if(this.state.questionText){

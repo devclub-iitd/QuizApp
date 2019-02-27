@@ -57,6 +57,7 @@ class Lobby extends React.Component{
     clearInterval(this.timerID);
     this.props.socket.off('start');
     this.props.socket.off('question');
+    this.props.socket.off('update');
   }
   tick(){
     if(this.state.status==="countdown"){
@@ -94,9 +95,7 @@ class Lobby extends React.Component{
     if(this.state.userList){
       this.state.userList.forEach(element => {
         userDisplayList.push(
-          <UserInLobby
-            name={element}
-          />
+          <li className="list-group-item">{element}</li>
         )
       });
     }
@@ -121,10 +120,13 @@ class Lobby extends React.Component{
     return(
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2 lobby">
-          {this.props.roomcode}
-          <div className="user-list-in-lobby">
-            {userDisplayList} 
+          <div className="alert alert-warning clearfix">
+          RoomCode: {this.props.roomcode}
+          <button className="float-right btn btn-warning">Back</button>
           </div>
+          <ul className="list-group">
+            {userDisplayList} 
+          </ul>
           {countdown}
         {/* {this.state.status}
         {this.props.status} */}
