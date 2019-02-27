@@ -1,5 +1,17 @@
 import React from "react";
 import Loading from "./Loading";
+import { Editor } from 'react-draft-wysiwyg';
+import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
+
+// {/* <Editor
+//   wrapperClassName="wrapper-class"
+//   editorClassName="editor-class"
+//   toolbarClassName="toolbar-class"
+//   wrapperStyle={<wrapperStyleObject>}
+//   editorStyle={<editorStyleObject>}
+//   toolbarStyle={<toolbarStyleObject>}
+// /> */}
 
 class AddQuestion extends React.Component {
   /* props:
@@ -71,12 +83,9 @@ class AddQuestion extends React.Component {
     return(
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2">
+        <div className="alert alert-warning alert-dismissible"> New Question: 
+          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button></div>
           {this.state.error}
-          {this.state.options.option1}
-          {this.state.options.option2}
-          {this.state.options.option3}
-          {this.state.options.option4}
-
           <form onSubmit={(event)=>this.handleSubmit(event)}>
             <div className="form-group">
               <label>

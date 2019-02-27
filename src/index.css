@@ -22,54 +22,6 @@ body {
 #root{
   height: 100%;
 }
-/*
-ol, ul {
-  padding-left: 30px;
-}
-
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
-}
-
-.status {
-  margin-bottom: 10px;
-}
-
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
-}
-
-.square:focus {
-  outline: none;
-}
-
-.kbd-navigation .square:focus {
-  background: #ddd;
-}
-
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-left: 20px;
-} */
-#root{
-}
 .option-container{
   padding: 0.125em;
 }
@@ -123,7 +75,7 @@ ol, ul {
   min-height: 50vh;
 }
 .game-box{
-  min-height: 50vh;
+  /* min-height: 50vh; */
   /* border: solid white 2px; */
   border-radius: 0.25em;
   padding:0.625em;
@@ -143,4 +95,8 @@ ol, ul {
   background-color: transparent;
   /* width: 100%; */
   margin: auto;
+}
+.flattop{
+  /* margin-top: 5px;
+  margin-bottom: 5px; */
 }

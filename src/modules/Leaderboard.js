@@ -26,7 +26,7 @@ class Leaderboard extends React.Component{
                 }
             });
             header=(
-                <thead class="thead-dark">
+                <thead className="thead-dark">
                 <tr>
                   <th>Position</th>
                   <th>Username</th>
@@ -38,7 +38,10 @@ class Leaderboard extends React.Component{
         return(
             <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2">
-            <table class="table">
+        <div className="alert alert-warning alert-dismissible"> Leaderboard: 
+          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
+          </div>
+            <table className="table">
                 {header}
             <tbody>
                 {rowlist}

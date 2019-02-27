@@ -17,6 +17,7 @@ class RoomMenu extends React.Component{
     this.state={
       isWaiting:false,
       message:"",
+      loadInstr: "Activate", /* "Delete", "Leaderboard" */
     }
   }
   renderQuestion(i){
@@ -30,6 +31,7 @@ class RoomMenu extends React.Component{
             onClick={()=>{}}
             isOn={true}
           />
+          <button onClick={()=>this.deleteQuestion(this.props.questionList[i].id)} className="btn btn-warning-outline">Delete Question</button> 
         </div>
       );
     }
@@ -37,13 +39,33 @@ class RoomMenu extends React.Component{
       return "";
     }
   }
+  fetchLeaderboard(){
+    this.props.socket.emit('leaderboard',{
+      roomid: this.props.roomcode,
+    })
+    this.setState({
+      isWaiting:true,
+      loadInstr:"Leaderboard",
+    });
+  }
   activateRoom(){
     this.props.socket.emit('activate',{
       roomid: this.props.roomcode,
     })
     this.setState({
       isWaiting:true,
+      loadInstr:"Activate",
     });
+  }
+  deleteQuestion(i){
+    this.props.socket.emit('deletequestion',{
+      id: i,
+      roomid: this.props.roomcode,
+    })
+    this.setState({
+      isWaiting:true,
+      loadInstr:"Delete"
+    })
   }
   handleActivateResponse(payload){
     if(payload.message==="Success"){
@@ -62,19 +84,87 @@ class RoomMenu extends React.Component{
       })
     }
   }
+  handleLeaderboardResponse(payload){
+    if(payload.message==="Success"){
+      this.props.cb({
+        result:payload.leaderboard,
+      });
+      console.log(payload);
+      this.setState({
+        isWaiting:false,
+      })
+      this.props.viewLeaderBoardCB();
+    }
+    else{
+      this.setState({
+        isWaiting:false,
+        message:payload.message,
+      })
+    }
+  }
+  handleDeleteResponse(payload){
+    if(payload.message==="Success"){
+      this.props.cb({
+          questionList:payload.questions,
+        // roomcode: this.props.roomcode,
+        // roomstatus: payload.state,
+        // userlist: payload.users,
+      })
+      this.setState({
+        isWaiting:false,
+      })
+      // console.log(payload);
+      // this.props.activateRoomCB();
+    }
+    else{
+      this.setState({
+        isWaiting:false,
+        message:payload.message,
+      })
+      console.log(payload);
+    }
+  }
   render(){
     if(this.state.isWaiting){
-      return (
-        <Loading
-          text={"Activating Room..."}
-          socket={this.props.socket}
-          time={5000}
-          listenFor={'activate'}
-          onSuccess={(payload)=>this.handleActivateResponse(payload)}
-          onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
-          onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
-        />
-      );
+      if(this.state.loadInstr==="Activate"){
+        return (
+          <Loading
+            text={"Activating Room..."}
+            socket={this.props.socket}
+            time={5000}
+            listenFor={'activate'}
+            onSuccess={(payload)=>this.handleActivateResponse(payload)}
+            onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
+            onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
+          />
+        );
+      }
+      else if(this.state.loadInstr==="Leaderboard"){
+        return (
+          <Loading
+            text={"Loading Leaderboard..."}
+            socket={this.props.socket}
+            time={5000}
+            listenFor={'leaderboard'}
+            onSuccess={(payload)=>this.handleLeaderboardResponse(payload)}
+            onFailure={()=>{this.setState({isWaiting:false, message: "Time Out (Deletion Request Still Sent)"})}} 
+            onCancel={()=>{this.setState({isWaiting:false, message: "Response Cancelled (Deletion Request Still Sent)"})}}
+          />
+        );
+      }
+      else{
+        return (
+          <Loading
+            text={"Deleting Question..."}
+            socket={this.props.socket}
+            time={15000}
+            listenFor={'deletequestion'}
+            onSuccess={(payload)=>this.handleDeleteResponse(payload)}
+            onFailure={()=>{this.setState({isWaiting:false, message: "Time Out (Deletion Request Still Sent)"})}} 
+            onCancel={()=>{this.setState({isWaiting:false, message: "Response Cancelled (Deletion Request Still Sent)"})}}
+          />
+        );
+      }
     }
     let questionDisplayList=[];
     for (let i = 0; i < this.props.questionList.length; i++) {
@@ -85,8 +175,11 @@ class RoomMenu extends React.Component{
         <div className="card-body">
           <div className="form-group">
             <button className="form-control"  onClick={()=>this.props.addQuestionCB()}>Add Question</button>
-            <button className="form-control" onClick={()=>this.props.viewLeaderBoardCB()}>View Leaderboard (non func) </button>
+            <button className="form-control" onClick={()=>this.fetchLeaderboard()}>View Leaderboard (non func) </button>
             <button className="form-control" onClick={()=>this.activateRoom()}>Activate Room</button>
+          </div>
+          <div className="alert alert-warning alert-dismissible"> RoomCode: {this.props.roomcode}
+          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>
           </div>
             {questionDisplayList}
         </div>

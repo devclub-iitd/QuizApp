@@ -120,9 +120,8 @@ class Lobby extends React.Component{
     return(
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2 lobby">
-          <div className="alert alert-warning clearfix">
-          RoomCode: {this.props.roomcode}
-          <button className="float-right btn btn-warning">Back</button>
+          <div className="alert alert-warning alert-dismissible"> RoomCode: {this.props.roomcode} 
+          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
           </div>
           <ul className="list-group">
             {userDisplayList} 
