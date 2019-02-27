@@ -1,7 +1,7 @@
 import sequelize = require('../config/db');
 import { initResult } from '../models/result';
 import { ResultModel, ResultInstance } from '../types/result';
-import { Room } from './room.controller';
+import { Room, getState } from './room.controller';
 import { User } from './user.controller';
 import { checkAnswer } from './ques.controller';
 import { AttemptJSON } from '../types/attempt';
@@ -23,11 +23,19 @@ export function createResult(roomid: string, username: string): Promise<ResultIn
 
 export function addAttempt(roomid: string, username: string, serial: number, attempt: number): Promise<ResultInstance> {
     return new Promise((resolve, reject) => {
-        Result.findOne({
-            where: {
-                roomid: roomid,
-                username: username,
-            },
+        getState(roomid)
+        .then((state) => {
+            if(state === 'collecting') {
+                return Result.findOne({
+                    where: {
+                        roomid: roomid,
+                        username: username,
+                    },
+                });
+            }
+            else {
+                throw 'Not collecting answers';
+            };
         })
         .then((result) => {
             if(result === null) {

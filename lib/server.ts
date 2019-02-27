@@ -152,10 +152,12 @@ io.on('connection', (socket: SocketIO.Socket) => {
             const startTime: number = new Date().setTime(Date.now() + 10000);
 
             socket.emit('start', { time: startTime });
-            roomController.changeState(payload.roomid, 'countdown');
             for(const x of users) {
                 socket.broadcast.to(x.socket).emit('start', { time: startTime });
             };
+            return Promise.all([users, roomController.changeState(payload.roomid, 'countdown')]);
+        })
+        .then(([users, {}]) => {
             return Promise.all([users, quesController.findNext(payload.roomid, 0)]);
         })
         .then(([users, question]) => {
@@ -176,9 +178,14 @@ io.on('connection', (socket: SocketIO.Socket) => {
                             totaltime: TIMER,
                         });
                     };
+                    return roomController.changeState(payload.roomid, 'collecting');
                 }, 10000);
             };
-            return roomController.changeState(payload.roomid, 'collecting');
+        })
+        .then(() => {
+            setTimeout(() => {
+                return roomController.changeState(payload.roomid, 'waiting');
+            }, TIMER*1000);
         })
         .catch((err) => {
             console.log(err);
@@ -192,7 +199,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             return Promise.all([users, quesController.findNext(payload.roomid, payload.serial)]);
         })
         .then(([users, question]) => {
-            if(question === null) {
+            if(question===null || question===undefined) {
                 resultController.getLeaderboard(payload.roomid)
                 .then((leaderboard) => {
                     socket.emit('leaderboard', {
@@ -200,6 +207,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
                     });
                 })
                 .catch((err) => console.log(err));
+                return roomController.changeState(payload.roomid, 'finish');
             }
             else {
                 const endTime: number = new Date().setTime(Date.now() + TIMER*1000);
@@ -219,6 +227,17 @@ io.on('connection', (socket: SocketIO.Socket) => {
                         totaltime: TIMER,
                     });
                 };
+                return roomController.changeState(payload.roomid, 'collecting');
+            };
+        })
+        .then(() => {
+            return roomController.getState(payload.roomid);
+        })
+        .then((state) => {
+            if(state === 'collecting') {
+                setTimeout(() => {
+                    return roomController.changeState(payload.roomid, 'waiting');
+                }, TIMER*1000);
             };
         })
         .catch((err) => {
