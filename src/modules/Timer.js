@@ -11,7 +11,7 @@ class Timer extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      displayTime: props.endTime.getTime() - Date.now(),
+      displayTime: props.endTime - Date.now(),
     };
     if(this.state.displayTime<=0){
       this.props.onTimeout();
@@ -25,7 +25,7 @@ class Timer extends React.Component{
   tick(){
     if(this.props.isOn){
       this.setState({
-        displayTime: this.props.endTime.getTime() - Date.now(),
+        displayTime: this.props.endTime - Date.now(),
       });
     }
     if((this.state.displayTime) <= 0){

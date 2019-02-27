@@ -55,7 +55,7 @@ class Game extends React.Component {
         response: i,
         timerIsOn: false,
       });
-      this.props.socket.emit('answer',{
+      this.props.socket.emit('answer',{ //potentially problematic, unreliable
         answer:i,
       });
     }

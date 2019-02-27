@@ -7,6 +7,7 @@ class Lobby extends React.Component{
   socket: socket object (Object)
   roomcode: recieved roomcode (String)
   cb: called when game starts (Takes parent state update)
+  isQM
    */
   constructor(props){
     super(props);
@@ -15,12 +16,16 @@ class Lobby extends React.Component{
       status: this.props.status, /* "inactive", "waiting", "collecting", "finish","countdown" */
       startTime: new Date(),
       timeLeft: '',
+      beginIsOn:true,
     };
+  }
+  componentWillMount(){
     this.props.socket.on('start', (payload)=>{
       this.setState({
-        startTime:payload.time,
-        timeLeft:(payload.time.getTime()-Date.now())/1000|0,
+        startTime:new Date(payload.time),
+        timeLeft:(payload.time-Date.now())/1000|0,
       });
+      // console.log()
     });
     this.props.socket.on('question', (payload)=>{
       this.props.cb({
@@ -34,6 +39,8 @@ class Lobby extends React.Component{
       this.setState({
         userList: payload.users,
       })
+      // console.log("Update:")
+      // console.log(payload);
     })
     this.timerID=setInterval(()=>this.tick(),1000);
   }
@@ -55,21 +62,41 @@ class Lobby extends React.Component{
       });
     }
   }
+  begin(){
+    this.props.socket.emit("start",{
+      roomid: this.props.roomcode,
+    });
+    this.setState({
+      beginIsOn:false,
+    })
+  }
 
   render(){
-    // console.log(this.state.userList);
-    // console.log(this.props.userList);
-    // console.log(this.props.roomstatus);
-    // console.log(this.state.roomstatus);
+
     let userDisplayList=[];
     let countdown;
-    this.state.userList.forEach(element => {
-      userDisplayList.push(
-        <UserInLobby
-          name={element}
-        />
-      )
-    });
+    let beginButton="";
+    if(this.props.isQM){
+      if(this.state.beginIsOn){
+        beginButton=(
+          <button className="btn" onClick={()=>this.begin()}> Begin Countdown </button>
+        );
+      }
+      else{
+        beginButton=(
+          <button className="btn disabled"> Begin Countdown </button>
+        );
+      }
+    }
+    if(this.state.userList){
+      this.state.userList.forEach(element => {
+        userDisplayList.push(
+          <UserInLobby
+            name={element}
+          />
+        )
+      });
+    }
     if(this.state.status==="Starting Soon"){
       if(this.state.timeLeft>=0){
         countdown = (
@@ -98,6 +125,7 @@ class Lobby extends React.Component{
           {countdown}
         {/* {this.state.status}
         {this.props.status} */}
+        {beginButton}
         </div>
       </div>
     );

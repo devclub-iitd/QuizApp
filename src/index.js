@@ -74,6 +74,7 @@ class QuizApp extends React.Component{
           cb={(stateUpdate)=>this.setStateAndStatus(stateUpdate,"Playing")}
           status={this.state.roomstatus}
           userList={this.state.userlist}
+          isQM={this.state.isQM}
         />
       // </div>
     );
@@ -100,7 +101,12 @@ class QuizApp extends React.Component{
     return(
       <RoomMenu
         questionList={this.state.questionList}
-        cb={()=>this.setStatus("AddingQuestion")}
+        roomCode={this.state.roomCode}
+        addQuestionCB={()=>this.setStatus("AddingQuestion")}
+        viewLeaderBoardCB={()=>this.setStatus("AddingQuestion")}
+        activateRoomCB={()=>this.setStatus("InLobby")}
+        cb={(stateUpdate)=>this.setState(stateUpdate)}
+        socket={socket}
       />
     );
   }
