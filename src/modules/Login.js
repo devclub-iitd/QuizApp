@@ -53,7 +53,7 @@ class Login extends React.Component{
       if(this.state.isQM){
         stateUpdate["roomCodeList"]=payload.rooms;
         nextState="RoomListScreen";
-        console.log(stateUpdate)
+        // console.log(stateUpdate)
       }
       this.props.cb(stateUpdate,nextState);
     }

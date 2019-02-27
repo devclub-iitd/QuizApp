@@ -19,12 +19,12 @@ class RoomListScreen extends React.Component{
     }
   }
   handleRoomResponse(payload,roomCode){
-    console.log(roomCode)
+    // console.log(roomCode)
     this.props.cb({
       questionList: payload.questions,
       roomCode: roomCode,
     },"ViewingRoom");
-    console.log(payload)
+    // console.log(payload)
   }
   fetchRoom(roomCode){
     this.setState({

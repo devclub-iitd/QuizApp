@@ -24,8 +24,10 @@ class Lobby extends React.Component{
       this.setState({
         startTime:new Date(payload.time),
         timeLeft:(payload.time-Date.now())/1000|0,
+        status: "countdown",
       });
-      // console.log()
+      // console.log(payload);
+      // console.log(this.state);
     });
     this.props.socket.on('question', (payload)=>{
       this.props.cb({
@@ -34,12 +36,13 @@ class Lobby extends React.Component{
         timerEndTime: payload.endtime,
         timerTotalTime: payload.totaltime,
       })
+      // console.log(payload);
     });
     this.props.socket.on('update', (payload) => {
       this.setState({
         userList: payload.users,
       })
-      // console.log("Update:")
+      // console.log("Update:");
       // console.log(payload);
     })
     this.timerID=setInterval(()=>this.tick(),1000);
@@ -48,7 +51,7 @@ class Lobby extends React.Component{
     this.setState({
       userList: nextProps.userList,
       status: nextProps.roomstatus,
-    })
+    });
   }
   componentWillUnmount(){
     clearInterval(this.timerID);
@@ -97,7 +100,7 @@ class Lobby extends React.Component{
         )
       });
     }
-    if(this.state.status==="Starting Soon"){
+    if(this.state.status==="countdown"){
       if(this.state.timeLeft>=0){
         countdown = (
           <div className="countdown">{this.state.timeLeft}</div> 

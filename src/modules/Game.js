@@ -12,6 +12,9 @@ class Game extends React.Component {
   question: HTML
   timerEndTime: ending time (Date)
   timerTotalTime: max time for a question in seconds (Integer)
+
+  roomcode
+  username
   */
   constructor(props) {
     super(props);
@@ -23,6 +26,7 @@ class Game extends React.Component {
       timerIsOn: true,
       timerEndTime: this.props.timerEndTime,
       timerTotalTime: this.props.timerTotalTime,
+      questionIndex:0,
     };
     this.props.socket.on('question',(payload)=>{
       this.setState({
@@ -31,6 +35,7 @@ class Game extends React.Component {
         timerEndTime: payload.endtime,
         timerTotalTime: payload.totaltime,
         timerIsOn: true,
+        questionIndex: this.state.questionIndex+1,
       })
     });
     
@@ -48,19 +53,42 @@ class Game extends React.Component {
       timerIsOn: false,
     });
   }
+  broadcastNext(){
+    console.log("broadcast"+this.state.questionIndex);
+    // this.props.socket.emit('next',{
+    //   serial:this.state.questionIndex,
+    // });
+  }
   handleClick(i) {
-    if(this.state.timerIsOn){
-      this.setState({
-        status:1,
-        response: i,
-        timerIsOn: false,
-      });
-      this.props.socket.emit('answer',{ //potentially problematic, unreliable
-        answer:i,
-      });
+    if(!this.props.isQM){
+      if(this.state.timerIsOn){
+        this.setState({
+          status:1,
+          response: i,
+          timerIsOn: false,
+        });
+        this.props.socket.emit('attempt',{ //potentially problematic, unreliable
+          attempt:i,
+          roomid:this.props.roomcode,
+          username:this.props.username,
+          serial:this.state.questionIndex,
+        });
+        console.log(this.props.roomcode);
+        console.log(this.state);
+        console.log(this.props);
+      }
     }
   } 
   render() {
+    let nextButton=""
+    if(this.props.isQM){
+      if(this.state.timerIsOn){
+        nextButton=<button className="btn btn-primary disabled">Next Question</button>;
+      }
+      else{
+        nextButton=<button className="btn btn-primary" onClick={()=>this.broadcastNext()}>Next Question</button>;
+      }
+    }
     if(this.state.questionText){
       return (
         <div className="row h-100">
@@ -79,6 +107,7 @@ class Game extends React.Component {
               totalTime={this.state.timerTotalTime}
               onTimeout={()=>this.handleTimeout()}
             />
+            {nextButton}
           </div>
         </div>
       );
