@@ -151,7 +151,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             for(const x of users) {
                 socket.broadcast.to(x.socket).emit('start', { time: startTime });                
             };
-            return Promise.all([users, quesController.findNext(payload.roomid, 1)]);
+            return Promise.all([users, quesController.findNext(payload.roomid, 0)]);
         })
         .then(([users, question]) => {
             if(question !== null) {
@@ -253,7 +253,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         .then((users) => {
             socket.emit('activate',{
                 message: 'Success',
-                user: users,
+                users: users,
             });
         })
         .catch((err) => {

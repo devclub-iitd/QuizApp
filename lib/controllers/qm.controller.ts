@@ -13,9 +13,7 @@ export function loginQM(username: string,email:string,phone: string,password: st
             }
             else if(qm.email===email && qm.phone===phone && qm.password===password) {
                 qm.update({
-                    attributes: {
-                        socket: socket,
-                    },
+                    socket: socket,
                 })
                 .then((qm) => {
                     resolve(qm);
