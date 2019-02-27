@@ -207,6 +207,14 @@ io.on('connection', (socket: SocketIO.Socket) => {
                     socket.emit('leaderboard', {
                         leaderboard: leaderboard
                     });
+                    return Promise.all([leaderboard, userController.findByRoom(payload.roomid)]);
+                })
+                .then(([leaderboard, users]) => {
+                    users.forEach((user) => {
+                        socket.broadcast.to(user.socket).emit('leaderboard', {
+                            leaderboard: leaderboard,
+                        });
+                    });
                 })
                 .catch((err) => console.log(err));
                 return roomController.changeState(payload.roomid, 'finish');
