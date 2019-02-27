@@ -38,9 +38,8 @@ class Leaderboard extends React.Component{
         return(
             <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2">
-        <div className="alert alert-warning clearfix">
-          Leaderboard
-          <button className="float-right btn btn-warning flattop" onClick={()=>this.props.back()}>Back</button>
+        <div className="alert alert-warning alert-dismissible"> Leaderboard: 
+          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
           </div>
             <table class="table">
                 {header}

@@ -120,13 +120,8 @@ class Lobby extends React.Component{
     return(
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2 lobby">
-          <div className="alert alert-warning">
-          <div className="row">
-          <div className="col-9">RoomCode: {this.props.roomcode} </div>
-
-          <div className="col-3 text-right"><button className="btn btn-warning" onclick={()=>this.props.back()}>Back</button>
-          </div>
-          </div>
+          <div className="alert alert-warning alert-dismissible"> RoomCode: {this.props.roomcode} 
+          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
           </div>
           <ul className="list-group">
             {userDisplayList} 

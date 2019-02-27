@@ -51,6 +51,7 @@ class RoomMenu extends React.Component{
   deleteQuestion(i){
     this.props.socket.emit('deletequestion',{
       id: i,
+      roomid: this.props.roomcode,
     })
     this.setState({
       isWaiting:true,
@@ -133,9 +134,8 @@ class RoomMenu extends React.Component{
             <button className="form-control" onClick={()=>this.props.viewLeaderBoardCB()}>View Leaderboard (non func) </button>
             <button className="form-control" onClick={()=>this.activateRoom()}>Activate Room</button>
           </div>
-          <div className="alert alert-warning clearfix">
-          <div style={{display: "inline-block"}} >RoomCode: {this.props.roomcode} </div>
-          <button className="float-right btn btn-warning flattop" onClick={()=>this.props.back()}>Back</button>
+          <div className="alert alert-warning alert-dismissible"> RoomCode: {this.props.roomcode}
+          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>
           </div>
             {questionDisplayList}
         </div>

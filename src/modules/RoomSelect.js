@@ -84,10 +84,9 @@ class RoomSelect extends React.Component{
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2"> 
           {this.state.message}
-          <div className="alert alert-warning clearfix">
-          <div style={{display: "inline-block"}} >RoomCode:</div>
-          <button className="float-right btn btn-warning" onClick={()=>this.props.back()}>Back</button>
-          </div>
+          <div className="alert alert-warning alert-dismissible"> RoomCode: 
+          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>
+        </div>
           <form onSubmit={(event)=>this.handleSubmit(event)}>
             <div className="form-group">
               

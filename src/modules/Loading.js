@@ -29,8 +29,10 @@ class Loading extends React.Component{
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2">
           {/* <div className="spinner-border"></div> */}
-          {this.props.text}
-          <BackButton cb={()=>this.props.onCancel()}/>
+          
+          <div className="alert alert-warning alert-dismissible">{this.props.text} 
+          <button type="button" className="close" onClick={()=>this.props.onCancel()}>&#10005;</button>
+          </div>
         </div>
       </div>
     )

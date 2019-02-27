@@ -132,7 +132,7 @@ class QuizApp extends React.Component{
         activateRoomCB={()=>this.setStatus("InLobby")}
         cb={(stateUpdate)=>this.setState(stateUpdate)}
         socket={socket}
-        back={()=>{this.setStatus("SelectingRoom")}}
+        back={()=>{this.setStatus("ViewingRoom")}}
       />
     );
   }
