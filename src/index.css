@@ -96,7 +96,10 @@ body {
   /* width: 100%; */
   margin: auto;
 }
-.flattop{
-  /* margin-top: 5px;
-  margin-bottom: 5px; */
+.wrapper-class{
+  border: 1px solid #dddddd;
+  margin-bottom: 7px;
+}
+.editor-class{
+  background-color: white;
 }

@@ -1,17 +1,11 @@
 import React from "react";
 import Loading from "./Loading";
-import { Editor } from 'react-draft-wysiwyg';
+import { Editor, EditorState } from 'react-draft-wysiwyg';
 import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { stateToHTML } from "draft-js-export-html";
+import Question from "./Question";
+import Answers from "./Answers";
 
-
-// {/* <Editor
-//   wrapperClassName="wrapper-class"
-//   editorClassName="editor-class"
-//   toolbarClassName="toolbar-class"
-//   wrapperStyle={<wrapperStyleObject>}
-//   editorStyle={<editorStyleObject>}
-//   toolbarStyle={<toolbarStyleObject>}
-// /> */}
 
 class AddQuestion extends React.Component {
   /* props:
@@ -81,7 +75,8 @@ class AddQuestion extends React.Component {
       )
     }
     return(
-      <div className="row h-100">
+      <div>
+        <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2">
         <div className="alert alert-warning alert-dismissible"> New Question: 
           <button type="button" className="close" onClick={()=>this.props.back()}>Back</button></div>
@@ -91,8 +86,17 @@ class AddQuestion extends React.Component {
               <label>
                 Question: 
               </label>
-
-              <input type="text" value={this.state.question} className="form-control" onChange={(event)=>this.takeTextInput(event,"question")} />
+              <Editor
+                wrapperClassName="wrapper-class"
+                editorClassName="editor-class"
+                toolbarClassName="toolbar-class"
+                onEditorStateChange={(editorState)=>{
+                  this.setState({
+                    question: stateToHTML(editorState.getCurrentContent())
+                  });
+                }}
+              />
+              {/* <input type="text" value={this.state.question} className="form-control" onChange={(event)=>this.takeTextInput(event,"question")} /> */}
             </div>
             <div className="form-group">
               <label> 
@@ -126,8 +130,21 @@ class AddQuestion extends React.Component {
             </div>
             <input type="submit" className="form-control" value="Submit" />
           </form>
+          </div>
+      </div>
+
+          <div className="row h-100">
+        <div className="game-box my-auto col-sm-8 offset-sm-2">
+        <Question questionText={this.state.question} />
+            <Answers
+              options={this.state.options}
+              onClick={i => {}}
+              isOn={true}
+            />
+        </div>
         </div>
       </div>
+      
     )
   }
 }
