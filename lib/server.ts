@@ -119,6 +119,12 @@ io.on('connection', (socket: SocketIO.Socket) => {
                             users: users,
                         }); 
                     };
+                    return Promise.all([users, roomController.getQm(payload.roomid)]);
+                })
+                .then(([users, qm]) => {
+                    socket.broadcast.to(qm.socket).emit('update', {
+                        users: users,
+                    });
                 })
                 .catch((err) => {
                     console.log(err);
@@ -225,5 +231,35 @@ io.on('connection', (socket: SocketIO.Socket) => {
             });
         })
         .catch((err) => console.log(err));
+    });
+
+    socket.on('activate', (payload) => {
+        roomController.getState(payload.roomid)
+        .then((state):(Promise<{} | undefined> | undefined) => {
+            if(state === 'finish') {
+                return roomController.changeState(payload.roomid, 'inactive');
+            }
+        })
+        .then(() => {
+            return userController.findByRoom(payload.roomid);
+        })
+        .then((users) => {
+            let userArray: string[] = [];
+            users.map((user, index) => {
+                userArray[index] = user.username;
+            });
+            return userArray;
+        })
+        .then((users) => {
+            socket.emit('activate',{
+                message: 'Success',
+                user: users,
+            });
+        })
+        .catch((err) => {
+            socket.emit('activate', {
+                message: err,
+            });
+        });
     });
 });
