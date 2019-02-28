@@ -12,15 +12,9 @@ export function loginQM(username: string,email:string,phone: string,password: st
                 throw 'FATAL. Wrong Credentials.'
             }
             else if(qm.email===email && qm.phone===phone && qm.password===password) {
-                qm.update({
+                return qm.update({
                     socket: socket,
                 })
-                .then((qm) => {
-                    resolve(qm);
-                })
-                .catch((err) => {
-                    reject(err);
-                });
             }
             else {
                 throw 'FATAL. Credentials do not match.'

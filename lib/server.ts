@@ -7,7 +7,8 @@ import * as userController from './controllers/user.controller';
 import * as roomController from './controllers/room.controller';
 import * as quesController from './controllers/ques.controller';
 import * as resultController from './controllers/result.controller';
-import { Leaderboard } from './types/leaderboard';
+import { UserInstance } from './types/user';
+
 
 const app: Express.Application = express();
 const server: http.Server = new http.Server(app);
@@ -16,6 +17,12 @@ const io = socketio(server);
 server.listen(env.PORT);
 
 const TIMER: number = 5;
+
+function sleeper(ms: number) {
+    return function(x: any) {
+        return new Promise<any>(resolve => setTimeout(() => resolve(x), ms));
+    };
+}
 
 io.on('connection', (socket: SocketIO.Socket) => {
     socket.on('login', (payload) => {
@@ -46,7 +53,13 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('createroom', (payload) => {
         roomController.createRoom(payload.roomid, payload.qm)
-        .then((room) => socket.emit('createroom', { message: 'Success' }))
+        .then((room) => {
+            return roomController.getRooms(payload.qm);
+        })
+        .then((rooms) => socket.emit('createroom', { 
+            message: 'Success',
+            rooms: rooms,
+        }))
         .catch((err) => socket.emit('createroom', { message: err }));
     });
 
@@ -178,9 +191,9 @@ io.on('connection', (socket: SocketIO.Socket) => {
         .then(([users, {}]) => {
             return Promise.all([users, quesController.findNext(payload.roomid, 0)]);
         })
+        .then(sleeper(10000))
         .then(([users, question]) => {
-            if(question !== null) {
-                setTimeout(function() {
+                if(question !== null) {
                     const endTime: number = new Date().setTime(Date.now() + TIMER*1000);
                     socket.emit('question', {
                         question: question[0].question,
@@ -198,14 +211,18 @@ io.on('connection', (socket: SocketIO.Socket) => {
                             islast: question[1],
                         });
                     };
-                    return roomController.changeState(payload.roomid, 'collecting');
-                }, 10000);
-            };
-        })
+                    return (roomController.changeState(payload.roomid, 'collecting'));
+                } else {
+                    throw('Question ID NULL! No questions in the room!');
+                }
+            }
+        )
+        .then(sleeper(TIMER*1000))
         .then(() => {
-            setTimeout(() => {
-                return roomController.changeState(payload.roomid, 'waiting');
-            }, TIMER*1000);
+            console.log("inside timeout, setting state to waiting, room id: ",payload.roomid);
+            return roomController.changeState(payload.roomid, 'waiting').catch((err)=>{
+                console.log("Error: ",err);
+            });
         })
         .catch((err) => {
             console.log(err);
@@ -219,15 +236,13 @@ io.on('connection', (socket: SocketIO.Socket) => {
             return Promise.all([users, quesController.findNext(payload.roomid, payload.serial)]);
         })
         .then(([users, question]) => {
+
             if((question===null) || question[0]===undefined) {
                 resultController.getLeaderboard(payload.roomid)
                 .then((leaderboard) => {
                     socket.emit('leaderboard', {
                         leaderboard: leaderboard
                     });
-                    return Promise.all([leaderboard, userController.findByRoom(payload.roomid)]);
-                })
-                .then(([leaderboard, users]) => {
                     users.forEach((user) => {
                         socket.broadcast.to(user.socket).emit('leaderboard', {
                             leaderboard: leaderboard,
@@ -235,7 +250,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
                     });
                 })
                 .catch((err) => console.log(err));
-                return roomController.changeState(payload.roomid, 'finish');
+                return Promise.all([users,roomController.changeState(payload.roomid, 'finish')]);
             }
             else {
                 const endTime: number = new Date().setTime(Date.now() + TIMER*1000);
@@ -257,17 +272,29 @@ io.on('connection', (socket: SocketIO.Socket) => {
                         islast: question[1],
                     });
                 };
-                return roomController.changeState(payload.roomid, 'collecting');
+                return Promise.all([users, roomController.changeState(payload.roomid, 'collecting')]);
             };
         })
-        .then(() => {
-            return roomController.getState(payload.roomid);
+        .then(([users, x]) => {
+            return Promise.all([users, roomController.getState(payload.roomid)]);
         })
-        .then((state) => {
+        .then(sleeper(TIMER*1000))
+        .then(([users,state]: [UserInstance[], string]) => {
             if(state === 'collecting') {
-                setTimeout(() => {
-                    return roomController.changeState(payload.roomid, 'waiting');
-                }, TIMER*1000);
+                roomController.changeState(payload.roomid, 'waiting')
+                .then(() => {
+                    return resultController.getLeaderboard(payload.roomid);
+                })
+                .then((leaderboard) => {
+                    socket.emit('leaderboard', {
+                        leaderboard: leaderboard,
+                    });
+                    users.forEach((user) => {
+                        socket.broadcast.to(user.socket).emit('leaderboard', {
+                            leaderboard: leaderboard,
+                        });
+                    });
+                })
             };
         })
         .catch((err) => {
