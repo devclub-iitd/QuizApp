@@ -28,6 +28,7 @@ class Login extends React.Component{
     // this.setState({
     //   username: "Submit Function Called",
     // });
+    // console.log("handle submit: "+this.state.isQM);
     this.props.socket.emit('login',{
       username: this.state.username,
       isQM: this.state.isQM,
@@ -44,13 +45,17 @@ class Login extends React.Component{
     // });
   }
   handleLoginResponse(payload){
+    // console.log("handle login response -1: "+this.state.isQM);
     if(payload.message==="Success"){
       let stateUpdate = {
         username: this.state.username,
         isQM: this.state.isQM,
       }
       let nextState="SelectingRoom";
+      // console.log("handle login response: "+this.state.isQM);
+
       if(this.state.isQM){
+
         stateUpdate["roomcodeList"]=payload.rooms;
         nextState="RoomListScreen";
         // console.log(stateUpdate)
@@ -66,6 +71,8 @@ class Login extends React.Component{
   }
   render(){
     if(this.state.isWaiting){
+      // console.log("render loading: "+this.state.isQM);
+
       return (
         <Loading 
           text={"Logging in..."}
@@ -106,7 +113,9 @@ class Login extends React.Component{
       userButtonClass="disabled btn btn-info";
       QMButtonClass="btn btn-outline-info";
     }
+    // console.log(this.state.isQM);
     return(
+      
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2">
           {error}
@@ -117,12 +126,12 @@ class Login extends React.Component{
                 className={userButtonClass} 
                 onClick={(e)=>{ this.setState({ isQM: false }); e.preventDefault() }}
               >
-                User Login
+                User Login 
               </button>
               <button 
                 className={QMButtonClass} 
                 onClick={(e)=>{ this.setState({ isQM: true }); e.preventDefault() }}
-              > 
+              >
                 QM Login 
               </button>
               </div>
@@ -131,7 +140,6 @@ class Login extends React.Component{
               <label>
                 Username: 
               </label>
-
               <input type="text" className="form-control" onChange={(event)=>this.takeTextInput(event,"username")} />
             </div>
             {secInput}

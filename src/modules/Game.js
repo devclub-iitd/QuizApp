@@ -121,7 +121,7 @@ class Game extends React.Component {
       }
       if(this.state.results){
         board=(
-          <div className="game-box my-auto col-sm-6">
+          <div className="leader-box my-auto col-sm-6">
           <Leaderboard
             result={this.state.results}
             username={this.props.username}
@@ -129,7 +129,7 @@ class Game extends React.Component {
           />
           </div>
         );
-        gameBoxClass="col-sm-4";
+        gameBoxClass="col-sm-6";
       }
     }
     if(this.state.questionText){

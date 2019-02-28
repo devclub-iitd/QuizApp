@@ -109,3 +109,8 @@ table{
 td{
   overflow: hidden;
 }
+.leader-box{
+  height:100vh;
+  background-color: white;
+  border-left: 2px solid black; 
+}

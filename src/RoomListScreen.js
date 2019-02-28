@@ -99,7 +99,7 @@ class RoomListScreen extends React.Component{
         isWaiting: true,
         loadInstr:"Add",
       });
-      console.log("adsads");
+      // console.log("adsads");
     }
   }
   takeTextInput(event, stateField){

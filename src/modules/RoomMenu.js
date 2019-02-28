@@ -103,7 +103,7 @@ class RoomMenu extends React.Component{
       this.props.cb({
         result:payload.leaderboard,
       });
-      console.log(payload);
+      // console.log(payload);
       this.setState({
         isWaiting:false,
       })
@@ -135,7 +135,7 @@ class RoomMenu extends React.Component{
         isWaiting:false,
         message:payload.message,
       })
-      console.log(payload);
+      // console.log(payload);
     }
   }
   render(){

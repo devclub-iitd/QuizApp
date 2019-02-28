@@ -12,7 +12,7 @@ class Leaderboard extends React.Component{
         if(!this.props.isEmbedded){
             label=(
                 <div className="alert alert-warning alert-dismissible"> Leaderboard: 
-                <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
+                    <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
                 </div>
             );
         }

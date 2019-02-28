@@ -94,7 +94,7 @@ class RoomSelect extends React.Component{
               
               <input className="form-control"type="text" value={this.state.value} onChange={(event)=>this.takeTextInput(event,"roomcode")} />
             </div>
-            <input className="form-control" type="submit" value="Submit" />
+            <input className="form-control" type="submit" value="Submit"/>
           </form> 
         </div>
       </div>
