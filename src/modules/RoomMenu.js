@@ -68,6 +68,20 @@ class RoomMenu extends React.Component{
     })
   }
   handleActivateResponse(payload){
+    // if(payload.message==="Success"){
+    //   if(payload.state==="countdown" || payload.state==="waiting" || payload.state==="collecting"){
+    //     this.props.cb({roomcode: roomcode},"Playing");
+    //   }
+    //   else if(payload.state==="finish"){
+    //     this.props.cb({roomcode: roomcode, result:payload.leaderboard},"Leaderboard");
+    //   }
+    //   else{
+    //     this.props.cb({
+    //       questionList: payload.questions,
+    //       roomcode: roomcode,
+    //     },"ViewingRoom");
+    //   }
+    // }
     if(payload.message==="Success"){
       this.props.cb({
         roomcode: this.props.roomcode,

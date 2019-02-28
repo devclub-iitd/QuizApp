@@ -2,6 +2,7 @@ import React from "react";
 import Timer from "./Timer";
 import Question from "./Question";
 import Answers from "./Answers";
+import Leaderboard from "./Leaderboard";
 
 // TODO: Handle state where we are too early for questions to start 
 class Game extends React.Component {
@@ -27,6 +28,7 @@ class Game extends React.Component {
       timerTotalTime: this.props.timerTotalTime,
       questionIndex:1,
       isLast:false,
+      results:"",
     };
   }
   componentWillReceiveProps(nextProps){
@@ -40,7 +42,15 @@ class Game extends React.Component {
   componentDidMount(){
     // console.log("mounting");
     this.props.socket.on('leaderboard',(payload)=>{
-      this.props.cb({result:payload.leaderboard});
+      if(payload.isnotlive){
+        this.props.cb({result:payload.leaderboard});
+      }
+      else{
+        this.setState({
+          results:payload.leaderboard,
+        });
+      }
+      // console.log("hi",payload,this.state)
     })
     this.props.socket.on('question',(payload)=>{
       this.setState({
@@ -52,7 +62,7 @@ class Game extends React.Component {
         timerIsOn: true,
         questionIndex: this.state.questionIndex+1,//make it question ka index + 1 aoid double click problems
       })
-      // console.log("Question reply:")
+      console.log("Question reply:")
       console.log(payload)
     });
     // console.log("mounted");
@@ -72,6 +82,7 @@ class Game extends React.Component {
       serial:this.state.questionIndex,
       roomid:this.props.roomcode,
     });
+    console.log(this.state.questionIndex);
   }
   handleClick(i) {
     if(!this.props.isQM){
@@ -94,8 +105,10 @@ class Game extends React.Component {
     }
   } 
   render() {
-    let nextButton=""
-    let buttonText="Next Question"
+    let nextButton="";
+    let buttonText="Next Question";
+    let board="";
+    let gameBoxClass="col-sm-8 offset-sm-2";
     if(this.state.isLast){
       buttonText="View Leaderboard"
     }
@@ -106,12 +119,24 @@ class Game extends React.Component {
       else{
         nextButton=<button className="btn btn-primary" onClick={()=>this.broadcastNext()}>{buttonText}</button>;
       }
+      if(this.state.results){
+        board=(
+          <div className="game-box my-auto col-sm-6">
+          <Leaderboard
+            result={this.state.results}
+            username={this.props.username}
+            back={()=>{}}
+          />
+          </div>
+        );
+        gameBoxClass="col-sm-4";
+      }
     }
     if(this.state.questionText){
       return (
         <div className="row h-100">
-          <div className="game-box my-auto col-sm-8 offset-sm-2">
-            <div className="response">{this.state.response}</div>
+          <div className={"game-box my-auto "+gameBoxClass}>
+            {/* <div className="response">{this.state.response}</div> */}
             <Question questionText={this.state.questionText} />
             <Answers
               options={this.state.options}
@@ -127,13 +152,14 @@ class Game extends React.Component {
             />
             {nextButton}
           </div>
+          {board}
         </div>
       );
     }
     else{
       return(
         <div className="row h-100">
-          <div className="game-box my-auto col-sm-8 offset-sm-2">
+          <div className="game-box my-auto col-sm-6 offset-sm-2">
             Please Wait For The Next Question
           </div>
         </div>

@@ -123,13 +123,13 @@ class Lobby extends React.Component{
           <div className="alert alert-warning alert-dismissible"> RoomCode: {this.props.roomcode} 
           <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
           </div>
+        {beginButton}
           <ul className="list-group">
             {userDisplayList} 
           </ul>
           {countdown}
         {/* {this.state.status}
         {this.props.status} */}
-        {beginButton}
         </div>
       </div>
     );

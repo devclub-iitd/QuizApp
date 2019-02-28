@@ -16,6 +16,8 @@ class RoomListScreen extends React.Component{
       isWaiting: false,
       roomcode: "",
       message:"",
+      loadInstr:"Open", /* "Add" */
+      newroomcode:"",
     }
   }
   handleRoomResponse(payload,roomcode){
@@ -26,9 +28,15 @@ class RoomListScreen extends React.Component{
     },"ViewingRoom");
     // console.log(payload)
   }
+  handleAddResponse(payload){
+    this.props.cb({
+      roomcodeList:payload.rooms,
+    },"RoomListScreen")
+  }
   fetchRoom(roomcode){
     this.setState({
       isWaiting:true,
+      loadInstr:"Open",
       roomcode: roomcode,
     });
     this.props.socket.emit('fetchroom',{
@@ -38,17 +46,32 @@ class RoomListScreen extends React.Component{
   }
   renderLoading(roomcode){
     // console.log(this.state.isWaiting);
-    return(
-      <Loading
-        text={"Loading Room..."}
-        socket={this.props.socket}
-        time={5000}
-        listenFor={'fetchroom'}
-        onSuccess={(payload)=>this.handleRoomResponse(payload,roomcode)}
-        onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
-        onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
-      />
-    );
+    if(this.state.loadInstr==="Open"){
+      return(
+        <Loading
+          text={"Loading Room..."}
+          socket={this.props.socket}
+          time={5000}
+          listenFor={'fetchroom'}
+          onSuccess={(payload)=>this.handleRoomResponse(payload,roomcode)}
+          onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
+          onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
+        />
+      );
+    }
+    else{
+      return(
+        <Loading
+          text={"Adding Room..."}
+          socket={this.props.socket}
+          time={5000}
+          listenFor={'createroom'}
+          onSuccess={(payload)=>this.handleAddResponse(payload)}
+          onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
+          onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
+        />
+      );
+    }
   }
   renderRoomButton(roomcode){
     return(
@@ -58,6 +81,28 @@ class RoomListScreen extends React.Component{
         isOn={true}
       />
     );
+  }
+  addRoom(event){
+    event.preventDefault();
+    // this.setState({
+    //   username: "Submit Function Called",
+    // });
+    if(this.newroomcode){
+      this.props.socket.emit('createroom',{
+        username: this.state.username,
+        roomid: this.state.newroomcode,
+      });
+      this.setState({
+        isWaiting: true,
+        loadInstr:"Add",
+      });
+
+    }
+  }
+  takeTextInput(event, stateField){
+    let stateUpdate={};
+    stateUpdate[stateField]=event.target.value;
+    this.setState(stateUpdate);
   }
   render(){
     if(this.state.isWaiting){
@@ -72,10 +117,20 @@ class RoomListScreen extends React.Component{
     return(
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2">
-        <div className="alert alert-warning alert-dismissible"> Rooms: 
-          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
+          <div className="alert alert-warning alert-dismissible"> Rooms: 
+            <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
           </div>
           {roomDisplayList}
+          <form onSubmit={(event)=>this.addRoom(event)}>
+            <div className="form-group">
+              <label>
+                New Room Code: 
+              </label>
+
+              <input type="text" className="form-control" onChange={(event)=>this.takeTextInput(event,"newroomcode")} />
+            </div>
+            <input type="submit" className="form-control" value="Create New Room" />
+          </form>
         </div>
       </div>
     );

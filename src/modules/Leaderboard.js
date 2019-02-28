@@ -3,10 +3,19 @@ import React from "react";
 class Leaderboard extends React.Component{
     /* props:
     username
-    result */
+    result 
+    isEmbedded*/
     render(){
         let rowlist=[];
         let header="";
+        let label="";
+        if(!this.props.isEmbedded){
+            label=(
+                <div className="alert alert-warning alert-dismissible"> Leaderboard: 
+                <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
+                </div>
+            );
+        }
         if(this.props.result){
             let i=1;
             this.props.result.forEach(element => {
@@ -36,18 +45,14 @@ class Leaderboard extends React.Component{
             )
         }
         return(
-            <div className="row h-100">
-        <div className="game-box my-auto col-sm-8 offset-sm-2">
-        <div className="alert alert-warning alert-dismissible"> Leaderboard: 
-          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
-          </div>
-            <table className="table">
-                {header}
-            <tbody>
-                {rowlist}
-            </tbody>
-            </table>
-            </div>
+            <div>
+                {label}
+                <table className="table">
+                    {header}
+                <tbody>
+                    {rowlist}
+                </tbody>
+                </table>
             </div>
         );
     }

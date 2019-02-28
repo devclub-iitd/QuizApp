@@ -103,3 +103,9 @@ body {
 .editor-class{
   background-color: white;
 }
+table{
+  width: 100%;
+}
+td{
+  overflow: hidden;
+}

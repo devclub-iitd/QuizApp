@@ -86,6 +86,8 @@ class RoomSelect extends React.Component{
           {this.state.message}
           <div className="alert alert-warning alert-dismissible"> RoomCode: 
           <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>
+          <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>
+
         </div>
           <form onSubmit={(event)=>this.handleSubmit(event)}>
             <div className="form-group">

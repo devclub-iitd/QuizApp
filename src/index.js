@@ -12,7 +12,7 @@ import RoomMenu from './modules/RoomMenu';
 import AddQuestion from './modules/AddQuestion';
 import Leaderboard from './modules/Leaderboard';
 
-const SERVER_URL = 'http://10.184.17.101:3001';
+const SERVER_URL = 'http://10.194.13.136:3001';
 const socket = openSocket(SERVER_URL);
   
 class QuizApp extends React.Component{
@@ -81,7 +81,14 @@ class QuizApp extends React.Component{
           status={this.state.roomstatus}
           userList={this.state.userlist}
           isQM={this.state.isQM}
-          back={()=>this.setStatus("SelectingRoom")}
+          back={()=>{
+            if(!this.state.isQM){
+              this.setStatus("SelectingRoom")
+            }
+            else{
+              this.setStatus("ViewingRoom")
+            }
+          }}
         />
       // </div>
     );
@@ -98,6 +105,8 @@ class QuizApp extends React.Component{
   }
   renderLeaderBoard(){
     return(
+      <div className="row h-100">
+      <div className="game-box my-auto col-sm-8 offset-sm-2">
       <Leaderboard
         result={this.state.result}
         username={this.state.username}
@@ -110,6 +119,8 @@ class QuizApp extends React.Component{
           }
         }}
       />
+      </div>
+      </div>
     )
   }
   renderRoomListScreen(){
