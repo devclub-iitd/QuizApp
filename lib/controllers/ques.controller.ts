@@ -105,7 +105,7 @@ export function deleteQuestion(roomid: string, id: number):Promise<quesArray> {
         })
         .then((questions) => {
             questions = questions.filter((question) => {
-                question.id!==id;
+                return question.id!==id;
             });
 
             let quesArray: quesArray = [];
