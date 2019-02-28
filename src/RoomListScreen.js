@@ -29,6 +29,9 @@ class RoomListScreen extends React.Component{
     // console.log(payload)
   }
   handleAddResponse(payload){
+    this.setState({
+      isWaiting:false,
+    })
     this.props.cb({
       roomcodeList:payload.rooms,
     },"RoomListScreen")
@@ -87,16 +90,16 @@ class RoomListScreen extends React.Component{
     // this.setState({
     //   username: "Submit Function Called",
     // });
-    if(this.newroomcode){
+    if(this.state.newroomcode){
       this.props.socket.emit('createroom',{
-        username: this.state.username,
+        qm: this.props.username,
         roomid: this.state.newroomcode,
       });
       this.setState({
         isWaiting: true,
         loadInstr:"Add",
       });
-
+      console.log("adsads");
     }
   }
   takeTextInput(event, stateField){

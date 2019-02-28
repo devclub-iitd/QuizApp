@@ -130,6 +130,7 @@ class QuizApp extends React.Component{
         roomcodeList={this.state.roomcodeList}
         cb={(stateUpdate,nextStatus)=>this.setStateAndStatus(stateUpdate,nextStatus)}
         back={()=>{this.setStatus("LoggingIn")}}
+        username={this.state.username}
       />
     )
   }
