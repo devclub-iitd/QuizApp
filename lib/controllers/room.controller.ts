@@ -106,16 +106,16 @@ export function getRooms(qm: string): Promise<string[]> {
 
 export function purge(roomid: string): Promise<void> {
     return new Promise((resolve, reject) => {
-        userController.findByRoom(roomid)
-        .then((users) => {
-            users.map((user) => {
-                user.destroy();
-            });
-            return resultController.getByRoom(roomid);
-        })
+        resultController.getByRoom(roomid)
         .then((results) => {
             results.map((result) => {
                 result.destroy();
+            });
+            return userController.findByRoom(roomid);
+        })
+        .then((users) => {
+            users.map((users) => {
+                users.destroy();
             });
             resolve();
         })
