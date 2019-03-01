@@ -47,25 +47,43 @@ io.on('connection', (socket: SocketIO.Socket) => {
         } else {
             userController.createUser(payload.username, payload.email, payload.phone, socket.id)
             .then((user) => socket.emit('login', { message: 'Success' }))
-            .catch((err) => {console.log(err); socket.emit('login', { message: err });});
+            .catch((err) => socket.emit('login', { message: err }));
         };
     });
 
     socket.on('createroom', (payload) => {
-        roomController.createRoom(payload.roomid, payload.qm)
-        .then((room) => {
+        console.log(payload);
+        qmController.QM.findAndCountAll({
+            where: {
+                socket: socket.id,
+            },
+        })
+        .then((qms) => {
+            if(qms.count === 1) {
+                return;
+            } else {
+                throw 'Not authorised.';
+            };
+        })
+        .then(() => {
+            return roomController.createRoom(payload.roomid, payload.qm);
+        })
+       .then((room) => {
             return roomController.getRooms(payload.qm);
         })
         .then((rooms) => socket.emit('createroom', { 
             message: 'Success',
             rooms: rooms,
         }))
-        .catch((err) => socket.emit('createroom', { message: err }));
+        .catch((err) => {console.log(err);socket.emit('createroom', { message: err })});
     });
 
     socket.on('createquestion', (payload) => {
         console.log(payload);
-        quesController.createQuestion(payload.question, payload.options, payload.roomid, payload.answer)
+        qmController.authenticate(socket.id, payload.roomid)
+        .then(() => {
+            return quesController.createQuestion(payload.question, payload.options, payload.roomid, payload.answer);
+        })
         .then((ques) => {
             return quesController.getByRoom(payload.roomid);
         })
@@ -80,7 +98,10 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('deletequestion', (payload) => {
         console.log(payload);
-        quesController.deleteQuestion(payload.roomid, payload.id)
+        qmController.authenticate(socket.id, payload.roomid)
+        .then(() => {
+            return quesController.deleteQuestion(payload.roomid, payload.id);
+        })
         .then((questions) => {
             console.log(questions);
             socket.emit('deletequestion', {
@@ -98,7 +119,10 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('fetchroom', (payload) => {
         console.log(payload);
-        quesController.getByRoom(payload.roomid)
+        qmController.authenticate(socket.id, payload.roomid)
+        .then(() => {
+            return quesController.getByRoom(payload.roomid);
+        })
         .then((questions) => {
             console.log(questions);
             socket.emit('fetchroom', {
@@ -115,7 +139,10 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('joinroom', (payload) => {
         console.log(payload);
-        roomController.getState(payload.roomid)
+        qmController.authenticate(socket.id, payload.roomid)
+        .then(() => {
+            return roomController.getState(payload.roomid);
+        })
         .then((state) => {
             console.log(state);
             if(state === 'finish') {
@@ -178,7 +205,11 @@ io.on('connection', (socket: SocketIO.Socket) => {
     });
 
     socket.on('start', (payload) => {
-        userController.findByRoom(payload.roomid)
+        console.log(payload);
+        qmController.authenticate(socket.id, payload.roomid)
+        .then(() => {
+            return userController.findByRoom(payload.roomid);
+        })
         .then((users) => {
             const startTime: number = new Date().setTime(Date.now() + 10000);
 
@@ -224,6 +255,14 @@ io.on('connection', (socket: SocketIO.Socket) => {
                 console.log("Error: ",err);
             });
         })
+        .then(() => {
+            return resultController.getLeaderboard(payload.roomid);
+        })
+        .then((leaderboard) => {
+            socket.emit('leaderboard', {
+                leaderboard: leaderboard,
+            });
+        })
         .catch((err) => {
             console.log(err);
         });
@@ -231,16 +270,20 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('next', (payload) => {
         console.log(payload);
-        userController.findByRoom(payload.roomid)
+        qmController.authenticate(socket.id, payload.roomid)
+        .then(() => {
+            return userController.findByRoom(payload.roomid);
+        })
         .then((users) => {
             return Promise.all([users, quesController.findNext(payload.roomid, payload.serial)]);
         })
         .then(([users, question]) => {
-
             if((question===null) || question[0]===undefined) {
                 resultController.getLeaderboard(payload.roomid)
                 .then((leaderboard) => {
                     socket.emit('leaderboard', {
+                        message: 'Success',
+                        isnotlive: true,
                         leaderboard: leaderboard
                     });
                     users.forEach((user) => {
@@ -321,7 +364,11 @@ io.on('connection', (socket: SocketIO.Socket) => {
     });
 
     socket.on('activate', (payload) => {
-        roomController.getState(payload.roomid)
+        console.log(payload);
+        qmController.authenticate(socket.id, payload.roomid)
+        .then(() => {
+            return roomController.getState(payload.roomid);
+        })
         .then((state):(Promise<{} | undefined> | undefined) => {
             if(state === 'finish') {
                 return roomController.changeState(payload.roomid, 'inactive');

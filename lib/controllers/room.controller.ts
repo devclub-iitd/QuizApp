@@ -14,7 +14,7 @@ export function createRoom(roomid: string,  qm: string) {
         }).then((room) => {
             resolve(room);
         }).catch((err) => {
-            resolve(err);
+            reject(err);
         });
     });
 };
