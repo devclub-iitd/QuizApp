@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  quizapp:
+    build: .
+    image: "${REGISTRY_NAME}devclubiitd/quizapp:1.0"
+    depends_on:
+      - database
+    environment:
+      - VIRTUAL_HOST
+      - PORT
+      - DATABASE_URL = postgres://${POSTGRESS_USER}:${POSTGRESS_PASSWORD}@database/${POSTGRESS_DB}
+    ports:
+      - ${PORT}:${PORT}
+    restart:
+      - "unless-stopped"
+    networks:
+      - "internal"
+      - "reverseproxy"
+    database:
+    image: "${REGISTRY_NAME}postgres:11.2-alpine"
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./initdb.sh:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - "internal"
+    restart:
+      - "unless-stopped"
+
+networks:
+  reverseproxy:
+    external:
+      name: "reverseproxy"
+  internal:

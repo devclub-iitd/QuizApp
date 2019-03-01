@@ -1,0 +1,7 @@
+node-modules/*
+data/*
+server/*
+build/*
+.git/*
+README.m
+.gitignore
