@@ -105,13 +105,13 @@ class Login extends React.Component{
           <input type="password" className="form-control" onChange={(event)=>this.takeTextInput(event,"password")} />
         </div>
       );
-      QMButtonClass="disabled btn btn-info";
-      userButtonClass="btn btn-outline-info";
+      QMButtonClass="disabled btn y-button y-button-active";
+      userButtonClass="btn y-button-outline y-button";
     }
     else{
       secInput="";
-      userButtonClass="disabled btn btn-info";
-      QMButtonClass="btn btn-outline-info";
+      userButtonClass="disabled btn y-button y-button-active";
+      QMButtonClass="btn y-button-outline y-button";
     }
     // console.log(this.state.isQM);
     return(
@@ -155,7 +155,7 @@ class Login extends React.Component{
               </label>
               <input type="number" className="form-control" onChange={(event)=>this.takeTextInput(event,"phone")} />
             </div>
-            <input type="submit" className="form-control" value="Submit" />
+            <input type="submit" className="form-control y-button y-button-outline" value="Submit" />
           </form>
         </div>
       </div>

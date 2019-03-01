@@ -67,6 +67,14 @@ class RoomSelect extends React.Component{
     }
   }
   render(){
+    let error="";
+    if(this.state.message){
+      error=(
+        <div className="alert alert-warning alert-dismissible"> {this.state.message} 
+          <button type="button" className="close" data-dismiss="alert">&times;</button>
+        </div>
+      );
+    }
     if(this.state.isWaiting){
       return(
         <Loading 
@@ -83,7 +91,7 @@ class RoomSelect extends React.Component{
     return(
       <div className="row h-100">
         <div className="game-box my-auto col-sm-8 offset-sm-2"> 
-          {this.state.message}
+          {error}
           <div className="alert alert-warning alert-dismissible"> RoomCode: 
           <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>
           <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>

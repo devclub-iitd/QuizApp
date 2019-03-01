@@ -139,6 +139,14 @@ class RoomMenu extends React.Component{
     }
   }
   render(){
+    let error="";
+    if(this.state.message){
+      error=(
+        <div className="alert alert-warning alert-dismissible"> {this.state.message} 
+          <button type="button" className="close" data-dismiss="alert">&times;</button>
+        </div>
+      );
+    }
     if(this.state.isWaiting){
       if(this.state.loadInstr==="Activate"){
         return (
@@ -161,8 +169,8 @@ class RoomMenu extends React.Component{
             time={5000}
             listenFor={'leaderboard'}
             onSuccess={(payload)=>this.handleLeaderboardResponse(payload)}
-            onFailure={()=>{this.setState({isWaiting:false, message: "Time Out (Deletion Request Still Sent)"})}} 
-            onCancel={()=>{this.setState({isWaiting:false, message: "Response Cancelled (Deletion Request Still Sent)"})}}
+            onFailure={()=>{this.setState({isWaiting:false, message: "Time Out"})}} 
+            onCancel={()=>{this.setState({isWaiting:false, message: ""})}}
           />
         );
       }
@@ -192,6 +200,7 @@ class RoomMenu extends React.Component{
             <button className="form-control" onClick={()=>this.fetchLeaderboard()}>View Leaderboard (non func) </button>
             <button className="form-control" onClick={()=>this.activateRoom()}>Activate Room</button>
           </div>
+          {error}
           <div className="alert alert-warning alert-dismissible"> RoomCode: {this.props.roomcode}
           <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>
           </div>

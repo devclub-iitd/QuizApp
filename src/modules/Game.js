@@ -42,6 +42,7 @@ class Game extends React.Component {
   componentDidMount(){
     // console.log("mounting");
     this.props.socket.on('leaderboard',(payload)=>{
+      console.log(payload);
       if(payload.isnotlive){
         this.props.cb({result:payload.leaderboard});
       }
@@ -62,8 +63,8 @@ class Game extends React.Component {
         timerIsOn: true,
         questionIndex: this.state.questionIndex+1,//make it question ka index + 1 aoid double click problems
       })
-      console.log("Question reply:")
-      console.log(payload)
+      // console.log("Question reply:")
+      // console.log(payload)
     });
     // console.log("mounted");
   }
@@ -82,7 +83,7 @@ class Game extends React.Component {
       serial:this.state.questionIndex,
       roomid:this.props.roomcode,
     });
-    console.log(this.state.questionIndex);
+    // console.log(this.state.questionIndex);
   }
   handleClick(i) {
     if(!this.props.isQM){
@@ -114,10 +115,10 @@ class Game extends React.Component {
     }
     if(this.props.isQM){
       if(this.state.timerIsOn){
-        nextButton=<button className="btn btn-primary disabled">{buttonText}</button>;
+        nextButton=<button className="btn y-button y-button-outline disabled">{buttonText}</button>;
       }
       else{
-        nextButton=<button className="btn btn-primary" onClick={()=>this.broadcastNext()}>{buttonText}</button>;
+        nextButton=<button className="btn y-button y-button-outline" onClick={()=>this.broadcastNext()}>{buttonText}</button>;
       }
       if(this.state.results){
         board=(

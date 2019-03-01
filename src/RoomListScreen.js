@@ -20,6 +20,8 @@ class RoomListScreen extends React.Component{
       newroomcode:"",
     }
   }
+
+  //TODO: add success checker and error message to handlers
   handleRoomResponse(payload,roomcode){
     // console.log(roomcode)
     this.props.cb({

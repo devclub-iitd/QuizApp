@@ -3,14 +3,18 @@ html{
   /* margin: 20px; */
   /* margin: 0; */
     height: 100%;
-  background-color: #300030; /* For browsers that do not support gradients */
+  /* background-color: #300030; For browsers that do not support gradients */
   /* background-image: url(http://www.transparenttextures.com/patterns/old-map.png); */
   /* background-image: linear-gradient(to bottom right, #42275a, #734b6d);  */
-  background-image:linear-gradient(to bottom right, #2C3E50, #FD746C);
+  /* background-image:linear-gradient(to bottom right, #2C3E50, #FD746C); */
+  background-color: #F57F17;
+background-image: url(./dark-wood.png);
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
   
 }
 body {
   font: 20px Comfortaa, cursive;
+  
   margin: 0 20px;
   background-color: transparent;
   color: #444444;
@@ -57,10 +61,11 @@ body {
   box-shadow:0.0125em 0.0125em 0.0625em #200020;
 }
 .option:active{
-  background-color:  #F6D8CA;
+  background-color:  #FFFDE7;
 }
 .answers{
   /* padding: 0.0625em; */
+  margin-bottom: 15px;
 }
 .h-100{
   height: 100%;
@@ -79,10 +84,10 @@ body {
   /* border: solid white 2px; */
   border-radius: 0.25em;
   padding:0.625em;
-  background-color:  #FFFDE7;
+  background-color:  #ffffff;
   /* background-image: linear-gradient(to bottom right, #f12711, #f5af19);  */
   /* background-image:linear-gradient(to bottom right, #2C3E50, #FD746C); */
-  box-shadow:0.125em 0.125em 0.625em #200020;
+  box-shadow:0.125em 0.125em 0.625em #5c2b00;
 }
 .aligner{
   vertical-align: middle;
@@ -114,3 +119,40 @@ td{
   background-color: white;
   border-left: 2px solid black; 
 }
+
+.y-button, .y-button.y-button-outline:focus{
+  color: #5c2b00;
+  border: 1px solid #5c2b00;
+  background-color: #fff3cd;
+
+}
+.y-button.y-button-outline{
+  background-color: #ffffff;
+}
+
+.btn{
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+.form-control.input{
+  border-color: #a48b76 !important;
+}
+.form-control:focus {
+  border-color: #a48b76 !important;
+  outline: 0;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;;
+}
+.top-margin{
+  margin-top: 7px;
+}
+.progress{
+  margin-top: 7px;
+  margin-bottom: 7px;
+  background-color: #ffffff;
+  border: 1px solid #a48b76;
+}
+.progress-bar{
+  background-color: #fff3cd;
+}
+

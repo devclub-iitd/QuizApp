@@ -1,5 +1,4 @@
 import React from "react";
-import UserInLobby from "./UserInLobby"
 class Lobby extends React.Component{
   /* 
   props:
@@ -83,12 +82,12 @@ class Lobby extends React.Component{
     if(this.props.isQM){
       if(this.state.beginIsOn){
         beginButton=(
-          <button className="btn" onClick={()=>this.begin()}> Begin Countdown </button>
+          <button className="btn y-button y-button-outline" onClick={()=>this.begin()}> Begin Countdown </button>
         );
       }
       else{
         beginButton=(
-          <button className="btn disabled"> Begin Countdown </button>
+          ""
         );
       }
     }
@@ -102,12 +101,12 @@ class Lobby extends React.Component{
     if(this.state.status==="countdown"){
       if(this.state.timeLeft>=0){
         countdown = (
-          <div className="countdown">{this.state.timeLeft}</div> 
+          <div className="countdown btn y-button y-button-outline">Seconds Left: {this.state.timeLeft}</div> 
         )
       }
       else{
         countdown = (
-          <div className="countdown">0</div> 
+          <div className="countdown btn y-button y-button-outline">Seconds Left: 0</div> 
         )
       }
     }
@@ -123,11 +122,11 @@ class Lobby extends React.Component{
           <div className="alert alert-warning alert-dismissible"> RoomCode: {this.props.roomcode} 
           <button type="button" className="close" onClick={()=>this.props.back()}>Back</button>          
           </div>
-        {beginButton}
-          <ul className="list-group">
+        {beginButton}{countdown}
+          <ul className="list-group top-margin">
             {userDisplayList} 
           </ul>
-          {countdown}
+          
         {/* {this.state.status}
         {this.props.status} */}
         </div>
