@@ -371,8 +371,12 @@ io.on('connection', (socket: SocketIO.Socket) => {
         })
         .then((state):(Promise<{} | undefined> | undefined) => {
             if(state === 'finish') {
-                return roomController.changeState(payload.roomid, 'inactive');
+            return roomController.changeState(payload.roomid, 'inactive');
             }
+            return;
+        })
+        .then(() => {
+            return roomController.purge(payload.roomid);
         })
         .then(() => {
             return userController.findByRoom(payload.roomid);

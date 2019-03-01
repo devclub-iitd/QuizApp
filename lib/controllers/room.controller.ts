@@ -3,6 +3,8 @@ import { initRoom } from '../models/room';
 import { RoomModel, RoomInstance } from '../types/room';
 import { QM } from './qm.controller';
 import { QMInstance } from '../types/quizmaster';
+import * as userController from './user.controller';
+import * as resultController from './result.controller';
 
 export const Room: RoomModel = initRoom(sequelize, QM);
 
@@ -56,7 +58,7 @@ export function changeState(roomid: string, state: string): Promise<{}> {
             reject(err);
         });
     });
-}
+};
 
 export function getQm(roomid: string): Promise<QMInstance> {
     return new Promise((resolve, reject) => {
@@ -78,7 +80,7 @@ export function getQm(roomid: string): Promise<QMInstance> {
             reject(err);
         });
     });
-}
+};
 
 export function getRooms(qm: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
@@ -99,5 +101,26 @@ export function getRooms(qm: string): Promise<string[]> {
         .catch((err) => {
             reject(err);
         })
+    })
+};
+
+export function purge(roomid: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        userController.findByRoom(roomid)
+        .then((users) => {
+            users.map((user) => {
+                user.destroy();
+            });
+            return resultController.getByRoom(roomid);
+        })
+        .then((results) => {
+            results.map((result) => {
+                result.destroy();
+            });
+            resolve();
+        })
+        .catch((err) => {
+            reject(err);
+        });
     })
 }

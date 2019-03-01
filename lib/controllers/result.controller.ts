@@ -81,14 +81,25 @@ export function addAttempt(roomid: string, username: string, serial: number, att
     });
 };
 
-export function getLeaderboard(roomid: string): Promise<Leaderboard> {
+export function getByRoom(roomid: string): Promise<ResultInstance[]> {
     return new Promise((resolve, reject) => {
         Result.findAll({
-            attributes: ['username', 'total'],
             where: {
                 roomid: roomid,
             },
         })
+        .then((results) => {
+            resolve(results);
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+}
+
+export function getLeaderboard(roomid: string): Promise<Leaderboard> {
+    return new Promise((resolve, reject) => {
+        getByRoom(roomid)
         .then((results) => {
             let resultArray: Leaderboard = [];
 
