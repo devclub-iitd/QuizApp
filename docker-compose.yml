@@ -13,7 +13,7 @@ services:
     ports:
       - ${PORT}:${PORT}
     restart:
-      - unless-stopped
+      - "unless-stopped"
     networks:
       - "internal"
       - "reverseproxy"
