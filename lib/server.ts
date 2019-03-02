@@ -186,7 +186,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
                     return Promise.all([users, userController.findByRoom(payload.roomid)]);
                 })
                 .then(([users, usersinst]) => {
-                    console.log('Sending user list to all users...')''
+                    console.log('Sending user list to all users...');
                     for(const x of usersinst) {
                         socket.broadcast.to(x.socket).emit('update', {
                             users: users,
