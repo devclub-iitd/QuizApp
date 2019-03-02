@@ -31,6 +31,8 @@ services:
       - "internal"
     restart: "unless-stopped"
 
+volumes:
+  quizdata:
 networks:
   reverseproxy:
     external:
