@@ -13,7 +13,7 @@ set -o errexit
 readonly REQUIRED_ENV_VARS=(
   "POSTGRES_USER"
   "POSTGRES_PASSWORD"
-  "POSTGRES_DATABASE"
+  "POSTGRES_DB"
 )
 
 # Main execution:
@@ -21,7 +21,7 @@ readonly REQUIRED_ENV_VARS=(
 # - runs the SQL code to create user and database
 main() {
   check_env_vars_set
-  init_user_and_db
+#  init_user_and_db
   create_tables
 }
 
@@ -55,7 +55,7 @@ EOSQL
 }
 
 create_tables() {
-  psql -v ON_ERROR_STOP --username "$POSTGRES_USER" <<-EOSQL
+  psql -v ON_ERROR_STOP --username "$POSTGRES_USER" -d "$POSTGRES_DB"<<-EOSQL
     CREATE TABLE IF NOT EXISTS qms(username VARCHAR PRIMARY KEY, email VARCHAR, phone VARCHAR, password VARCHAR, socket VARCHAR);
     CREATE TABLE IF NOT EXISTS rooms(roomid VARCHAR PRIMARY KEY, qm VARCHAR, state VARCHAR, FOREIGN KEY(qm) REFERENCES qms(username));
     CREATE TABLE IF NOT EXISTS users(username VARCHAR PRIMARY KEY, email VARCHAR, phone VARCHAR, roomid VARCHAR, socket VARCHAR, FOREIGN KEY(roomid) REFERENCES rooms(roomid));
