@@ -26,8 +26,7 @@ services:
       - POSTGRES_PASSWORD
       - POSTGRES_DB
     volumes:
-      - ./data:/var/lib/postgresql/data
-      - ./initdb.sh:/docker-entrypoint-initdb.d/init.sh
+      - quizdata:/var/lib/postgresql/data
     networks:
       - "internal"
     restart: "unless-stopped"
