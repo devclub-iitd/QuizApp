@@ -139,7 +139,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     socket.on('joinroom', (payload) => {
         console.log(payload);
-        roomController.getState(payload.roomid);
+        roomController.getState(payload.roomid)
         .then((state) => {
             console.log(state);
             if(state === 'finish') {
