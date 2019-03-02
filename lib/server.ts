@@ -16,7 +16,7 @@ const io = socketio(server);
 
 server.listen(env.PORT);
 
-const TIMER: number = 5;
+const TIMER: number = 30;
 
 function sleeper(ms: number) {
     return function(x: any) {
