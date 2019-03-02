@@ -10,18 +10,23 @@ import { Leaderboard } from '../types/leaderboard';
 export const Result: ResultModel = initResult(sequelize, Room, User);
 
 export function createResult(roomid: string, username: string): Promise<ResultInstance> {
+    console.log('Creating result...');
     return new Promise((resolve, reject) => {
         Result.create({
             roomid: roomid,
             username: username,
             total: 0,
         })
-        .then((Result) => resolve(Result))
+        .then((Result) => {
+            console.log('Created result');
+            resolve(Result);
+        })
         .catch((err) => reject(err));
     });
 };
 
 export function addAttempt(roomid: string, username: string, serial: number, attempt: number): Promise<ResultInstance> {
+    console.log('Adding attempt...')
     return new Promise((resolve, reject) => {
         getState(roomid)
         .then((state) => {
@@ -51,7 +56,8 @@ export function addAttempt(roomid: string, username: string, serial: number, att
         .then(([result, correct]) => {
             let total = result.total;
             if(correct) total++;
-    
+
+            console.log('Updating result...');            
             if(result.attempts === null || result.attempts === undefined) {
                 
                 return result.update({
@@ -73,6 +79,7 @@ export function addAttempt(roomid: string, username: string, serial: number, att
             };
         })
         .then((result) => {
+            console.log('Added attempt');
             resolve(result);
         })
         .catch((err) => {
@@ -82,6 +89,7 @@ export function addAttempt(roomid: string, username: string, serial: number, att
 };
 
 export function getByRoom(roomid: string): Promise<ResultInstance[]> {
+    console.log('Getting results for room',roomid);
     return new Promise((resolve, reject) => {
         Result.findAll({
             where: {
@@ -89,6 +97,7 @@ export function getByRoom(roomid: string): Promise<ResultInstance[]> {
             },
         })
         .then((results) => {
+            console.log('Done.');
             resolve(results);
         })
         .catch((err) => {
@@ -98,6 +107,7 @@ export function getByRoom(roomid: string): Promise<ResultInstance[]> {
 }
 
 export function getLeaderboard(roomid: string): Promise<Leaderboard> {
+    console.log('Generating leaderboard');
     return new Promise((resolve, reject) => {
         getByRoom(roomid)
         .then((results) => {
@@ -121,7 +131,7 @@ export function getLeaderboard(roomid: string): Promise<Leaderboard> {
                     return 0;
                 }
             });
-
+            console.log('Generated leaderboard.')
             resolve(resultArray);
         })
         .catch((err) => {

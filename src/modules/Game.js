@@ -137,7 +137,7 @@ class Game extends React.Component {
       return (
         <div className="row h-100">
           <div className={"game-box my-auto "+gameBoxClass}>
-            {/* <div className="response">{this.state.response}</div> */}
+            <div className="response">{"Question "+this.state.questionIndex}</div>
             <Question questionText={this.state.questionText} />
             <Answers
               options={this.state.options}

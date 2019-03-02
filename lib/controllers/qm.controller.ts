@@ -24,6 +24,7 @@ export function loginQM(username: string,email:string,phone: string,password: st
     //         reject(err);
     //     });
     // });
+    console.log('QM login');
     const p = QM.findByPk(username)
     .then((qm) => {
         if((qm) === null) {
@@ -42,6 +43,7 @@ export function loginQM(username: string,email:string,phone: string,password: st
 }
 
 export function authenticate(socketid: string, roomid: string): Promise<void> {
+    console.log('Authenticating QM');
     return new Promise((resolve, reject) => {
         QM.findAndCountAll({
             where: {
@@ -57,6 +59,7 @@ export function authenticate(socketid: string, roomid: string): Promise<void> {
         })
         .then(([qm1,qm2]) => {
             if(qm1.username === qm2.username) {
+                console.log('Authenticated');
                 resolve();
             } else {
                 throw 'This qm has no control over this room.'

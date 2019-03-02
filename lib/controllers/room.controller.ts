@@ -9,11 +9,13 @@ import * as resultController from './result.controller';
 export const Room: RoomModel = initRoom(sequelize, QM);
 
 export function createRoom(roomid: string,  qm: string) {
+    console.log('Creating room', roomid);
     return new Promise((resolve, reject) => {
         Room.create({
             roomid: roomid,
             qm: qm,
         }).then((room) => {
+            console.log('Created room.')
             resolve(room);
         }).catch((err) => {
             reject(err);
@@ -22,10 +24,12 @@ export function createRoom(roomid: string,  qm: string) {
 };
 
 export function getState(roomid: string): Promise<string> {
+    console.log('Fetching state of room', roomid);
     return new Promise((resolve, reject) => {
         Room.findByPk(roomid)
         .then((room) => {
             if(room !== null) {
+                console.log('Fetched state:', room.state);
                 resolve(room.state);
             }
             else {
@@ -39,6 +43,7 @@ export function getState(roomid: string): Promise<string> {
 };
 
 export function changeState(roomid: string, state: string): Promise<{}> {
+    console.log('Changing state of room '+roomid+' to '+state);
     return new Promise((resolve, reject) => {
         Room.findByPk(roomid)
         .then((room) => {
@@ -52,6 +57,7 @@ export function changeState(roomid: string, state: string): Promise<{}> {
             };
         })
         .then(() => {
+            console.log('Changed state of room', roomid);
             resolve();
         })
         .catch((err) => {
@@ -61,6 +67,7 @@ export function changeState(roomid: string, state: string): Promise<{}> {
 };
 
 export function getQm(roomid: string): Promise<QMInstance> {
+    console.log('Getting QM for room', roomid);
     return new Promise((resolve, reject) => {
         Room.findByPk(roomid)
         .then((room) => {
@@ -73,6 +80,7 @@ export function getQm(roomid: string): Promise<QMInstance> {
         })
         .then((qm) => {
             if(qm !== null) {
+                console.log('Found QM for room', roomid);
                 resolve(qm);
             };
         })
@@ -83,6 +91,7 @@ export function getQm(roomid: string): Promise<QMInstance> {
 };
 
 export function getRooms(qm: string): Promise<string[]> {
+    console.log('Getting list of rooms for qm', qm);
     return new Promise((resolve, reject) => {
         Room.findAll({
             attributes: ['roomid'],
@@ -96,6 +105,7 @@ export function getRooms(qm: string): Promise<string[]> {
             rooms.map((room, index) => {
                 roomsArray[index] = room.roomid;
             });
+            console.log('Got list of rooms.');
             resolve(roomsArray);
         })
         .catch((err) => {
@@ -105,18 +115,22 @@ export function getRooms(qm: string): Promise<string[]> {
 };
 
 export function purge(roomid: string): Promise<void> {
+    console.log('Purging data of room', roomid);
     return new Promise((resolve, reject) => {
         resultController.getByRoom(roomid)
         .then((results) => {
+            console.log('Purging results...');
             results.map((result) => {
                 result.destroy();
             });
             return userController.findByRoom(roomid);
         })
         .then((users) => {
+            console.log('Purging users...');
             users.map((users) => {
                 users.destroy();
             });
+            console.log('Purging complete.')
             resolve();
         })
         .catch((err) => {

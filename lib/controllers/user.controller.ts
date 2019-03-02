@@ -6,10 +6,13 @@ import { Room } from './room.controller';
 export const User: UserModel = initUser(sequelize, Room);
 
 export function createUser(username: string, email: string, phone: string,socket: string): Promise<UserInstance> {
+    console.log('Creating user...');
     return new Promise((resolve, reject) => {
+        console.log('Checking for duplication.');
         User.findByPk(username)
         .then((user) => {
             if(user === null) {
+                console.log('Creating new user...');
                 return User.create({
                     username: username,
                     email: email,
@@ -21,6 +24,7 @@ export function createUser(username: string, email: string, phone: string,socket
                 throw 'Username taken. If this is a reconnect request make sure all your credentials match';
             }
             else {
+                console.log('Reconnecting user...');
                 return user.update({
                     socket: socket,
                 },
@@ -32,6 +36,7 @@ export function createUser(username: string, email: string, phone: string,socket
             };
         })
         .then((user) => {
+            console.log('User logged in.');
             resolve(user);
         })
         .catch((err) => {
@@ -41,6 +46,7 @@ export function createUser(username: string, email: string, phone: string,socket
 };
 
 export function addToRoom(username: string, roomid: string): Promise<string[]> {
+    console.log('Adding user to room...');
     return new Promise((resolve, reject) => {
         User.findByPk(username)
         .then((user) => {
@@ -67,6 +73,7 @@ export function addToRoom(username: string, roomid: string): Promise<string[]> {
 }
 
 export function findByRoom(roomid: string): Promise<UserInstance[]> {
+    console.log('Finding users list for room');
     return new Promise((resolve, reject) => {
         User.findAll({
             attributes: ['username','socket'],
