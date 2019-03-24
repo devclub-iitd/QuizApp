@@ -12,9 +12,9 @@ import RoomMenu from './modules/RoomMenu';
 import AddQuestion from './modules/AddQuestion';
 import Leaderboard from './modules/Leaderboard';
 
-const SERVER_URL = 'quiz.devclub.iitd.ac.in';
+const SERVER_URL = 'quiz.devclub.in';
 const socket = openSocket(SERVER_URL);
-  
+
 class QuizApp extends React.Component{
 
   // Split into QM path and User path separately?
@@ -48,7 +48,7 @@ class QuizApp extends React.Component{
   }
   renderLogin(){
     return(
-      <Login 
+      <Login
         cb={(stateUpdate,nextStatus)=>this.setStateAndStatus(stateUpdate, nextStatus)}
         socket={socket}
       />
@@ -56,7 +56,7 @@ class QuizApp extends React.Component{
   }
   renderGame(){
     return(
-      <Game 
+      <Game
         socket={socket}
         options={this.state.options}
         question={this.state.question}
@@ -73,7 +73,7 @@ class QuizApp extends React.Component{
     return (
       // <div>
         // <div className="game-box">{this.state.username}</div>
-        <Lobby 
+        <Lobby
           roomstatus={this.state.roomstatus}
           roomcode={this.state.roomcode}
           socket={socket}
@@ -95,7 +95,7 @@ class QuizApp extends React.Component{
   }
   renderRoomSelect(){
     return(
-      <RoomSelect 
+      <RoomSelect
         cb={(stateUpdate, nextParentState)=>this.setStateAndStatus(stateUpdate, nextParentState)}
         socket={socket}
         username={this.state.username}
