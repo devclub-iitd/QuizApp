@@ -13,6 +13,7 @@ services:
       - POSTGRES_PASSWORD
       - POSTGRES_DB
       - DATABASE_URL
+      - REACT_APP_VIRTUAL_HOST
     ports:
       - ${PORT}:${PORT}
     restart: "unless-stopped"

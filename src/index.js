@@ -12,7 +12,7 @@ import RoomMenu from './modules/RoomMenu';
 import AddQuestion from './modules/AddQuestion';
 import Leaderboard from './modules/Leaderboard';
 
-const SERVER_URL = 'quiz.devclub.in';
+const SERVER_URL = process.env.REACT_APP_VIRTUAL_HOST || "localhost:3001";
 const socket = openSocket(SERVER_URL);
 
 class QuizApp extends React.Component{
