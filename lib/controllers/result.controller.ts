@@ -1,4 +1,4 @@
-import sequelize = require('../config/db');
+import db = require('../config/db');
 import { initResult } from '../models/result';
 import { ResultModel, ResultInstance } from '../types/result';
 import { Room, getState } from './room.controller';
@@ -7,6 +7,7 @@ import { checkAnswer } from './ques.controller';
 import { AttemptJSON } from '../types/attempt';
 import { Leaderboard } from '../types/leaderboard';
 
+const sequelize = db.sequelize;
 export const Result: ResultModel = initResult(sequelize, Room, User);
 
 export function createResult(roomid: string, username: string): Promise<ResultInstance> {

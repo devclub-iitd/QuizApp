@@ -1,10 +1,10 @@
-import sequelize = require('../config/db');
+import db = require('../config/db');
 import { initQuestion } from '../models/question';
 import { QuestionModel, QuestionInstance } from '../types/question';
 import { Room } from './room.controller';
 import { quesArray } from '../types/quesarray';
 
-
+const sequelize = db.sequelize;
 export const Question: QuestionModel = initQuestion(sequelize, Room);
 
 export function createQuestion(question: Text, options: JSON, roomid: string, answer: number): Promise<QuestionInstance> {

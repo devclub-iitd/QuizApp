@@ -1,6 +1,9 @@
-export = {
-    user: 'CREATE TABLE IF NOT EXISTS users(username VARCHAR(128) PRIMARY_KEY NOT NULL, socket VARCHAR(256)',
-    state: 'CREATE TYPE states AS ENUM (\'inactive\',\'waiting\',\'collecting\'',
-    questions: 'CREATE TABLE IF NOT EXISTS questions(questionID UUID PRIMARY_KEY,question TEXT NOT NULL, option-one VARCHAR(128), option-two VARCHAR(128), option-three VARCHAR(128), option-four VARCHAR(128))',
-    room: 'CREATE TABLE IF NOT EXISTS rooms(roomID VARCHAR(128) PRIMARY_KEY NOT NULL, state states, FOREIGN_KEY user REFERENCES users(username), FOREIGN_KEY questions REFERENCES questions(questionID)'
-}
+const initQueries: string[] = [
+    'CREATE TABLE IF NOT EXISTS qms(username VARCHAR PRIMARY KEY, email VARCHAR, phone VARCHAR, password VARCHAR, socket VARCHAR);',
+    'CREATE TABLE IF NOT EXISTS rooms(roomid VARCHAR PRIMARY KEY, qm VARCHAR, state VARCHAR, FOREIGN KEY(qm) REFERENCES qms(username));',
+    'CREATE TABLE IF NOT EXISTS users(username VARCHAR PRIMARY KEY, email VARCHAR, phone VARCHAR, roomid VARCHAR, socket VARCHAR, FOREIGN KEY(roomid) REFERENCES rooms(roomid));',
+    'CREATE TABLE IF NOT EXISTS questions(id SERIAL PRIMARY KEY, roomid VARCHAR, question TEXT, options JSON, answer INTEGER, FOREIGN KEY(roomid) REFERENCES rooms(roomid));',
+    'CREATE TABLE IF NOT EXISTS results(id SERIAL PRIMARY KEY, username VARCHAR, roomid VARCHAR, attempts JSON, total INTEGER, FOREIGN KEY(username) REFERENCES users(username), FOREIGN KEY(roomid) REFERENCES rooms(roomid));',
+]
+
+export = initQueries;

@@ -2,6 +2,7 @@ import http = require('http');
 import socketio = require('socket.io');
 import express = require('./config/express');
 import env = require('./config/env');
+import db = require('./config/db');
 import * as qmController from './controllers/qm.controller';
 import * as userController from './controllers/user.controller';
 import * as roomController from './controllers/room.controller';
@@ -13,6 +14,8 @@ import { UserInstance } from './types/user';
 const app: Express.Application = express();
 const server: http.Server = new http.Server(app);
 const io = socketio(server);
+
+db.initdb();
 
 server.listen(env.PORT);
 

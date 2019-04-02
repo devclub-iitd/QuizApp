@@ -1,4 +1,4 @@
-import sequelize = require('../config/db');
+import db = require('../config/db');
 import { initRoom } from '../models/room';
 import { RoomModel, RoomInstance } from '../types/room';
 import { QM } from './qm.controller';
@@ -6,6 +6,7 @@ import { QMInstance } from '../types/quizmaster';
 import * as userController from './user.controller';
 import * as resultController from './result.controller';
 
+const sequelize = db.sequelize;
 export const Room: RoomModel = initRoom(sequelize, QM);
 
 export function createRoom(roomid: string,  qm: string) {

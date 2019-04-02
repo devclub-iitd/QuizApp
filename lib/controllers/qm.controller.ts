@@ -1,8 +1,9 @@
-import sequelize = require('../config/db');
+import db = require('../config/db');
 import { initQM } from '../models/quizmaster';
 import { QMModel, QMInstance } from '../types/quizmaster';
 import * as roomController from '../controllers/room.controller';
 
+const sequelize = db.sequelize;
 export const QM: QMModel = initQM(sequelize);
 
 export function loginQM(username: string,email:string,phone: string,password: string,socket: string): Promise<QMInstance>{
