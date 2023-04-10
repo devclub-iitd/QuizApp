@@ -5,7 +5,7 @@ There are two types of users -
 * Players
 * Quizmaster
 
-Quizmasters ccan create rooms and add questions, while players can join rooms and answer questions.
+Quizmasters can create rooms and add questions, while players can join rooms and answer questions.
 
 ## Workflows
 
@@ -84,14 +84,20 @@ Quizmasters ccan create rooms and add questions, while players can join rooms an
 * Clone the repo
 * Run `npm install`
 * Run `npm start`
-* View at `localhost:3000`
+* View at `http://localhost:3000`
 * It may be necessary to delete `tsconfig.json`
 
 ## Deploy
 * Clone the repo  
-  `git clone https://github.com/devclub-iitd/QuizApp`  
-  `cd QuizApp`
+  ```shell
+  git clone https://github.com/devclub-iitd/QuizApp
+  cd QuizApp
+  ```
 * Populate `.env.sample` and move it to `.env`
 * Remove the `reverseproxy` network from `docker-compose.yml` (lines 21, 37,38, 39).
-* `docker build .`
-* `docker-compose up -d`
+* ```shell
+  docker build .
+  ```
+* ```shell
+  docker-compose up -d
+  ```
